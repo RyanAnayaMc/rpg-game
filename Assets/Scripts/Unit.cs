@@ -5,6 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     public string name;
+    public Weapon weapon;
     public int level;
     public int cHP; // current hp
     public int maxHP; // maximum hp
@@ -15,11 +16,17 @@ public class Unit : MonoBehaviour
     public int res; // resistance
     public int arm; // armor
     public int agi; // agility
+    public bool isDefending = false;
 
     public bool TakeDamage(int damage)
     {
         cHP -= damage;
-        return cHP <= 0;
+        bool isDead = cHP <= 0;
+
+        if (isDead)
+            cHP = 0;
+
+        return isDead;
     }
 
     public void Heal(int heal)
