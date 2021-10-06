@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 // A class that handles the bulk of combat logic
 
@@ -19,7 +20,8 @@ public class BattleController : MonoBehaviour
 {
     public GameObject player; // Prefab to represent the player
     public GameObject enemy; // Prefab to represent the enemy
-    public Text attackButtonText; // The text on the "Attack" button
+    public GameObject playerOptionWindow; // The window with the player's options
+    public TMP_Text attackButtonText; // The text on the "Attack" button
 
     BattlePhase phase; // Current phase of the battle
 
@@ -27,6 +29,7 @@ public class BattleController : MonoBehaviour
     public AudioClip battleMusic; // The music to play during the battle
     public AudioClip victoryFanfare; // Fanfare that plays if you win
     public AudioClip victoryMusic; // Music that plays after the fanfare
+    public AudioClip enemyDefeatSFX; // SFX that plays when an enemy dies
     public AudioSource sfxSource; // The scene's sound effect player
 
     public Transform playerLocation; // The location to place the player
@@ -38,7 +41,7 @@ public class BattleController : MonoBehaviour
     public GameObject playerPhaseUI; // The GameObject to display at the beginning of Player Phase
     public GameObject enemyPhaseUI; // The GameObject to display at the beginning of Enemy Phase
 
-    public Text dialogueText; // The text on the dialogue box
+    public TMP_Text dialogueText; // The text on the dialogue box
 
     Unit playerUnit; // The Unit linked to the player GameObject
     Unit enemyUnit; // The Unit linked to the enemy GameObject
@@ -53,6 +56,9 @@ public class BattleController : MonoBehaviour
     // Coroutine to handle setting up the battle
     IEnumerator BattleSetup()
     {
+        // Make sure player option menu is hidden
+        playerOptionWindow.SetActive(false);
+
         // Play the battle music
         musicSource.clip = battleMusic;
         musicSource.loop = true;
@@ -98,11 +104,14 @@ public class BattleController : MonoBehaviour
     IEnumerator PlayerTurn()
     {
         // Show player phase image
-        StartCoroutine(fadeIn(playerPhaseUI));
+        StartCoroutine(fadeIn(playerPhaseUI, 0.03f));
         yield return new WaitForSeconds(1);
-        StartCoroutine(fadeOut(playerPhaseUI));
+        StartCoroutine(fadeOut(playerPhaseUI, 0.03f));
 
         yield return new WaitForSeconds(1);
+
+        // Show option menu
+        StartCoroutine(stretchIn(playerOptionWindow, 0.1f));
 
         // Let player pick an option
         phase = BattlePhase.PLAYER;
@@ -118,6 +127,9 @@ public class BattleController : MonoBehaviour
             return;
         phase = BattlePhase.PLAYER_ACTION;
 
+        // Hide option menu
+        StartCoroutine(stretchOut(playerOptionWindow, 0.2f));
+
         AttackType atkType = playerUnit.weapon.atkType;
         StartCoroutine(PlayerAttack(atkType));
     }
@@ -129,6 +141,8 @@ public class BattleController : MonoBehaviour
         if (phase != BattlePhase.PLAYER)
             return;
         // phase = BattlePhase.PLAYER_ACTION;
+        // Hide option menu
+        // StartCoroutine(stretchOut(playerOptionWindow, 0.2f));
     }
 
     // Player clicks defend button
@@ -136,6 +150,10 @@ public class BattleController : MonoBehaviour
     {
         if (phase != BattlePhase.PLAYER)
             return;
+
+        // Hide option menu
+        StartCoroutine(stretchOut(playerOptionWindow, 0.2f));
+
         phase = BattlePhase.PLAYER_ACTION;
         StartCoroutine(PlayerDefend());
         StartCoroutine(EnemyTurn());
@@ -194,6 +212,11 @@ public class BattleController : MonoBehaviour
         if (isEnemyDead)
         {
             phase = BattlePhase.WIN;
+
+            // Fade out enemy
+            sfxSource.PlayOneShot(enemyDefeatSFX);
+            StartCoroutine(fadeOutSprite(enemyUnit.gameObject, 0.1f));
+
             StartCoroutine(Victory());
         }
         else
@@ -207,10 +230,10 @@ public class BattleController : MonoBehaviour
     IEnumerator EnemyTurn()
     {
         // Show enemy phase image
-        StartCoroutine(fadeIn(enemyPhaseUI));
+        StartCoroutine(fadeIn(enemyPhaseUI, 0.03f));
         phase = BattlePhase.ENEMY;
         yield return new WaitForSeconds(1);
-        StartCoroutine(fadeOut(enemyPhaseUI));
+        StartCoroutine(fadeOut(enemyPhaseUI, 0.03f));
         yield return new WaitForSeconds(1);
 
         // Do enemy attack
@@ -270,6 +293,11 @@ public class BattleController : MonoBehaviour
         if (isPlayerDead)
         {
             phase = BattlePhase.LOSE;
+
+            // Fade out player
+            sfxSource.PlayOneShot(enemyDefeatSFX);
+            StartCoroutine(fadeOutSprite(playerUnit.gameObject, 0.1f));
+
             StartCoroutine(Lose());
         }
         else
@@ -358,36 +386,92 @@ public class BattleController : MonoBehaviour
     }
 
     // Makes a GameObject with an Image component fade in
-    IEnumerator fadeIn(GameObject obj)
+    IEnumerator fadeIn(GameObject obj, float speed)
     {
-        Color color = obj.GetComponent<Image>().color;
-        float r = color.r;
-        float g = color.g;
-        float b = color.b;
+        speed = Mathf.Abs(speed);
+        Color originalColor = obj.GetComponent<Image>().color;
+        float r = originalColor.r;
+        float g = originalColor.g;
+        float b = originalColor.b;
         float a = 0;
 
         while (a < 1)
         {
-            a += 0.03f;
+            a += speed;
             obj.GetComponent<Image>().color = new Color(r, g, b, a);
             yield return new WaitForFixedUpdate();
         }
     }
-    
+
     // Makes a GameObject with an Image component fade out
-    IEnumerator fadeOut(GameObject obj)
+    IEnumerator fadeOut(GameObject obj, float speed)
     {
-        Color color = obj.GetComponent<Image>().color;
-        float r = color.r;
-        float g = color.g;
-        float b = color.b;
+        speed = Mathf.Abs(speed);
+        Color originalColor = obj.GetComponent<Image>().color;
+        float r = originalColor.r;
+        float g = originalColor.g;
+        float b = originalColor.b;
         float a = 1;
 
         while (a > 0)
         {
-            a -= 0.03f;
+            a -= speed;
             obj.GetComponent<Image>().color = new Color(r, g, b, a);
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    IEnumerator fadeOutSprite(GameObject obj, float speed)
+    {
+        speed = Mathf.Abs(speed);
+        Color originalColor = obj.GetComponent<SpriteRenderer>().color;
+        float r = originalColor.r;
+        float g = originalColor.g;
+        float b = originalColor.b;
+        float a = 1;
+
+        while (a > 0)
+        {
+            a -= speed;
+            obj.GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    // Makes a GameObject appear by stretching out
+    IEnumerator stretchIn(GameObject obj, float speed)
+    {
+        speed = Mathf.Abs(speed);
+        obj.SetActive(true);
+        Vector3 startScale = obj.transform.localScale;
+        float scaleY = startScale.y;
+        float scaleZ = startScale.z;
+        float scaleX = 0;
+
+        while (scaleX < 1)
+        {
+            scaleX += speed;
+            obj.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    // Makes a GameObject disappear by stretching out
+    IEnumerator stretchOut(GameObject obj, float speed)
+    {
+        speed = Mathf.Abs(speed);
+        Vector3 startScale = obj.transform.localScale;
+        float scaleY = startScale.y;
+        float scaleZ = startScale.z;
+        float scaleX = 1;
+
+        while (scaleX > 0)
+        {
+            scaleX -= speed;
+            obj.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
+            yield return new WaitForFixedUpdate();
+        }
+
+        obj.SetActive(false);
     }
 }

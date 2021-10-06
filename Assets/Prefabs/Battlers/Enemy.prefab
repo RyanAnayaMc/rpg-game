@@ -203,6 +203,8 @@ MonoBehaviour:
   level: 2
   cHP: 15
   maxHP: 15
+  cSP: 35
+  maxSP: 35
   str: 1
   mag: 5
   dex: 2

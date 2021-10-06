@@ -13,6 +13,8 @@ public class Unit : MonoBehaviour
     public int level; // The unit's level
     public int cHP; // current hp
     public int maxHP; // maximum hp
+    public int cSP; // current SP
+    public int maxSP; // maximum SP
     public int str; // strength
     public int mag; // magic
     public int dex; // dexterity
