@@ -8,10 +8,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Characters
+  - Effects
   - Water
   - UI
-  - Background
+  - 
   - 
   - 
   - 
@@ -41,7 +41,7 @@ TagManager:
   - name: Foreground
     uniqueID: 3462249491
     locked: 0
-  - name: Characters
+  - name: Effects
     uniqueID: 3736652639
     locked: 0
   - name: Default

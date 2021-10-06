@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public string name;
-    public Weapon weapon;
-    public int level;
+    // Basis for a playable or enemy Unit that can see combat
+
+    public string unitName; // The unit's name
+    public Weapon weapon; // The unit's equipped weapon
+    // TODO add more equipment
+    // TODO add skills
+    public int level; // The unit's level
     public int cHP; // current hp
     public int maxHP; // maximum hp
     public int str; // strength
@@ -16,8 +20,10 @@ public class Unit : MonoBehaviour
     public int res; // resistance
     public int arm; // armor
     public int agi; // agility
-    public bool isDefending = false;
+    public bool isDefending = false; // Whether or not the unit is defending
+    public GameObject effectRenderer; // The object that manages rendering effects on the unit
 
+    // Makes the unit take damage. Returns true if the unit died, false otherwise
     public bool TakeDamage(int damage)
     {
         cHP -= damage;
@@ -29,6 +35,7 @@ public class Unit : MonoBehaviour
         return isDead;
     }
 
+    // Heals the unit's HP. cHP cannot exceed maxHP
     public void Heal(int heal)
     {
         cHP += heal;

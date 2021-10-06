@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atkType: 1
-  subtype: 8
+  subtype: 7
+  castAnimation: 3
+  weaponAnimation: 2
   weaponName: Fire Staff
   weaponDescription: A basic staff that shoots fire.
   might: 4
   attackSFX: {fileID: 8300000, guid: 704ff3486fd4f7a4f8fd4cccf6626a4d, type: 3}
+  castSFX: {fileID: 8300000, guid: 6887a876f5890d447897ef68fecbbc12, type: 3}
   weaponIcon: {fileID: 7559376211103262369, guid: 7a3857b8406c9e9488b5cef9342e7405, type: 3}

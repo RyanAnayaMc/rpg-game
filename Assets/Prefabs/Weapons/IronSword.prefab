@@ -45,6 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atkType: 0
   subtype: 0
+  castAnimation: 0
+  weaponAnimation: 1
   weaponName: Iron Sword
   weaponDescription: A basic iron sword used by amateur adventurers.
   might: 4
