@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e369d494391e748bf5ded5f86cfd9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Gus
+  unitName: Gus
   weapon: {fileID: 5512835588336331025, guid: 8fec67f67fd28874b8929c27c19e1cd7, type: 3}
   level: 1
   cHP: 20
