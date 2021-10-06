@@ -7,6 +7,7 @@ public enum BattlePhase
 {
     START,
     PLAYER,
+    PLAYER_ACTION,
     ENEMY,
     WIN,
     LOSE
@@ -18,10 +19,12 @@ public class BattleController : MonoBehaviour
     public GameObject enemy;
     public Text attackButtonText;
 
-    public BattlePhase phase;
+    BattlePhase phase;
 
     public AudioSource musicSource;
     public AudioClip battleMusic;
+    public AudioClip victoryFanfare;
+    public AudioClip victoryMusic;
     public AudioSource sfxSource;
 
     public Transform playerLocation;
@@ -29,6 +32,9 @@ public class BattleController : MonoBehaviour
 
     public HUDController playerHUD;
     public HUDController enemyHUD;
+
+    public GameObject playerPhaseUI;
+    public GameObject enemyPhaseUI;
 
     public Text dialogueText;
 
@@ -43,13 +49,12 @@ public class BattleController : MonoBehaviour
     IEnumerator BattleSetup()
     {
         musicSource.clip = battleMusic;
+        musicSource.loop = true;
         musicSource.Play();
 
         phase = BattlePhase.START;
         GameObject playerObj = Instantiate(player, playerLocation);
         GameObject enemyObj = Instantiate(enemy, enemyLocation);
-        
-        playerObj.transform.position.Set(playerLocation.position.x, playerLocation.position.y, playerLocation.position.z);
 
         playerUnit = playerObj.GetComponent<Unit>();
         enemyUnit = enemyObj.GetComponent<Unit>();
@@ -79,18 +84,24 @@ public class BattleController : MonoBehaviour
         StartCoroutine(PlayerTurn());
     }
 
+    // Player Actions
     IEnumerator PlayerTurn()
     {
+        StartCoroutine(fadeIn(playerPhaseUI));
+        yield return new WaitForSeconds(1);
+        StartCoroutine(fadeOut(playerPhaseUI));
+        yield return new WaitForSeconds(1);
         phase = BattlePhase.PLAYER;
         playerUnit.isDefending = false;
         dialogueText.text = "Choose an action.";
-        yield return new WaitForSeconds(0);
+        
     }
 
     public void OnAttackButton()
     {
         if (phase != BattlePhase.PLAYER)
             return;
+        phase = BattlePhase.PLAYER_ACTION;
 
         AttackType atkType = playerUnit.weapon.atkType;
         StartCoroutine(PlayerAttack(atkType));
@@ -100,14 +111,16 @@ public class BattleController : MonoBehaviour
     {
         if (phase != BattlePhase.PLAYER)
             return;
+        phase = BattlePhase.PLAYER_ACTION;
     }
 
     public void OnDefendButton()
     {
         if (phase != BattlePhase.PLAYER)
             return;
-
+        phase = BattlePhase.PLAYER_ACTION;
         StartCoroutine(PlayerDefend());
+        StartCoroutine(EnemyTurn());
     }
 
     IEnumerator PlayerDefend()
@@ -149,8 +162,7 @@ public class BattleController : MonoBehaviour
         }
 
         // Sound effect and animation
-        sfxSource.PlayOneShot(playerUnit.weapon.attackSFX);
-        StartCoroutine(FlickerAnimation(enemyUnit));
+        StartCoroutine(PlayDamageAnimation(enemyUnit, playerUnit.weapon, sfxSource));
 
         bool isEnemyDead = enemyUnit.TakeDamage(damage);
         enemyHUD.SetHP(enemyUnit);
@@ -169,9 +181,15 @@ public class BattleController : MonoBehaviour
         }
     }
 
+    // Enemy Actions
     IEnumerator EnemyTurn()
     {
-        yield return new WaitForSeconds(0);
+
+        StartCoroutine(fadeIn(enemyPhaseUI));
+        phase = BattlePhase.ENEMY;
+        yield return new WaitForSeconds(1);
+        StartCoroutine(fadeOut(enemyPhaseUI));
+        yield return new WaitForSeconds(1);
         AttackType atkType = enemyUnit.weapon.atkType;
         StartCoroutine(EnemyAttack(atkType));
     }
@@ -208,8 +226,7 @@ public class BattleController : MonoBehaviour
         }
 
         // Sound effect
-        sfxSource.PlayOneShot(enemyUnit.weapon.attackSFX);
-        StartCoroutine(FlickerAnimation(playerUnit));
+        StartCoroutine(PlayDamageAnimation(playerUnit, enemyUnit.weapon, sfxSource));
 
         bool isPlayerDead = playerUnit.TakeDamage(damage);
         playerHUD.SetHP(playerUnit);
@@ -228,10 +245,28 @@ public class BattleController : MonoBehaviour
         }
     }
 
+    // State Changes
     IEnumerator Victory()
     {
         dialogueText.text = "You win!";
+        musicSource.Stop();
+        StartCoroutine(PlayVictoryFanfare());
+        
         yield return new WaitForSeconds(0);
+    }
+
+    IEnumerator PlayVictoryFanfare()
+    {
+        musicSource.loop = false;
+        musicSource.clip = victoryFanfare;
+        musicSource.Play();
+
+        while (musicSource.isPlaying)
+            yield return new WaitForSeconds(0.5f);
+
+        musicSource.clip = victoryMusic;
+        musicSource.loop = true;
+        musicSource.Play();
     }
 
     IEnumerator Lose()
@@ -240,6 +275,7 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(0);
     }
 
+    // Battle Animations
     IEnumerator FlickerAnimation(Unit unit)
     {
         SpriteRenderer sr = unit.gameObject.GetComponent<SpriteRenderer>();
@@ -252,6 +288,47 @@ public class BattleController : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             sr.color = oldColor;
             yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    public IEnumerator PlayDamageAnimation(Unit unit, Weapon weapon, AudioSource sfxSource)
+    {
+       sfxSource.PlayOneShot(weapon.attackSFX);
+
+        StartCoroutine(FlickerAnimation(unit));
+
+        yield return new WaitForSeconds(0);
+    }
+
+    IEnumerator fadeIn(GameObject obj)
+    {
+        Color color = obj.GetComponent<Image>().color;
+        float r = color.r;
+        float g = color.g;
+        float b = color.b;
+        float a = 0;
+
+        while (a < 1)
+        {
+            a += 0.03f;
+            obj.GetComponent<Image>().color = new Color(r, g, b, a);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    IEnumerator fadeOut(GameObject obj)
+    {
+        Color color = obj.GetComponent<Image>().color;
+        float r = color.r;
+        float g = color.g;
+        float b = color.b;
+        float a = 1;
+
+        while (a > 0)
+        {
+            a -= 0.03f;
+            obj.GetComponent<Image>().color = new Color(r, g, b, a);
+            yield return new WaitForFixedUpdate();
         }
     }
 }

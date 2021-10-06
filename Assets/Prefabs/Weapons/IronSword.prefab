@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8855765659718657683}
-  - component: {fileID: 1581241933451803531}
+  - component: {fileID: 5512835588336331025}
   m_Layer: 0
   m_Name: IronSword
   m_TagString: Untagged
@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2834278566931713305}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1044.0281, y: 317.52402, z: -219.05856}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1581241933451803531
+--- !u!114 &5512835588336331025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,6 +46,7 @@ MonoBehaviour:
   atkType: 0
   subtype: 0
   weaponName: Iron Sword
-  weaponDescription: A basic iron sword used by novice adventurers.
+  weaponDescription: A basic iron sword used by amateur adventurers.
   might: 4
   attackSFX: {fileID: 8300000, guid: bc0ec6c698c39ad49afc75af080bb418, type: 3}
+  weaponIcon: {fileID: -508515256125228720, guid: 7a3857b8406c9e9488b5cef9342e7405, type: 3}

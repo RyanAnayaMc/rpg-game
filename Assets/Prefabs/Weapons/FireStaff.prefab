@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3616747001513798417}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1044.0281, y: 317.52402, z: -219.05856}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,5 +47,6 @@ MonoBehaviour:
   subtype: 8
   weaponName: Fire Staff
   weaponDescription: A basic staff that shoots fire.
-  might: 3
+  might: 4
   attackSFX: {fileID: 8300000, guid: 704ff3486fd4f7a4f8fd4cccf6626a4d, type: 3}
+  weaponIcon: {fileID: 7559376211103262369, guid: 7a3857b8406c9e9488b5cef9342e7405, type: 3}

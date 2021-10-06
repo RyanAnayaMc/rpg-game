@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Gus
-  weapon: {fileID: 1581241933451803531, guid: 8fec67f67fd28874b8929c27c19e1cd7, type: 3}
+  weapon: {fileID: 5512835588336331025, guid: 8fec67f67fd28874b8929c27c19e1cd7, type: 3}
   level: 1
   cHP: 20
   maxHP: 20

@@ -18,6 +18,7 @@ public enum WeaponSubtype
     CLUB,
     RING,
     TOME,
+    STAFF,
     SCROLL,
     WAND,
     BOW,
@@ -33,4 +34,5 @@ public class Weapon : MonoBehaviour
     public string weaponDescription;
     public int might;
     public AudioClip attackSFX;
+    public Sprite weaponIcon;
 }
