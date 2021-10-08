@@ -52,4 +52,24 @@ public class DamageCalculationHandler : MonoBehaviour
 
         return (text, damage);
     }
+
+    public (string, int, bool) SpecialAttack(Skill skill, BattleUnit attacker, BattleUnit defender)
+    {
+        // TODO scripted skill effect handling
+
+        if (skill.targetType == TargetType.ENEMY)
+        {
+            int damage = skill.getValue(attacker.unit, defender.unit);
+            string diagMsg = attacker.unit.unitName + " did " + damage + " special damage to " + defender.unit.unitName + ".";
+            return (diagMsg, damage, true);
+        }
+        else if (skill.targetType == TargetType.SELF)
+        {
+            int heal = skill.getValue(attacker.unit, defender.unit);
+            string diagMsg = attacker.unit.unitName + " healed " + heal + " HP.";
+            return (diagMsg, heal, false);
+        }
+
+        return (null, 0, false);
+    }
 }

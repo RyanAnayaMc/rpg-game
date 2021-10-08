@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+[CreateAssetMenu(fileName = "NewUnit", menuName = "RPG Element/Unit")]
+public class Unit : ScriptableObject
 {
     // Basis for a playable or enemy Unit that can see combat
-
+    public Sprite unitSprite;
     public string unitName; // The unit's name
     public Weapon weapon; // The unit's equipped weapon
     // TODO add more equipment
@@ -23,26 +24,5 @@ public class Unit : MonoBehaviour
     public int arm; // armor
     public int agi; // agility
     public bool isDefending = false; // Whether or not the unit is defending
-    public GameObject effectRenderer; // The object that manages rendering effects on the unit
     public List<Skill> skills; // Skills the Unit can use in combat
-
-    // Makes the unit take damage. Returns true if the unit died, false otherwise
-    public bool TakeDamage(int damage)
-    {
-        cHP -= damage;
-        bool isDead = cHP <= 0;
-
-        if (isDead)
-            cHP = 0;
-
-        return isDead;
-    }
-
-    // Heals the unit's HP. cHP cannot exceed maxHP
-    public void Heal(int heal)
-    {
-        cHP += heal;
-        if (cHP > maxHP)
-            cHP = maxHP;
-    }
 }

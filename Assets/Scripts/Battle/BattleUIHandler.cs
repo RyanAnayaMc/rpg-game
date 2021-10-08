@@ -12,6 +12,8 @@ public class BattleUIHandler : MonoBehaviour
     private GameObject playerOptionWindow; // The window with the player's options
     [SerializeField]
     private TMP_Text attackButtonText; // The text on the "Attack" button
+    [SerializeField]
+    private SkillMenuController skillMenuController;
 
     [SerializeField]
     private HUDController playerHUD; // The location of the HUD that shows the player's info
@@ -37,6 +39,8 @@ public class BattleUIHandler : MonoBehaviour
         isSetup = true;
         playerOptionWindow.SetActive(false);
 
+
+        // Display player and enemy HUDs
         playerHUD.SetupHUD(playerUnit);
         enemyHUD.SetupHUD(enemyUnit);
 
@@ -56,6 +60,10 @@ public class BattleUIHandler : MonoBehaviour
                 attackButtonText.text = "Fire";
                 break;
         }
+
+        // Hide the skill menu but make sure it is enabled
+        skillMenuController.gameObject.SetActive(true);
+        animationHandler.stretchOut(skillMenuController.gameObject, 1f);
     }
 
     // Shows the Player Phase image
@@ -94,6 +102,21 @@ public class BattleUIHandler : MonoBehaviour
     public void HidePlayerOptionWindow()
     {
         animationHandler.stretchOut(playerOptionWindow, 0.2f);
+    }
+
+    // Shows the skill menu
+    public void ShowSkillWindow()
+    {
+        GameObject skillWindow = skillMenuController.gameObject;
+        skillMenuController.SetSkillMenu();
+        animationHandler.stretchIn(skillWindow, 0.1f);
+    }
+
+    // Shows the skill menu
+    public void HideSkillWindow()
+    {
+        GameObject skillWindow = skillMenuController.gameObject;
+        animationHandler.stretchOut(skillWindow, 0.1f);
     }
 
     // Shows a new text message on the dialogue box

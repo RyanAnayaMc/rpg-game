@@ -44,7 +44,8 @@ public enum WeaponAnimation
     BowAttack
 }
 
-public class Weapon : MonoBehaviour
+[CreateAssetMenu(fileName = "NewWeapon", menuName = "RPG Element/Weapon")]
+public class Weapon : ScriptableObject
 {
     public AttackType atkType; // The type of damage the weapon does
     public WeaponSubtype subtype; // The subtype of the weapon

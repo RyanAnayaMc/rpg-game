@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class BattleAnimationHandler : MonoBehaviour
 {
     // Plays a flicker animation for when a unit takes damage
-    public void FlickerAnimation(Unit unit)
+    public void FlickerAnimation(GameObject unitObject)
     {
-        StartCoroutine(FlickerAnimationCoroutine(unit));
+        StartCoroutine(FlickerAnimationCoroutine(unitObject));
     }
 
-    private IEnumerator FlickerAnimationCoroutine(Unit unit)
+    private IEnumerator FlickerAnimationCoroutine(GameObject unitObject)
     {
-        SpriteRenderer sr = unit.gameObject.GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = unitObject.GetComponent<SpriteRenderer>();
         Color oldColor = sr.color;
         Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
 
@@ -27,28 +27,32 @@ public class BattleAnimationHandler : MonoBehaviour
     }
 
     // Plays a cast and damage animation, including sound effects
-    public void PlayDamageAnimation(Unit attackingUnit, Unit targetUnit, AudioSource sfxSource)
-    {
-        StartCoroutine(PlayDamageAnimationCoroutine(attackingUnit, targetUnit, sfxSource));
-    }
-
-    private IEnumerator PlayDamageAnimationCoroutine(Unit attackingUnit, Unit targetUnit, AudioSource sfxSource)
+    public void PlayDamageAnimation(BattleUnit attackingUnit, BattleUnit targetUnit, BattleSFXHandler sfxHandler)
     {
         // Play cast sound effect and animation
-        Weapon weapon = attackingUnit.weapon;
+        Weapon weapon = attackingUnit.unit.weapon;
         if (weapon.castSFX != null)
-            sfxSource.PlayOneShot(weapon.castSFX);
+            sfxHandler.PlaySFX(weapon.castSFX);
         attackingUnit.effectRenderer.GetComponent<Animator>().SetTrigger(weapon.castAnimation.ToString());
 
         // Play attack sound effect and animation
         targetUnit.effectRenderer.GetComponent<Animator>().SetTrigger(weapon.weaponAnimation.ToString());
         if (weapon.attackSFX != null)
-            sfxSource.PlayOneShot(weapon.attackSFX);
+            sfxHandler.PlaySFX(weapon.attackSFX);
 
         // Play flicker animation
-        StartCoroutine(FlickerAnimationCoroutine(targetUnit));
+        StartCoroutine(FlickerAnimationCoroutine(targetUnit.gameObject));
+    }
+    
+    public void PlaySkillAnimation(BattleUnit attackingUnit, BattleUnit targetUnit, Skill skill, BattleSFXHandler sfxHandler)
+    {
+        BattleUnit battleUnit = (skill.targetType == TargetType.SELF) ? attackingUnit : targetUnit;
 
-        yield return new WaitForSeconds(0);
+        battleUnit.effectRenderer.GetComponent<Animator>().SetTrigger(skill.skillAnimation.ToString());
+        if (skill.targetType == TargetType.ENEMY)
+            FlickerAnimation(battleUnit.gameObject);
+        if (skill.skillSFX != null)
+            sfxHandler.PlaySFX(skill.skillSFX);
     }
 
     // Makes a GameObject with an Image component fade in

@@ -6,14 +6,16 @@ using TMPro;
 
 public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public TMP_Text skillName;
-    public TMP_Text spCostText;
+    [SerializeField]
+    private TMP_Text skillName;
+    [SerializeField]
+    private TMP_Text spCostText;
     public TMP_Text dialogueText;
     public Skill skill;
-    private string oldDialogueText;
+    private string oldDialogueText = "";
 
     // Put button data 
-    public void setData()
+    public void setData(Skill skill)
     {
         skillName.text = skill.skillName;
         spCostText.text = "" + skill.costSP;
@@ -30,5 +32,17 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
     public void OnPointerExit(PointerEventData eventData)
     {
         dialogueText.text = oldDialogueText;
+    }
+
+    // Makes the sp cost text red
+    public void RedSPCostText()
+    {
+        spCostText.color = new Color(1, 0, 0);
+    }
+
+    // Makes the sp cost text white
+    public void WhiteSPCostText()
+    {
+        spCostText.color = new Color(1, 1, 1);
     }
 }
