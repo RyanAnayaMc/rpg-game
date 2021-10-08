@@ -40,7 +40,8 @@ public enum WeaponAnimation
     NONE,
     SlashAttack,
     FireAttack,
-    CastAnimation
+    CastAnimation,
+    BowAttack
 }
 
 public class Weapon : MonoBehaviour

@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour
     public int agi; // agility
     public bool isDefending = false; // Whether or not the unit is defending
     public GameObject effectRenderer; // The object that manages rendering effects on the unit
+    public List<Skill> skills; // Skills the Unit can use in combat
 
     // Makes the unit take damage. Returns true if the unit died, false otherwise
     public bool TakeDamage(int damage)

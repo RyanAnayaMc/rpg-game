@@ -207,10 +207,11 @@ MonoBehaviour:
   maxSP: 35
   str: 1
   mag: 5
-  dex: 2
+  dex: 3
   def: 1
   res: 4
   arm: 1
   agi: 3
   isDefending: 0
   effectRenderer: {fileID: 1114063354904093374}
+  skills: []
