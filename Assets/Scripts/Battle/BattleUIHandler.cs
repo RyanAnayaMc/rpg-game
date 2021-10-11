@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BattleUIHandler : MonoBehaviour
-{
+public class BattleUIHandler : MonoBehaviour {
     [SerializeField]
     private BattleAnimationHandler animationHandler; // The BattleAnimationHandler for the battle
 
@@ -14,6 +13,8 @@ public class BattleUIHandler : MonoBehaviour
     private TMP_Text attackButtonText; // The text on the "Attack" button
     [SerializeField]
     private SkillMenuController skillMenuController;
+    [SerializeField]
+    private ItemMenuController itemMenuController;
 
     [SerializeField]
     private HUDController playerHUD; // The location of the HUD that shows the player's info
@@ -30,9 +31,12 @@ public class BattleUIHandler : MonoBehaviour
 
     private bool isSetup = false;
 
-    // Sets up the UI
-    public void setupHUD(Unit playerUnit, Unit enemyUnit)
-    {
+    /// <summary>
+    /// Sets up the player and enemy HUD displays.
+    /// </summary>
+    /// <param name="playerUnit">The Unit representing the player.</param>
+    /// <param name="enemyUnit">The Unit representing the enemy.</param>
+    public void setupHUD(Unit playerUnit, Unit enemyUnit) {
         if (isSetup)
             return;
 
@@ -48,8 +52,7 @@ public class BattleUIHandler : MonoBehaviour
 
         // Update text on attack button based on equipped weapon
         AttackType atkType = playerUnit.weapon.atkType;
-        switch (atkType)
-        {
+        switch (atkType) {
             case AttackType.MELEE:
                 attackButtonText.text = "Melee";
                 break;
@@ -66,73 +69,105 @@ public class BattleUIHandler : MonoBehaviour
         animationHandler.stretchOut(skillMenuController.gameObject, 1f);
     }
 
-    // Shows the Player Phase image
-    public void ShowPlayerPhaseImage()
-    {
+    /// <summary>
+    /// Shows the Player Phase image
+    /// </summary>
+    public void ShowPlayerPhaseImage() {
         StartCoroutine(showPlayerPhaseCoroutine());
     }
 
-    private IEnumerator showPlayerPhaseCoroutine()
-    {
+    private IEnumerator showPlayerPhaseCoroutine() {
         animationHandler.fadeIn(playerPhaseUI, 0.03f);
         yield return new WaitForSeconds(1);
         animationHandler.fadeOut(playerPhaseUI, 0.03f);
     }
 
-    // Shows the Enemy Phase image
-    public void ShowEnemyPhaseImage()
-    {
+    /// <summary>
+    /// Shows the Enemy Phase image
+    /// </summary>
+    public void ShowEnemyPhaseImage() {
         StartCoroutine(showEnemyPhaseCoroutine());
     }
 
-    private IEnumerator showEnemyPhaseCoroutine()
-    {
+    private IEnumerator showEnemyPhaseCoroutine() {
         animationHandler.fadeIn(enemyPhaseUI, 0.03f);
         yield return new WaitForSeconds(1);
         animationHandler.fadeOut(enemyPhaseUI, 0.03f);
     }
 
-    // Shows the player's option window
-    public void ShowPlayerOptionWindow()
-    {
+    /// <summary>
+    /// Shows the player's option window
+    /// </summary>
+    public void ShowPlayerOptionWindow() {
         animationHandler.stretchIn(playerOptionWindow, 0.1f);
     }
 
-    // Hides the player's option window
-    public void HidePlayerOptionWindow()
-    {
+    /// <summary>
+    /// Hides the player's option window
+    /// </summary>
+    public void HidePlayerOptionWindow() {
         animationHandler.stretchOut(playerOptionWindow, 0.2f);
     }
 
-    // Shows the skill menu
-    public void ShowSkillWindow()
-    {
+    /// <summary>
+    /// Shows the skill menu
+    /// </summary>
+    public void ShowSkillWindow() {
         GameObject skillWindow = skillMenuController.gameObject;
         skillMenuController.SetSkillMenu();
         animationHandler.stretchIn(skillWindow, 0.1f);
     }
 
-    // Shows the skill menu
-    public void HideSkillWindow()
-    {
+    /// <summary>
+    /// Hides the skill menu
+    /// </summary>
+    public void HideSkillWindow() {
         GameObject skillWindow = skillMenuController.gameObject;
         animationHandler.stretchOut(skillWindow, 0.1f);
     }
 
-    // Shows a new text message on the dialogue box
-    public void DisplayDialogueText(string newDiagText)
-    {
+    /// <summary>
+    /// Shows the Item menu
+    /// </summary>
+    /// <param name="items">The items the player has</param>
+    public void ShowItemsWindow(List<InventoryItem> items) {
+        Debug.Log("showing window");
+        GameObject itemWindow = itemMenuController.gameObject;
+        Debug.Log(items.Count + " items");
+        itemMenuController.SetItemMenu(items);
+        animationHandler.stretchIn(itemWindow, 0.1f);
+	}
+
+    /// <summary>
+    /// Hides the item menu
+    /// </summary>
+    public void HideItemsWindow() {
+        GameObject itemWindow = itemMenuController.gameObject;
+        animationHandler.stretchOut(itemWindow, 0.1f);
+	}
+
+    /// <summary>
+    /// Shows a new text message on the dialogue box
+    /// </summary>
+    /// <param name="newDiagText">The text to display in the dialogue box</param>
+    public void DisplayDialogueText(string newDiagText) {
         dialogueText.text = newDiagText;
     }
 
-    public void SetPlayerHUD(Unit playerUnit)
-    {
+    /// <summary>
+    /// Updates the cHP, mHP, cSP, and mSP values on the player's HUD.
+    /// </summary>
+    /// <param name="playerUnit">The unit representing the Player.</param>
+    public void SetPlayerHUD(Unit playerUnit) {
         playerHUD.SetHP(playerUnit);
         playerHUD.SetSP(playerUnit);
     }
 
-    public void SetEnemyHUD(Unit enemyUnit)
-    {
+    /// <summary>
+    /// Updates the cHP, mHP, cSP, and mSP values on the player's HUD.
+    /// </summary>
+    /// <param name="enemyUnit">The uint representing the Enemy.</param>
+    public void SetEnemyHUD(Unit enemyUnit) {
         enemyHUD.SetHP(enemyUnit);
         enemyHUD.SetSP(enemyUnit);
     }

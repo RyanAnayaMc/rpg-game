@@ -16,9 +16,9 @@ MonoBehaviour:
   unitName: Charles
   weapon: {fileID: 11400000, guid: 6560755d18c82004b952f07df0782787, type: 2}
   level: 3
-  cHP: 7
+  cHP: 17
   maxHP: 17
-  cSP: 4
+  cSP: 10
   maxSP: 10
   str: 2
   mag: 2
@@ -31,3 +31,4 @@ MonoBehaviour:
   skills:
   - {fileID: 11400000, guid: c2d15d184de2a9a44a168b3304e072de, type: 2}
   - {fileID: 11400000, guid: a0805b0bc02236449b70949ac59069df, type: 2}
+  inventory: {fileID: 11400000, guid: 93e1cb203d6d06d43951662515bbeef6, type: 2}

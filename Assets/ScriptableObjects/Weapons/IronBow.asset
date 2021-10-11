@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2129677787867794ebfd4204bf47bf3f, type: 3}
-  m_Name: FireStaff
+  m_Name: IronBow
   m_EditorClassIdentifier: 
-  atkType: 1
-  subtype: 7
+  itemIcon: {fileID: 3305619894676824738, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  itemName: Iron Bow
+  itemDescription: A decent bow for novice adventurers.
+  isSellable: 1
+  buyPrice: 100
+  stackableMax: 0
+  atkType: 2
+  subtype: 10
   castAnimation: 0
-  weaponAnimation: 2
-  weaponName: Fire Staff
-  weaponDescription: A staff for beginner makes. Shoots fire.
-  might: 4
-  attackSFX: {fileID: 8300000, guid: 704ff3486fd4f7a4f8fd4cccf6626a4d, type: 3}
+  weaponAnimation: 4
+  might: 7
+  attackSFX: {fileID: 8300000, guid: d99882e319cf44a4386d1e04e935fb4e, type: 3}
   castSFX: {fileID: 0}
-  weaponIcon: {fileID: -4662212186398768402, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}

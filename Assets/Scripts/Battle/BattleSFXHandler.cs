@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleSFXHandler : MonoBehaviour
-{
+public class BattleSFXHandler : MonoBehaviour {
     [SerializeField]
     private AudioSource sfxSource;
     [SerializeField]
@@ -11,18 +10,25 @@ public class BattleSFXHandler : MonoBehaviour
     [SerializeField]
     private AudioClip backSFX;
 
-    public void PlayConfirmSFX()
-    {
+    /// <summary>
+    /// Plays the confirm sound effect.
+    /// </summary>
+    public void PlayConfirmSFX() {
         sfxSource.PlayOneShot(confirmSFX);
     }
 
-    public void PlayBackSFX()
-    {
+    /// <summary>
+    /// Plays the back sound effect.
+    /// </summary>
+    public void PlayBackSFX() {
         sfxSource.PlayOneShot(backSFX);
     }
 
-    public void PlaySFX(AudioClip sfxClip)
-    {
+    /// <summary>
+    /// Plays a specific sound effect.
+    /// </summary>
+    /// <param name="sfxClip">The sound effect to play.</param>
+    public void PlaySFX(AudioClip sfxClip) {
         sfxSource.PlayOneShot(sfxClip);
     }
 }

@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SkillMenuController : MonoBehaviour
-{
+public class SkillMenuController : MonoBehaviour {
     [SerializeField]
     private Transform content; // The transform for the content field for the Skills menu
     [SerializeField]
@@ -18,27 +17,30 @@ public class SkillMenuController : MonoBehaviour
     private List<Skill> playerSkills;
     private List<SkillButtonController> skillButtons;
 
-    public void SetSkillMenu()
-    {
+    /// <summary>
+    /// Populates the skill menu if not populated. Otherwise, updates it.
+    /// </summary>
+    public void SetSkillMenu() {
         if (skillButtons == null)
             PopulateSkillMenu();
         else
             UpdateSkillMenu();
     }
 
-    public void UpdateSkillMenu()
-    {
-        foreach (SkillButtonController button in skillButtons)
-        {
-            if (battleController.playerUnit.unit.cSP < button.skill.costSP)
-                button.RedSPCostText();
+    // Updates the skill menu. Makes SP text red if unit does not have enough SP,
+    // or white otherwise.
+    private void UpdateSkillMenu() {
+        foreach (SkillButtonController button in skillButtons) {
+            if (battleController.playerUnit.unit.cSP < button.element.GetNumber())
+                button.RedNumber();
             else
-                button.WhiteSPCostText();
+                button.WhiteNumber();
+                    ;
         }
     }
 
-    public void PopulateSkillMenu()
-    {
+    // Puts all the user's skills into the skill menu.
+    private void PopulateSkillMenu() {
         playerSkills = battleController.playerUnit.unit.skills;
 
         skillButtons = new List<SkillButtonController>();
@@ -52,16 +54,14 @@ public class SkillMenuController : MonoBehaviour
             SkillButtonController buttonController = skillButton.GetComponent<SkillButtonController>();
             skillButtons.Add(buttonController);
             buttonController.dialogueText = dialogueBoxText;
-            buttonController.skill = skill;
             buttonController.setData(skill);
             if (battleController.playerUnit.unit.cSP < skill.costSP)
-                buttonController.RedSPCostText();
+                buttonController.RedNumber();
 
             // Register the listener for the button
             Button button = skillButton.GetComponent<Button>();
             int j = i;
             button.onClick.AddListener(() => battleController.onSkillButton(j));
-            button.name = i.ToString();
         }
     }
 }
