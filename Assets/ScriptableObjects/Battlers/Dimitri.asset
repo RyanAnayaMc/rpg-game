@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e369d494391e748bf5ded5f86cfd9a, type: 3}
-  m_Name: FireMage
+  m_Name: Dimitri
   m_EditorClassIdentifier: 
-  unitSprite: {fileID: 21300000, guid: d3a721f51a2573c4691cb62edb2d16bf, type: 3}
-  unitName: Fire Mage
-  weaponType: 1
-  weapon: {fileID: 11400000, guid: 938afa262450f3e459ed52270c17eab9, type: 2}
-  level: 4
-  cHP: 17
-  maxHP: 17
-  cSP: 25
-  maxSP: 25
-  str: 1
-  mag: 6
+  unitSprite: {fileID: 21300000, guid: 22282fbbc7eea6f45ac696f27c29b982, type: 3}
+  unitName: Dimitri
+  weaponType: 0
+  weapon: {fileID: 11400000, guid: 964f54d70acc2ef499a97f9c863e4bdc, type: 2}
+  level: 5
+  cHP: 20
+  maxHP: 20
+  cSP: 15
+  maxSP: 15
+  str: 4
+  mag: 2
   dex: 3
-  def: 2
+  def: 4
   res: 3
-  arm: 2
-  agi: 3
+  arm: 3
+  agi: 2
   isDefending: 0
   skills: []
   inventory: {fileID: 0}

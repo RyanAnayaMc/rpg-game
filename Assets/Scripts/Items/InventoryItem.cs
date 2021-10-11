@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+[CreateAssetMenu(fileName = "NewInventoryItem", menuName = "RPG Element/Debug/Inventory Item")]
 public class InventoryItem : ScriptableObject, ButtonTextable
 {
 	[SerializeField]

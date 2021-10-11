@@ -7,6 +7,7 @@ using UnityEngine;
 /// <summary>
 /// Base class for items that the user can have in their inventory.
 /// </summary>
+[System.Serializable]
 public class Item : ScriptableObject {
     /// <summary>
     /// The icon for the item.

@@ -26,7 +26,7 @@ public enum Stat {
     MT
 }
 
-[CreateAssetMenu(fileName = "NewConsumable", menuName = "RPG Element/Consumable Item")]
+[CreateAssetMenu(fileName = "NewConsumable", menuName = "RPG Element/Item/Consumable")]
 public class Consumable : Item {
     /// <summary>
     /// The ConsumableType of the item.
@@ -76,4 +76,45 @@ public class Consumable : Item {
     /// If scripted, the skill effect to perform.
     /// </summary>
     public ScriptedSkillEffect scriptedSkillEffect;
+
+    /// <summary>
+    /// Performs the effect of the consumable item. Includes performing animation and SFX.
+    /// </summary>
+    /// <param name="attacker">The unit using the item.</param>
+    /// <param name="defender">The enemy of the user.</param>
+    /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
+    /// <returns>
+    /// Item1 - The dialogue box message.
+    /// Item2 - Whether or not defender died.
+    /// </returns>
+    public (string, bool) Use(BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
+        Debug.Log("2 " + attacker.unit.cHP + " " + defender.unit.cHP);
+        switch (type) {
+            case ConsumableType.HealthRecover:
+                int heal = attacker.Heal(recovery);
+                playAnimationAndSFX(attacker, sfxHandler);
+                return (attacker.unit.unitName + " restored " + heal + " HP.", false);
+            case ConsumableType.SpecialRecover:
+                int recover = attacker.RecoverSP(recovery);
+                playAnimationAndSFX(attacker, sfxHandler);
+                return (attacker.unit.unitName + " recovered " + recover + " SP.", false);
+            case ConsumableType.StatBuff:
+                return ("not implemented yet", false);
+            case ConsumableType.DebuffInflict:
+                return ("not implemented yet", false);
+            case ConsumableType.DamageDeal:
+                bool dead = defender.TakeDamage(damage);
+                playAnimationAndSFX(defender, sfxHandler);
+                return (defender.unit.unitName + " took " + damage + " item damage!", dead);
+            case ConsumableType.Scripted:
+                return (scriptedSkillEffect.DoSkill(attacker, defender, sfxHandler), defender.unit.cHP <= 0);
+		}
+
+        return ("error", false);
+	}
+
+    private void playAnimationAndSFX(BattleUnit unit, BattleSFXHandler sfxHandler) {
+        unit.effectRenderer.GetComponent<Animator>().SetTrigger(animation.ToString());
+        sfxHandler.PlaySFX(soundEffect);
+    }
 }

@@ -114,4 +114,6 @@ public class Unit : ScriptableObject {
     /// The unit's inventory.
     /// </summary>
     public Inventory inventory;
+
+    public bool showStats;
 }

@@ -32,7 +32,7 @@ public enum RangedWeaponType {
     RIFLE
 }
 
-[CreateAssetMenu(fileName = "NewWeapon", menuName = "RPG Element/Weapon")]
+[CreateAssetMenu(fileName = "NewWeapon", menuName = "RPG Element/Item/Weapon")]
 public class Weapon : Item {
     /// <summary>
     /// The type of damage the weapon does.

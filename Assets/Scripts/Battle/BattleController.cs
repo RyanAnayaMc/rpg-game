@@ -117,6 +117,7 @@ public class BattleController : MonoBehaviour {
 
         // Setup sprites
         playerUnit = playerObj.GetComponent<BattleUnit>();
+        playerUnit.GetComponent<SpriteRenderer>().flipX = true;
         enemyUnit = enemyObj.GetComponent<BattleUnit>();
 
         playerUnit.unit = playerUnitObj;
@@ -184,9 +185,35 @@ public class BattleController : MonoBehaviour {
         uiHandler.ShowItemsWindow(playerUnitObj.inventory.GetConsumableItems());
 	}
 
+
     public void OnItemButton(int index) {
-        // TODO implement
-	}
+        phase = BattlePhase.PLAYER_ACTION;
+        uiHandler.HideItemsWindow();
+
+        Item item = playerUnitObj.inventory.GetConsumableItems()[index].item;
+        playerUnitObj.inventory.RemoveItem(item);
+
+        uiHandler.DisplayDialogueText(playerUnitObj.unitName + " uses a " + item.itemName + "!");
+        StartCoroutine(useItem(item as Consumable));
+    }
+
+    private IEnumerator useItem(Consumable item) {
+        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
+        (string, bool) data = item.Use(playerUnit, enemyUnit, battleSFXHandler);
+        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
+        uiHandler.SetPlayerHUD(playerUnit.unit);
+        uiHandler.SetEnemyHUD(enemyUnit.unit);
+        yield return new WaitForSeconds(2);
+        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
+        uiHandler.DisplayDialogueText(data.Item1);
+        yield return new WaitForSeconds(1);
+        bool isDead = data.Item2;
+
+        if (isDead)
+            Win();
+        else
+            StartCoroutine(EnemyTurn());
+    }
 
     /// <summary>
     /// Code ran when the player clicks the back button in the items menu
@@ -395,6 +422,16 @@ public class BattleController : MonoBehaviour {
 
     #region State Changes
     // Player wins
+    public void Win() {
+        phase = BattlePhase.WIN;
+
+        // Fade out enemy
+        battleSFXHandler.PlaySFX(enemyDefeatSFX);
+        animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
+
+        StartCoroutine(Victory());
+    }
+
     private IEnumerator Victory() {
         uiHandler.DisplayDialogueText("You win!");
         musicHandler.PlayVictoryFanfare();

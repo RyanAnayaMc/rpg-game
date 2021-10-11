@@ -27,10 +27,10 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
         icon.sprite = textable.GetIcon();
     }
 
-    /// <summary>
-    /// Puts the skill description in the dialogue box when mousing over the skill.
-    /// </summary>
-    public void OnPointerEnter(PointerEventData eventData) {
+	/// <summary>
+	/// Puts the skill description in the dialogue box when mousing over the skill.
+	/// </summary>
+	public void OnPointerEnter(PointerEventData eventData) {
         oldDialogueText = dialogueText.text;
         dialogueText.text = element.GetDescriptionText();
     }

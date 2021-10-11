@@ -3683,8 +3683,8 @@ MonoBehaviour:
   baseBattleUnit: {fileID: 6248857837144847558, guid: 5dcd8f5048e687f46b4b1e2422b6ea56, type: 3}
   playerLocation: {fileID: 824633868}
   enemyLocation: {fileID: 1641637877}
-  playerUnitObj: {fileID: 11400000, guid: d841b75edc4df9c44803a5b58d4a5118, type: 2}
-  enemyUnitObj: {fileID: 11400000, guid: d54e0cf29049ab84882655c2ddf0b6f2, type: 2}
+  playerUnitObj: {fileID: 11400000, guid: d83c06612c90d0f478492a326ae909e2, type: 2}
+  enemyUnitObj: {fileID: 11400000, guid: a3cc9c897230bf241b1943243242b91d, type: 2}
   playerUnit: {fileID: 0}
   enemyUnit: {fileID: 0}
   musicHandler: {fileID: 1275054343}
