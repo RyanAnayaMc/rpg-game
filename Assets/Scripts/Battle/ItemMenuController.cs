@@ -17,14 +17,18 @@ public class ItemMenuController : MonoBehaviour
 
     private List<SkillButtonController> itemButtons; // This controller is reused from skills
 
+    public void ResetItemMenu() {
+        // Destroy all existing item buttons
+        foreach (SkillButtonController buttonController in itemButtons)
+            Destroy(buttonController.gameObject);
+
+        itemButtons = new List<SkillButtonController>();
+    }
+
     public void SetItemMenu(List<InventoryItem> consumables) {
         // Create itemButtons array if it doesn't exist
         if (itemButtons == null)
             itemButtons = new List<SkillButtonController>();
-
-        // Destroy all existing item buttons
-        foreach (SkillButtonController buttonController in itemButtons)
-            Destroy(buttonController.gameObject);
 
         // Populate the item list
         for (int i = 0; i < consumables.Count; i++) {

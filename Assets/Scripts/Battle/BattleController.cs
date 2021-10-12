@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -16,6 +17,22 @@ public enum BattlePhase {
 }
 
 public class BattleController : MonoBehaviour {
+    #region Input
+
+    [HideInInspector]
+    public static PlayerUnit inPlayerUnit;
+    [HideInInspector]
+    public static Unit inEnemyUnit;
+    [HideInInspector]
+    public static AudioClip inMusic;
+    [HideInInspector]
+    public static string inScene;
+    [HideInInspector]
+    public static Transform inLocation;
+    [HideInInspector]
+    public static bool inParameters;
+
+    #endregion
     #region Fields
     /// <summary>
     /// The prefab for the BattleUnit.
@@ -37,7 +54,7 @@ public class BattleController : MonoBehaviour {
     /// The Unit to spawn for the battle representing the player.
     /// </summary>
     [SerializeField]
-    private Unit playerUnitObj;
+    private PlayerUnit playerUnitObj;
 
     /// <summary>
     /// The Unit to spawn for the battle representing the enemy.
@@ -99,14 +116,49 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     [Header("Sound Effects")]
     public AudioClip enemyDefeatSFX;
+
+    private string currentScene;
+    private Transform location;
     #endregion
 
     #region Setup
+    /// <summary>
+    /// Starts a battle
+    /// </summary>
+    /// <param name="playerUnit">The player unit.</param>
+    /// <param name="enemy">The enemy unit.</param>
+    /// <param name="battleMusic">The battle music.</param>
+    /// <param name="currentSceneName">The name of the scene you are currently in (to return to after the battle).</param>
+    /// <param name="currentLocation">The location to return to after the battle.</param>
+    public static void StartBattle(PlayerUnit playerUnit, Unit enemy, AudioClip battleMusic, string currentSceneName, Transform currentLocation) {
+        SceneManager.LoadScene("BattleScene");
+
+        BattleController.inParameters = true;
+        BattleController.inPlayerUnit = playerUnit;
+        BattleController.inEnemyUnit = enemy;
+        BattleController.inMusic = battleMusic;
+        BattleController.inScene = currentSceneName;
+        BattleController.inLocation = currentLocation;
+    }
+    
     void Start() {
         StartCoroutine(BattleSetup());
 
     }
     private IEnumerator BattleSetup() {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
+        // Get parameters from other scene if present
+        if (inParameters) {
+            playerUnitObj = inPlayerUnit;
+            enemyUnitObj = inEnemyUnit;
+            musicHandler.battleMusic = inMusic;
+            currentScene = inScene;
+            location = inLocation;
+            inParameters = false;
+        }
+
         // Play the battle music
         musicHandler.PlayBattleMusic();
 
@@ -117,7 +169,6 @@ public class BattleController : MonoBehaviour {
 
         // Setup sprites
         playerUnit = playerObj.GetComponent<BattleUnit>();
-        playerUnit.GetComponent<SpriteRenderer>().flipX = true;
         enemyUnit = enemyObj.GetComponent<BattleUnit>();
 
         playerUnit.unit = playerUnitObj;
@@ -189,6 +240,8 @@ public class BattleController : MonoBehaviour {
         phase = BattlePhase.PLAYER_ACTION;
         uiHandler.HideItemsWindow();
 
+        battleSFXHandler.PlayConfirmSFX();
+
         Item item = PlayerInventory.INSTANCE.GetConsumableItems()[index].item;
         PlayerInventory.INSTANCE.RemoveItem(item);
 
@@ -219,6 +272,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     public void OnItemBackButton() {
         StartCoroutine(ItemBackButton());
+        battleSFXHandler.PlayBackSFX();
 	}
 
     private IEnumerator ItemBackButton() {
@@ -287,6 +341,7 @@ public class BattleController : MonoBehaviour {
         }
         else {
             StartCoroutine(PlayerSkill(skill));
+            battleSFXHandler.PlayConfirmSFX();
         }
     }
 

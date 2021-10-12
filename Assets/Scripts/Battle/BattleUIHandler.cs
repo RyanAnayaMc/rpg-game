@@ -141,6 +141,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     public void HideItemsWindow() {
         GameObject itemWindow = itemMenuController.gameObject;
+        itemMenuController.ResetItemMenu();
         animationHandler.stretchOut(itemWindow, 0.1f);
 	}
 

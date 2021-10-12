@@ -3663,7 +3663,7 @@ GameObject:
   - component: {fileID: 1690504653}
   m_Layer: 0
   m_Name: BattleController
-  m_TagString: Untagged
+  m_TagString: BattleController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3683,8 +3683,8 @@ MonoBehaviour:
   baseBattleUnit: {fileID: 6248857837144847558, guid: 5dcd8f5048e687f46b4b1e2422b6ea56, type: 3}
   playerLocation: {fileID: 824633868}
   enemyLocation: {fileID: 1641637877}
-  playerUnitObj: {fileID: 11400000, guid: d83c06612c90d0f478492a326ae909e2, type: 2}
-  enemyUnitObj: {fileID: 11400000, guid: a3cc9c897230bf241b1943243242b91d, type: 2}
+  playerUnitObj: {fileID: 0}
+  enemyUnitObj: {fileID: 0}
   playerUnit: {fileID: 0}
   enemyUnit: {fileID: 0}
   musicHandler: {fileID: 1275054343}

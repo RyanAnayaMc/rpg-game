@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Unit))]
-public class UnitEditor : Editor {
+[CustomEditor(typeof(PlayerUnit))]
+public class PlayerUnitEditor : Editor
+{
 	public override void OnInspectorGUI() {
-		Unit unit = target as Unit;
+		PlayerUnit unit = target as PlayerUnit;
 
 		unit.unitName = EditorGUILayout.TextField("Name", unit.unitName);
 		unit.level = EditorGUILayout.IntField("Level", unit.level);
+		unit.xp = EditorGUILayout.IntField("Experience Points", unit.xp);
 
-		unit.unitSprite = EditorGUILayout.ObjectField("Sprite", unit.unitSprite, typeof(Sprite), false) as Sprite;
+		unit.useBasicSpriteMode = EditorGUILayout.Toggle("Use Basic Sprite Mode", unit.useBasicSpriteMode);
 
-		unit.weaponType = (AttackType) EditorGUILayout.EnumPopup("Weapon Type", unit.weaponType);
+		if (unit.useBasicSpriteMode)
+			unit.unitSprite = EditorGUILayout.ObjectField("Sprite", unit.unitSprite, typeof(Sprite), false) as Sprite;
+		else {
+			unit.meleeSprite = EditorGUILayout.ObjectField("Melee Sprite", unit.meleeSprite, typeof(Sprite), false) as Sprite;
+			unit.magicSprite = EditorGUILayout.ObjectField("Magic Sprite", unit.magicSprite, typeof(Sprite), false) as Sprite;
+			unit.rangedSprite = EditorGUILayout.ObjectField("Ranged Sprite", unit.rangedSprite, typeof(Sprite), false) as Sprite;
+		}
 
 		unit.weapon = EditorGUILayout.ObjectField("Weapon", unit.weapon, typeof(Weapon), false) as Weapon;
 

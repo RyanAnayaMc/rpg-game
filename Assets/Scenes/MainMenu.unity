@@ -462,6 +462,9 @@ MonoBehaviour:
   sfxSource: {fileID: 1352590150}
   buttonClickSFX: {fileID: 8300000, guid: 7f837260a9e72314eb4099317c96256c, type: 3}
   backSFX: {fileID: 8300000, guid: bc3f10ba894229c47ba5c98e435123cc, type: 3}
+  playerUnit: {fileID: 11400000, guid: ecd707efcfc6fb443badbc3b87e32a5a, type: 2}
+  enemyUnit: {fileID: 11400000, guid: a3cc9c897230bf241b1943243242b91d, type: 2}
+  battleMusic: {fileID: 8300000, guid: 08bbc73a25dce03409b01d07bae949d1, type: 3}
 --- !u!4 &503207606
 Transform:
   m_ObjectHideFlags: 0

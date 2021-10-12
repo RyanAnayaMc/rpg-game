@@ -17,8 +17,29 @@ public class BattleUnit : MonoBehaviour {
 
     public void Start() {
         SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        Sprite sprite = unit.unitSprite;
-        spriteRenderer.sprite = sprite;
+
+        if (unit is PlayerUnit) {
+            if (!((PlayerUnit) unit).useBasicSpriteMode) {
+                switch (unit.weapon.atkType) {
+                    case AttackType.MELEE:
+                        spriteRenderer.sprite = ((PlayerUnit) unit).meleeSprite;
+                        break;
+                    case AttackType.MAGIC:
+                        spriteRenderer.sprite = ((PlayerUnit) unit).magicSprite;
+                        break;
+                    case AttackType.RANGED:
+                        spriteRenderer.sprite = ((PlayerUnit) unit).rangedSprite;
+                        break;
+                }
+            }
+            else
+                spriteRenderer.sprite = unit.unitSprite;
+
+            spriteRenderer.flipX = true;
+		}
+        else
+            spriteRenderer.sprite = unit.unitSprite;
+
         spriteRenderer.sortingOrder = 10;
     }
 

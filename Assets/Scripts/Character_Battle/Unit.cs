@@ -12,7 +12,7 @@ public enum UnitType {
 /// <summary>
 /// Basis for a playable or enemy Unit that can see combat.
 /// </summary>
-[CreateAssetMenu(fileName = "NewUnit", menuName = "RPG Element/Unit")]
+[CreateAssetMenu(fileName = "NewGenericUnit", menuName = "RPG Element/Unit/GenericUnit")]
 public class Unit : ScriptableObject {
     /// <summary>
     /// The battle sprite for the Unit.
