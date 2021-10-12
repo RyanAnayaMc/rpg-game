@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInventory : Inventory
+public class PlayerInventory
 {
 	private static Inventory _instance;
 
