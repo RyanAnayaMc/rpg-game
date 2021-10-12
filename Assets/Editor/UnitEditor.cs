@@ -38,7 +38,5 @@ public class UnitEditor : Editor {
 		serializedObject.Update();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("skills"), true);
 		serializedObject.ApplyModifiedProperties();
-
-		unit.inventory = EditorGUILayout.ObjectField("Inventory", unit.inventory, typeof(Inventory), false) as Inventory;
 	}
 }

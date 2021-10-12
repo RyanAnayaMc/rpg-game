@@ -131,9 +131,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="items">The items the player has</param>
     public void ShowItemsWindow(List<InventoryItem> items) {
-        Debug.Log("showing window");
         GameObject itemWindow = itemMenuController.gameObject;
-        Debug.Log(items.Count + " items");
         itemMenuController.SetItemMenu(items);
         animationHandler.stretchIn(itemWindow, 0.1f);
 	}

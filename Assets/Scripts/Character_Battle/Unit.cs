@@ -110,10 +110,5 @@ public class Unit : ScriptableObject {
     /// </summary>
     public List<Skill> skills; // Skills the Unit can use in combat
 
-    /// <summary>
-    /// The unit's inventory.
-    /// </summary>
-    public Inventory inventory;
-
     public bool showStats;
 }

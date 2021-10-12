@@ -120,9 +120,6 @@ public class BattleController : MonoBehaviour {
         playerUnit.GetComponent<SpriteRenderer>().flipX = true;
         enemyUnit = enemyObj.GetComponent<BattleUnit>();
 
-        // Setup player inventory
-        playerUnitObj.inventory = PlayerInventory.INSTANCE;
-
         playerUnit.unit = playerUnitObj;
         enemyUnit.unit = Instantiate(enemyUnitObj);
 
