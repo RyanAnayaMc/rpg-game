@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
+  m_Name: PowerShot
+  m_EditorClassIdentifier: 
+  icon: {fileID: 3305619894676824738, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  skillName: Power Shot
+  skillDescription: A stronger bow attack that ignores half of enemyARM. Does not
+    crit.
+  requiresWeaponType: 1
+  requiredAtkType: 2
+  costSP: 3
+  useScriptedSkillEffects: 0
+  scriptedSkillEffect: {fileID: 0}
+  skillSFX: {fileID: 8300000, guid: d99882e319cf44a4386d1e04e935fb4e, type: 3}
+  skillAnimation: 4
+  targetType: 2
+  unitChpMultiplier: 0
+  unitMhpMultiplier: 0
+  unitCspMultiplier: 0
+  unitMspMultiplier: 0
+  unitStrMultiplier: 0
+  unitMagMultiplier: 0
+  unitDexMultiplier: 0
+  unitDefMultiplier: 0
+  unitResMultiplier: 0
+  unitArmMultiplier: 0
+  unitAgiMultiplier: 0
+  unitMtMultiplier: 1
+  enemyChpMultiplier: 0
+  enemyMhpMultiplier: 0
+  enemyCspMultiplier: 0
+  enemyMspMultiplier: 0
+  enemyStrMultiplier: 0
+  enemyMagMultiplier: 0
+  enemyDexMultiplier: 0
+  enemyDefMultiplier: 0
+  enemyResMultiplier: 0
+  enemyArmMultiplier: -0.5
+  enemyAgiMultiplier: 0
+  enemyMtMultiplier: 0
+  flatValue: 0

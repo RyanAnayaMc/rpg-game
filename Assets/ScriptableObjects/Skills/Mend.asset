@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
+  m_Name: Mend
+  m_EditorClassIdentifier: 
+  icon: {fileID: -6737271339988783208, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  skillName: Mend
+  skillDescription: Restores a small amount of HP and SP.
+  requiresWeaponType: 0
+  requiredAtkType: 0
+  requiresSubtype: 0
+  requiredSubtype: 0
+  costSP: 0
+  useScriptedSkillEffects: 1
+  scriptedSkillEffect: {fileID: -8680542395795957790, guid: 366878f76d1638547bcc03bf51d022f8, type: 3}
+  skillSFX: {fileID: 0}
+  skillAnimation: 0
+  targetType: 0
+  unitChpMultiplier: 0
+  unitMhpMultiplier: 0
+  unitCspMultiplier: 0
+  unitMspMultiplier: 0
+  unitStrMultiplier: 0
+  unitMagMultiplier: 0
+  unitDexMultiplier: 0
+  unitDefMultiplier: 0
+  unitResMultiplier: 0
+  unitArmMultiplier: 0
+  unitAgiMultiplier: 0
+  unitMtMultiplier: 0
+  enemyChpMultiplier: 0
+  enemyMhpMultiplier: 0
+  enemyCspMultiplier: 0
+  enemyMspMultiplier: 0
+  enemyStrMultiplier: 0
+  enemyMagMultiplier: 0
+  enemyDexMultiplier: 0
+  enemyDefMultiplier: 0
+  enemyResMultiplier: 0
+  enemyArmMultiplier: 0
+  enemyAgiMultiplier: 0
+  enemyMtMultiplier: 0
+  flatValue: 0
