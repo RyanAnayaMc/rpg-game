@@ -176,7 +176,6 @@ public class BattleController : MonoBehaviour {
 
         battleSFXHandler.PlayConfirmSFX();
         StartCoroutine(onItemMenu());
-        Debug.Log("Started coroutine");
     }
 
     private IEnumerator onItemMenu() {
