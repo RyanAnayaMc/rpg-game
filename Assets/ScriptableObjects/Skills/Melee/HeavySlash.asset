@@ -10,34 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
-  m_Name: PowerShot
+  m_Name: HeavySlash
   m_EditorClassIdentifier: 
-  icon: {fileID: 3305619894676824738, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
-  skillName: Power Shot
-  skillDescription: A stronger bow attack that ignores half of enemyARM. Does not
-    crit.
-  requiresWeaponType: 0
+  icon: {fileID: -3871836356909336669, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  skillName: Critical Slash
+  skillDescription: A strong attack that scales on STR and DEX.
+  requiresWeaponType: 1
   requiredAtkType: 0
-  requiresSubtype: 0
-  requiredSubtype: 0
-  costSP: 3
+  costSP: 4
   useScriptedSkillEffects: 0
   scriptedSkillEffect: {fileID: 0}
-  skillSFX: {fileID: 8300000, guid: d99882e319cf44a4386d1e04e935fb4e, type: 3}
-  skillAnimation: 4
+  skillSFX: {fileID: 8300000, guid: bc0ec6c698c39ad49afc75af080bb418, type: 3}
+  skillAnimation: 1
   targetType: 2
   unitChpMultiplier: 0
   unitMhpMultiplier: 0
   unitCspMultiplier: 0
   unitMspMultiplier: 0
-  unitStrMultiplier: 0
+  unitStrMultiplier: 1.2
   unitMagMultiplier: 0
-  unitDexMultiplier: 0
+  unitDexMultiplier: 1.75
   unitDefMultiplier: 0
   unitResMultiplier: 0
   unitArmMultiplier: 0
   unitAgiMultiplier: 0
-  unitMtMultiplier: 1
+  unitMtMultiplier: 0
   enemyChpMultiplier: 0
   enemyMhpMultiplier: 0
   enemyCspMultiplier: 0
@@ -45,9 +42,9 @@ MonoBehaviour:
   enemyStrMultiplier: 0
   enemyMagMultiplier: 0
   enemyDexMultiplier: 0
-  enemyDefMultiplier: 0
+  enemyDefMultiplier: -1
   enemyResMultiplier: 0
-  enemyArmMultiplier: -0.5
+  enemyArmMultiplier: 0
   enemyAgiMultiplier: 0
   enemyMtMultiplier: 0
   flatValue: 0

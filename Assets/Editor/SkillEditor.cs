@@ -17,15 +17,8 @@ public class SkillEditor : Editor {
         SerializedProperty requiresWeapon = serializedObject.FindProperty("requiresWeaponType");
         EditorGUILayout.PropertyField(requiresWeapon);
 
-        if (requiresWeapon.boolValue) {
+        if (requiresWeapon.boolValue)
             EditorGUILayout.PropertyField(serializedObject.FindProperty("requiredAtkType"));
-
-            SerializedProperty requiresSubtype = serializedObject.FindProperty("requiresSubtype");
-            EditorGUILayout.PropertyField(requiresSubtype);
-
-            if (requiresSubtype.boolValue)
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("requiredSubtype"));
-        }
 
         // Draw skill effect info
         SerializedProperty scriptedSkillEff = serializedObject.FindProperty("useScriptedSkillEffects");

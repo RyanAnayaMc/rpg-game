@@ -60,6 +60,8 @@ public class SkillMenuController : MonoBehaviour {
 
             // Register the listener for the button
             Button button = skillButton.GetComponent<Button>();
+            button.interactable = !skill.requiresWeaponType ||
+                (skill.requiresWeaponType && skill.requiredAtkType == battleController.playerUnit.unit.weapon.atkType);
             int j = i;
             button.onClick.AddListener(() => battleController.onSkillButton(j));
         }

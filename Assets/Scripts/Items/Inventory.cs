@@ -6,6 +6,8 @@ using UnityEngine;
 public class Inventory : ScriptableObject {
     public List<Item> items;
     public List<int> quantities;
+    [SerializeField]
+    private int gold;
 
     public List<InventoryItem> GetConsumableItems() {
         List<InventoryItem> consumables = new List<InventoryItem>();
@@ -15,6 +17,52 @@ public class Inventory : ScriptableObject {
                 consumables.Add(getByIndex(i));
 
         return consumables;
+	}
+
+    /// <summary>
+    /// Gets the amount of gold in this inventory
+    /// </summary>
+    public int GetGold() {
+        return gold;
+	}
+
+    /// <summary>
+    /// Subtracts the amount of gold from the inventory if the inventory has enough gold.
+    /// If the inventory does not have enough gold, it will not be changed.
+    /// </summary>
+    /// <param name="amount">The amount is</param>
+    /// <returns><see langword="true"/> if the gold was removed. <see langword="false"/> if
+    /// there was not enough gold in the inventory.</returns>
+    public bool SubtractGold(int amount) {
+        if (amount > gold)
+            return false;
+        else {
+            gold -= amount;
+            return true;
+		}
+	}
+
+    /// <summary>
+    /// Adds an item to the inventory.
+    /// </summary>
+    /// <param name="item">The item to add.</param>
+    public void AddItem(Item item) {
+        AddItem(item, 1);
+	}
+
+    /// <summary>
+    /// Adds an item to the inventory.
+    /// </summary>
+    /// <param name="item">The item to add.</param>
+    /// <param name="quantity">How many of the item to add.</param>
+    public void AddItem(Item item, int quantity) {
+        int index = items.IndexOf(item);
+
+        if (index < 0) {
+            items.Add(item);
+            quantities.Add(quantity);
+        } else
+            quantities[index] += quantity;
 	}
 
     /// <summary>
@@ -48,7 +96,20 @@ public class Inventory : ScriptableObject {
             } else
                 return false;
 		}
+	}
 
+    /// <summary>
+    /// Returns the quantity of an item in the inventory.
+    /// </summary>
+    /// <param name="item">The item to check the quantity of.</param>
+    /// <returns></returns>
+    public int QuantityOfItem(Item item) {
+        int index = items.IndexOf(item);
+
+        if (index < 0)
+            return 0;
+        else
+            return quantities[index];
 	}
 
     private InventoryItem createInventoryItem(Item item, int quantity) {

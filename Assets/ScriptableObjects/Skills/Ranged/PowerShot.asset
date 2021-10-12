@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
-  m_Name: Heavy Slash
+  m_Name: PowerShot
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  skillName: 
-  skillDescription: 
-  requiresWeaponType: 0
-  requiredAtkType: 0
-  costSP: 0
+  icon: {fileID: 3305619894676824738, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  skillName: Power Shot
+  skillDescription: A stronger bow attack that ignores half of enemyARM. Does not
+    crit.
+  requiresWeaponType: 1
+  requiredAtkType: 2
+  costSP: 3
   useScriptedSkillEffects: 0
   scriptedSkillEffect: {fileID: 0}
-  skillSFX: {fileID: 0}
-  skillAnimation: 0
-  targetType: 0
+  skillSFX: {fileID: 8300000, guid: d99882e319cf44a4386d1e04e935fb4e, type: 3}
+  skillAnimation: 4
+  targetType: 2
   unitChpMultiplier: 0
   unitMhpMultiplier: 0
   unitCspMultiplier: 0
@@ -34,7 +35,7 @@ MonoBehaviour:
   unitResMultiplier: 0
   unitArmMultiplier: 0
   unitAgiMultiplier: 0
-  unitMtMultiplier: 0
+  unitMtMultiplier: 1
   enemyChpMultiplier: 0
   enemyMhpMultiplier: 0
   enemyCspMultiplier: 0
@@ -44,7 +45,7 @@ MonoBehaviour:
   enemyDexMultiplier: 0
   enemyDefMultiplier: 0
   enemyResMultiplier: 0
-  enemyArmMultiplier: 0
+  enemyArmMultiplier: -0.5
   enemyAgiMultiplier: 0
   enemyMtMultiplier: 0
   flatValue: 0

@@ -120,6 +120,9 @@ public class BattleController : MonoBehaviour {
         playerUnit.GetComponent<SpriteRenderer>().flipX = true;
         enemyUnit = enemyObj.GetComponent<BattleUnit>();
 
+        // Setup player inventory
+        playerUnitObj.inventory = PlayerInventory.INSTANCE;
+
         playerUnit.unit = playerUnitObj;
         enemyUnit.unit = Instantiate(enemyUnitObj);
 
@@ -182,7 +185,7 @@ public class BattleController : MonoBehaviour {
     private IEnumerator onItemMenu() {
         uiHandler.HidePlayerOptionWindow();
         yield return new WaitForSeconds(0.3f);
-        uiHandler.ShowItemsWindow(playerUnitObj.inventory.GetConsumableItems());
+        uiHandler.ShowItemsWindow(PlayerInventory.INSTANCE.GetConsumableItems());
 	}
 
 
@@ -190,8 +193,8 @@ public class BattleController : MonoBehaviour {
         phase = BattlePhase.PLAYER_ACTION;
         uiHandler.HideItemsWindow();
 
-        Item item = playerUnitObj.inventory.GetConsumableItems()[index].item;
-        playerUnitObj.inventory.RemoveItem(item);
+        Item item = PlayerInventory.INSTANCE.GetConsumableItems()[index].item;
+        PlayerInventory.INSTANCE.RemoveItem(item);
 
         uiHandler.DisplayDialogueText(playerUnitObj.unitName + " uses a " + item.itemName + "!");
         StartCoroutine(useItem(item as Consumable));

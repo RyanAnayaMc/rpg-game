@@ -12,7 +12,9 @@ public class InventoryEditor : Editor {
 
 		SerializedProperty items = serializedObject.FindProperty("items");
 		SerializedProperty quantities = serializedObject.FindProperty("quantities");
+		SerializedProperty gold = serializedObject.FindProperty("gold");
 
+		EditorGUILayout.PropertyField(gold);
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.PropertyField(items);
 		EditorGUILayout.PropertyField(quantities);
