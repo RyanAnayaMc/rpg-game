@@ -17,6 +17,7 @@ public class LightIntensitySine : MonoBehaviour {
 	}
 
 	private void Update() {
-		lightData.intensity = Mathf.Abs(Mathf.Sin(Time.time * 2 * Mathf.PI / period)) * defaultIntensity;
+		float intensity = Mathf.Abs(Mathf.Sin(Time.time * 2 * Mathf.PI / period)) * defaultIntensity;
+		lightData.intensity = intensity;
 	}
 }

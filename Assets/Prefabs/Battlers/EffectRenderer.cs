@@ -23,18 +23,30 @@ public class EffectRenderer : MonoBehaviour {
     IEnumerator NONE() { yield return null; }
 
     IEnumerator SlashAttack() {
-        yield return null;
+        lightData.color = new Color(1, (float) 210 / 255, 0);
+
+        lightData.intensity = 78;
+
+        for (int i = 0; i < 13; i++) {
+            lightData.intensity -= 6;
+            yield return new WaitForEndOfFrame();
+		}
     }
 
     IEnumerator FireAttack() {
-        lightData.color = new Color(248, 80, 0);
-        lightData.intensity = 10;
+        lightData.color = new Color((float) 248 / 255, (float) 80 / 255, 0);
+        int[] intensities = {300, 250, 275};
+        lightData.intensity = 300;
 
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 35; i++) {
+            yield return new WaitForEndOfFrame();
+            if (i % 3 == 0)
+                lightData.intensity = intensities[Random.Range(0, 3)];
+        }
+        while (lightData.intensity > 0) {
+            lightData.intensity -= 12.5f;
             yield return new WaitForEndOfFrame();
         }
-        while (lightData.intensity > 0)
-            lightData.intensity--;
 	}
 
     IEnumerator CastAnimation() {
@@ -46,6 +58,12 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator HealAnimation() {
-        yield return null;
+        lightData.color = Color.green;
+        lightData.intensity = 65;
+
+        while (lightData.intensity > 0) {
+            lightData.intensity--;
+            yield return new WaitForEndOfFrame();
+		}
     }
 }
