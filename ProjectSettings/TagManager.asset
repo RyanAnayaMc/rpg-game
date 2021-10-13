@@ -39,8 +39,11 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Foreground
+  - name: Level
     uniqueID: 3462249491
+    locked: 0
+  - name: Characters
+    uniqueID: 3339483213
     locked: 0
   - name: Effects
     uniqueID: 3736652639

@@ -25,13 +25,12 @@ public class BattleAnimationHandler : MonoBehaviour {
 
     private IEnumerator FlickerAnimationCoroutine(GameObject unitObject) {
         SpriteRenderer sr = unitObject.GetComponent<SpriteRenderer>();
-        Color oldColor = sr.color;
-        Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+        Material oldMaterial = sr.material;
 
         for (int i = 0; i < 5; i++) {
-            sr.color = newColor;
+            sr.material = null;
             yield return new WaitForSeconds(0.1f);
-            sr.color = oldColor;
+            sr.material = oldMaterial;
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -47,10 +46,10 @@ public class BattleAnimationHandler : MonoBehaviour {
         Weapon weapon = attackingUnit.unit.weapon;
         if (weapon.castSFX != null)
             sfxHandler.PlaySFX(weapon.castSFX);
-        attackingUnit.effectRenderer.GetComponent<Animator>().SetTrigger(weapon.castAnimation.ToString());
+        attackingUnit.DoAnimation(weapon.castAnimation);
 
         // Play attack sound effect and animation
-        targetUnit.effectRenderer.GetComponent<Animator>().SetTrigger(weapon.weaponAnimation.ToString());
+        targetUnit.DoAnimation(weapon.weaponAnimation);
         if (weapon.attackSFX != null)
             sfxHandler.PlaySFX(weapon.attackSFX);
 
@@ -68,7 +67,7 @@ public class BattleAnimationHandler : MonoBehaviour {
     public void PlaySkillAnimation(BattleUnit attackingUnit, BattleUnit targetUnit, Skill skill, BattleSFXHandler sfxHandler) {
         BattleUnit battleUnit = (skill.targetType == TargetType.SELF) ? attackingUnit : targetUnit;
 
-        battleUnit.effectRenderer.GetComponent<Animator>().SetTrigger(skill.skillAnimation.ToString());
+        battleUnit.DoAnimation(skill.skillAnimation);
         if (skill.targetType == TargetType.ENEMY)
             FlickerAnimation(battleUnit.gameObject);
         if (skill.skillSFX != null)

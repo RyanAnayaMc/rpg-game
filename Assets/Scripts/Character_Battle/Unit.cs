@@ -15,9 +15,9 @@ public enum UnitType {
 [CreateAssetMenu(fileName = "NewGenericUnit", menuName = "RPG Element/Unit/GenericUnit")]
 public class Unit : ScriptableObject {
     /// <summary>
-    /// The battle sprite for the Unit.
+    /// The Prefab for the Unit.
     /// </summary>
-    public Sprite unitSprite;
+    public GameObject unitPrefab;
 
     /// <summary>
     /// The unit's name.

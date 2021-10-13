@@ -13,14 +13,14 @@ public class PlayerUnitEditor : Editor
 		unit.level = EditorGUILayout.IntField("Level", unit.level);
 		unit.xp = EditorGUILayout.IntField("Experience Points", unit.xp);
 
-		unit.useBasicSpriteMode = EditorGUILayout.Toggle("Use Basic Sprite Mode", unit.useBasicSpriteMode);
+		unit.useBasicPrefabMode = EditorGUILayout.Toggle("Use Basic Prefab Mode", unit.useBasicPrefabMode);
 
-		if (unit.useBasicSpriteMode)
-			unit.unitSprite = EditorGUILayout.ObjectField("Sprite", unit.unitSprite, typeof(Sprite), false) as Sprite;
+		if (unit.useBasicPrefabMode)
+			unit.unitPrefab = EditorGUILayout.ObjectField("Sprite", unit.unitPrefab, typeof(GameObject), false) as GameObject;
 		else {
-			unit.meleeSprite = EditorGUILayout.ObjectField("Melee Sprite", unit.meleeSprite, typeof(Sprite), false) as Sprite;
-			unit.magicSprite = EditorGUILayout.ObjectField("Magic Sprite", unit.magicSprite, typeof(Sprite), false) as Sprite;
-			unit.rangedSprite = EditorGUILayout.ObjectField("Ranged Sprite", unit.rangedSprite, typeof(Sprite), false) as Sprite;
+			unit.meleePrefab = EditorGUILayout.ObjectField("Melee Prefab", unit.meleePrefab, typeof(GameObject), false) as GameObject;
+			unit.magicPrefab = EditorGUILayout.ObjectField("Magic Prefab", unit.magicPrefab, typeof(GameObject), false) as GameObject;
+			unit.rangedPrefab = EditorGUILayout.ObjectField("Ranged Prefab", unit.rangedPrefab, typeof(GameObject), false) as GameObject;
 		}
 
 		unit.weapon = EditorGUILayout.ObjectField("Weapon", unit.weapon, typeof(Weapon), false) as Weapon;

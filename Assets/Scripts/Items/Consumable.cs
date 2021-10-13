@@ -114,7 +114,7 @@ public class Consumable : Item {
 	}
 
     private void playAnimationAndSFX(BattleUnit unit, BattleSFXHandler sfxHandler) {
-        unit.effectRenderer.GetComponent<Animator>().SetTrigger(animation.ToString());
+        unit.DoAnimation(animation);
         sfxHandler.PlaySFX(soundEffect);
     }
 }

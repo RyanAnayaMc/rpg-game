@@ -38,8 +38,6 @@ public class BattleController : MonoBehaviour {
     /// The prefab for the BattleUnit.
     /// </summary>
     [Header("Player and Enemy References")]
-    public GameObject baseBattleUnit;
-
     /// <summary>
     /// The location to place the player
     /// </summary>
@@ -164,15 +162,22 @@ public class BattleController : MonoBehaviour {
 
         // Spawn player and enemy
         phase = BattlePhase.START;
-        GameObject playerObj = Instantiate(baseBattleUnit, playerLocation);
-        GameObject enemyObj = Instantiate(baseBattleUnit, enemyLocation);
+        playerUnitObj = Instantiate(playerUnitObj);
+        enemyUnitObj = Instantiate(enemyUnitObj);
+
+        GameObject playerObj = Instantiate(playerUnitObj.unitPrefab, playerLocation);
+        GameObject enemyObj = Instantiate(enemyUnitObj.unitPrefab, enemyLocation);
 
         // Setup sprites
         playerUnit = playerObj.GetComponent<BattleUnit>();
         enemyUnit = enemyObj.GetComponent<BattleUnit>();
 
+        // Setup units
         playerUnit.unit = playerUnitObj;
-        enemyUnit.unit = Instantiate(enemyUnitObj);
+        enemyUnit.unit = enemyUnitObj;
+
+        playerUnit.unit.weapon = Instantiate(playerUnit.unit.weapon);
+        enemyUnit.unit.weapon = Instantiate(enemyUnit.unit.weapon);
 
         // Setup UI
         uiHandler.setupHUD(playerUnit.unit, enemyUnit.unit);

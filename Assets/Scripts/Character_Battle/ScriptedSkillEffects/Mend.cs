@@ -16,8 +16,7 @@ public class Mend : ScriptedSkillEffect {
         int spHeal = (int) ((float) user.unit.maxSP * 0.1 + user.unit.level);
 
         // Play heal animation
-        Animator animator = user.effectRenderer.GetComponent<Animator>();
-        animator.SetTrigger(WeaponAnimation.HealAnimation.ToString());
+        user.DoAnimation(WeaponAnimation.HealAnimation);
         sfxHandler.PlaySFX(healSFX);
 
         // Recover HP and SP

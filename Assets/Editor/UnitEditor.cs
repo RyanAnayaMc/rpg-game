@@ -11,7 +11,7 @@ public class UnitEditor : Editor {
 		unit.unitName = EditorGUILayout.TextField("Name", unit.unitName);
 		unit.level = EditorGUILayout.IntField("Level", unit.level);
 
-		unit.unitSprite = EditorGUILayout.ObjectField("Sprite", unit.unitSprite, typeof(Sprite), false) as Sprite;
+		unit.unitPrefab = EditorGUILayout.ObjectField("Prefab", unit.unitPrefab, typeof(GameObject), false) as GameObject;
 
 		unit.weaponType = (AttackType) EditorGUILayout.EnumPopup("Weapon Type", unit.weaponType);
 
