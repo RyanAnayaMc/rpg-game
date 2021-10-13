@@ -27,7 +27,7 @@ public class BattleUIHandler : MonoBehaviour {
     private GameObject enemyPhaseUI; // The GameObject to display at the beginning of Enemy Phase
 
     [SerializeField]
-    private TMP_Text dialogueText; // The text on the dialogue box
+    private DialogueBoxController dialogueBox; // The battle's dialogue box controller
 
     private bool isSetup = false;
 
@@ -48,7 +48,7 @@ public class BattleUIHandler : MonoBehaviour {
         playerHUD.SetupHUD(playerUnit);
         enemyHUD.SetupHUD(enemyUnit);
 
-        dialogueText.text = "Engaging " + enemyUnit.unitName + "!";
+        dialogueBox.ShowDialouge("Engaging " + enemyUnit.unitName + "!", 4);
 
         // Update text on attack button based on equipped weapon
         AttackType atkType = playerUnit.weapon.atkType;
@@ -150,7 +150,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="newDiagText">The text to display in the dialogue box</param>
     public void DisplayDialogueText(string newDiagText) {
-        dialogueText.text = newDiagText;
+        dialogueBox.EditDialogue(newDiagText, 4);
     }
 
     /// <summary>

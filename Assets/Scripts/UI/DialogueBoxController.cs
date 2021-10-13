@@ -8,11 +8,13 @@ public class DialogueBoxController : MonoBehaviour
     public TMP_Text Text;
     private Animator animator;
     private string currentText;
-    private const string kAlpha = "<color=00000000>";
-    private float speed;
+    private const string kAlpha = "<color=#00000000>";
+    private int speed;
+    private bool isTyping = false;
 
     void Start()
     {
+        transform.localScale = new Vector3(1, 0, 1);
         animator = GetComponent<Animator>();
         animator.SetBool("isOpen", false);
     }
@@ -21,8 +23,11 @@ public class DialogueBoxController : MonoBehaviour
     /// Shows a dialogue box with the given text.
     /// </summary>
     /// <param name="text">The text to display in the text box.</param>
-    /// <param name="spd">Text display speed in letters per second.</param>
-    public void ShowDialouge(string text, float spd) {
+    /// <param name="spd">Text display speed in frames per letter.</param>
+    public void ShowDialouge(string text, int spd) {
+        if (animator.GetBool("isOpen"))
+            return;
+
         animator.SetBool("isOpen", true);
         currentText = text;
         speed = spd;
@@ -32,13 +37,19 @@ public class DialogueBoxController : MonoBehaviour
     /// Edits the dialogue on the text window without erasing it.
     /// </summary>
     /// <param name="text">The text to display in the text box.</param>
-    /// <param name="spd">Text display speed in letters per second.</param>
-    public void EditDialogue(string text, float spd) {
+    /// <param name="spd">Text display speed in frames per letter.</param>
+    public void EditDialogue(string text, int spd) {
         if (!animator.GetBool("isOpen"))
             return;
 
         currentText = text;
         speed = spd;
+
+        StopAllCoroutines();
+
+        // Finish typing if it was busy
+        if (isTyping)
+            Text.text = currentText;
 
         StartCoroutine(displayText());
 	}
@@ -51,6 +62,7 @@ public class DialogueBoxController : MonoBehaviour
     }
 
     public void OnDialogueOpen() {
+        StopAllCoroutines();
         StartCoroutine(displayText());
     }
 
@@ -61,18 +73,58 @@ public class DialogueBoxController : MonoBehaviour
     private IEnumerator displayText() {
         Text.text = "";
 
-        string originalText = currentText;
+        isTyping = true;
+
+        string originalText = stripHTML(currentText);
         string displayedText = "";
         int alphaIndex = 0;
 
-        foreach (char c in currentText.ToCharArray()) {
+        foreach (char c in originalText.ToCharArray()) {
             alphaIndex++;
-            Text.text = originalText;
-            displayedText = Text.text.Insert(alphaIndex, kAlpha);
+            string text = originalText;
+            displayedText = text.Insert(alphaIndex, kAlpha);
 
             Text.text = displayedText;
 
-            yield return new WaitForSeconds(1 / speed);
+            for (int i = 0; i < speed; i++)
+                yield return new WaitForEndOfFrame();
 		}
+
+        isTyping = false;
 	}
+
+    /// <summary>
+    /// Removes any characters betweeen angle brackets and the angle brackets themselves
+    /// from a string.
+    /// </summary>
+    /// <returns>String with HTML stripped out.</returns>
+    private string stripHTML(string str) {
+        int index1 = -1;
+        int index2 = -1;
+
+        for (int i = 0; i < str.Length; i++) {
+            if (str[i] == '<') {
+                index1 = i;
+                break;
+            }
+        }
+
+        if (index1 < 0) {
+            return str;
+        }
+
+        for (int i = index1; i < str.Length; i++) {
+            if (str[i] == '>') {
+                index2 = i;
+                break;
+            }
+        }
+
+        if (index1 < 0 || index2 < 1 || index1 > index2)
+            return str;
+
+        string newStr = str.Substring(0, index1) + str.Substring(index2 + 1);
+
+        return stripHTML(newStr);
+    }
 }

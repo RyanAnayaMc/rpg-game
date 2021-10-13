@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
+[RequireComponent(typeof(HDAdditionalLightData))]
 public class LightIntensitySine : MonoBehaviour {
 	private HDAdditionalLightData lightData;
 

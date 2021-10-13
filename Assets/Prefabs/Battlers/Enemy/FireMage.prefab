@@ -229,6 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96cd80336d997d45b27280015c0c665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRandomOffset: 0
+  setOffset: 0
+  speedMultiplier: 0.8
+  minimumMultiplier: 0
+  maximumMultiplier: 1
 --- !u!1 &4224775242783772796
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +463,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96cd80336d997d45b27280015c0c665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRandomOffset: 0
+  setOffset: 0
+  speedMultiplier: 0.8
+  minimumMultiplier: 0
+  maximumMultiplier: 1
 --- !u!1 &4230590987707483997
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,6 +697,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96cd80336d997d45b27280015c0c665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRandomOffset: 0
+  setOffset: 0
+  speedMultiplier: 0.8
+  minimumMultiplier: 0
+  maximumMultiplier: 1
 --- !u!1 &6204013881528276178
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +931,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96cd80336d997d45b27280015c0c665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRandomOffset: 0
+  setOffset: 0
+  speedMultiplier: 0.8
+  minimumMultiplier: 0
+  maximumMultiplier: 1
 --- !u!1 &7274150325774555016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96cd80336d997d45b27280015c0c665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRandomOffset: 0
+  setOffset: 0
+  speedMultiplier: 0.8
+  minimumMultiplier: 0
+  maximumMultiplier: 1
 --- !u!1 &7381284348630786295
 GameObject:
   m_ObjectHideFlags: 0

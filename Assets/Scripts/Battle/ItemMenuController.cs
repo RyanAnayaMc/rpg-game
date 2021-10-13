@@ -13,7 +13,7 @@ public class ItemMenuController : MonoBehaviour
     [SerializeField]
     private BattleController battleController; // The battle controller for the battle
     [SerializeField]
-    private TMP_Text dialogueBoxText; // The text on the dialogue box
+    private DialogueBoxController dialogueBox; // The text on the dialogue box
 
     private List<SkillButtonController> itemButtons; // This controller is reused from skills
 
@@ -39,7 +39,7 @@ public class ItemMenuController : MonoBehaviour
             // Setup button text
             SkillButtonController buttonController = itemButton.GetComponent<SkillButtonController>();
             itemButtons.Add(buttonController);
-            buttonController.dialogueText = dialogueBoxText;
+            buttonController.dialogueBox = dialogueBox;
             buttonController.setData(item);
 
             // Register the listener for the button
