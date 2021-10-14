@@ -12,31 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb362e38e13d22846a7cab58f45b8a21, type: 3}
   m_Name: Dimitri
   m_EditorClassIdentifier: 
-  unitSprite: {fileID: 21300000, guid: 22282fbbc7eea6f45ac696f27c29b982, type: 3}
+  unitPrefab: {fileID: 2164450066092167372, guid: 45258d1326fa03e40a5f171161c0cb1b, type: 3}
   unitName: Dimitri
   weaponType: 0
   weapon: {fileID: 11400000, guid: 964f54d70acc2ef499a97f9c863e4bdc, type: 2}
   level: 4
-  cHP: 0
-  maxHP: 0
-  cSP: 0
-  maxSP: 0
-  str: 0
-  mag: 0
-  dex: 0
-  def: 0
-  res: 0
-  arm: 0
-  agi: 0
+  cHP: 20
+  maxHP: 20
+  cSP: 15
+  maxSP: 15
+  str: 4
+  mag: 1
+  dex: 3
+  def: 3
+  res: 3
+  arm: 3
+  agi: 3
   isDefending: 0
   skills:
   - {fileID: 11400000, guid: 841408cb381ca454fa72c09e45c844d8, type: 2}
   - {fileID: 11400000, guid: e71d470cf039efd409a32f56d436b90a, type: 2}
-  - {fileID: 11400000, guid: a0805b0bc02236449b70949ac59069df, type: 2}
   - {fileID: 11400000, guid: ce1136145612b4f4ab6b4ad775e93936, type: 2}
-  showStats: 0
-  meleeSprite: {fileID: 0}
-  magicSprite: {fileID: 0}
-  rangedSprite: {fileID: 0}
-  useBasicSpriteMode: 1
+  showStats: 1
+  meleePrefab: {fileID: 0}
+  magicPrefab: {fileID: 0}
+  rangedPrefab: {fileID: 0}
+  useBasicPrefabMode: 1
   xp: 0

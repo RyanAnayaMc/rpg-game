@@ -45,7 +45,8 @@ public class LightFireEffect : MonoBehaviour {
 				Mathf.Cos(offsetTime),
 				Mathf.Sin(offsetTime / 1.5f),
 				Mathf.Cos(5 * offsetTime - 5),
-				Mathf.Sin(3 * offsetTime)
+				Mathf.Sin(3 * offsetTime),
+				Mathf.Sin(offsetTime + Mathf.PI / 2)
 			)
 		);
 

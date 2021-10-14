@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronSword
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 0}
-  itemName: 
+  itemName: Iron Sword
   itemDescription: 
   isSellable: 0
   buyPrice: 0
@@ -23,7 +23,7 @@ MonoBehaviour:
   magicType: 0
   rangedType: 0
   castAnimation: 0
-  weaponAnimation: 0
+  weaponAnimation: 1
   might: 0
-  attackSFX: {fileID: 0}
+  attackSFX: {fileID: 8300000, guid: 1f19933815890314fbfde5dfd3b4036f, type: 3}
   castSFX: {fileID: 0}

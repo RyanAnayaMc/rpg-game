@@ -33,6 +33,8 @@ public class BattleController : MonoBehaviour {
     public static bool inParameters;
 
     #endregion
+
+
     #region Fields
     /// <summary>
     /// The prefab for the BattleUnit.
@@ -256,7 +258,6 @@ public class BattleController : MonoBehaviour {
     }
 
     private IEnumerator useItem(Consumable item) {
-        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         (string, bool) data = item.Use(playerUnit, enemyUnit, battleSFXHandler);
         uiHandler.SetPlayerHUD(playerUnit.unit);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
@@ -369,10 +370,12 @@ public class BattleController : MonoBehaviour {
             if (isHeal)
             {
                 playerUnit.Heal(data.Item2);
+                NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Heal, playerUnit.transform);
             }
             else
             {
                 isDead = enemyUnit.TakeDamage(data.Item2);
+                NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, enemyUnit.transform);
             }
         }
         else {
@@ -414,6 +417,7 @@ public class BattleController : MonoBehaviour {
 
         // Check if enemy is dead
         bool isEnemyDead = enemyUnit.TakeDamage(attackData.Item2);
+        NumberPopup.DisplayNumberPopup(attackData.Item2, NumberType.Damage, enemyUnit.transform);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
         uiHandler.DisplayDialogueText(attackData.Item1);
         yield return new WaitForSeconds(2);
@@ -458,6 +462,7 @@ public class BattleController : MonoBehaviour {
 
         // Check if player is dead
         bool isPlayerDead = playerUnit.TakeDamage(attackData.Item2);
+        NumberPopup.DisplayNumberPopup(attackData.Item2, NumberType.Damage, playerUnit.transform);
         uiHandler.SetPlayerHUD(playerUnit.unit);
         uiHandler.DisplayDialogueText(attackData.Item1);
         yield return new WaitForSeconds(2);
