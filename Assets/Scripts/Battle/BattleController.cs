@@ -229,7 +229,6 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks the item button.
     /// </summary>
     public void OnItemButton() {
-        // TODO: show item menu
         if (phase != BattlePhase.PLAYER)
             return;
 
@@ -451,8 +450,8 @@ public class BattleController : MonoBehaviour {
         AttackType atkType = enemyUnit.unit.weapon.atkType;
         StartCoroutine(EnemyAttack(atkType));
 
-        // TODO more logic for enemy attack
-    }
+		// TODO: more logic for enemy attack
+	}
 
     private IEnumerator EnemyAttack(AttackType type) {
         (string, int) attackData = damageHandler.NormalAttack(enemyUnit.unit, playerUnit.unit);
@@ -501,12 +500,12 @@ public class BattleController : MonoBehaviour {
         
         yield return new WaitForSeconds(0);
 
-        // TODO put player back to map screen
+        // TODO: put player back to map screen
     }
 
     // Player lost
     private IEnumerator Lose() {
-        // TODO make game over screen
+        // TODO: make game over screen
         uiHandler.DisplayDialogueText("You lose...");
         yield return new WaitForSeconds(0);
     }

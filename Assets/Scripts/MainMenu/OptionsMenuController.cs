@@ -2,23 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
+/// <summary>
+/// Class with methods and data pertaining to the options. These methods probably should
+/// not be called via script and instead called via Sliders or Toggles.
+/// </summary>
 public class OptionsMenuController : MonoBehaviour {
-	public void Start() {
+	public Slider musicVolumeSlider;
+	public Slider sfxVolumeSlider;
+	public Toggle damageNumberToggle;
+
+	// Read settings from file
+	public void Awake() {
 		SaveDataHandler.LoadSettings();
+	}
+
+	// Change settings values to those read from file
+	public void Start() {
+		musicVolumeSlider.value = Settings.INSTANCE.musicVolume;
+		sfxVolumeSlider.value = Settings.INSTANCE.sfxVolume;
+		damageNumberToggle.isOn = Settings.INSTANCE.showDamageNumbers;
 	}
 	public void SetMusicVolume(float newVolume) {
 		Settings.INSTANCE.musicVolume = newVolume;
-		SaveDataHandler.SaveSettings();
 	}
 
 	public void SetSFXVolume(float newVolume) {
 		Settings.INSTANCE.sfxVolume = newVolume;
-		SaveDataHandler.SaveSettings();
 	}
 
 	public void UseDamageNumbers(bool value) {
 		Settings.INSTANCE.showDamageNumbers = value;
+	}
+
+	public void SaveSettings() {
 		SaveDataHandler.SaveSettings();
 	}
 }

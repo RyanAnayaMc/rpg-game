@@ -24,6 +24,6 @@ MonoBehaviour:
   rangedType: 0
   castAnimation: 0
   weaponAnimation: 1
-  might: 0
+  might: 4
   attackSFX: {fileID: 8300000, guid: 1f19933815890314fbfde5dfd3b4036f, type: 3}
   castSFX: {fileID: 0}
