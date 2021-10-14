@@ -128,8 +128,9 @@ public class BattleController : MonoBehaviour {
     /// <param name="battleMusic">The battle music.</param>
     /// <param name="currentSceneName">The name of the scene you are currently in (to return to after the battle).</param>
     /// <param name="currentLocation">The location to return to after the battle.</param>
-    public static void StartBattle(PlayerUnit playerUnit, Unit enemy, AudioClip battleMusic, string currentSceneName, Transform currentLocation) {
-        SceneManager.LoadScene("BattleScene");
+    /// <param name="battleSceneName">The name of the Battle scene to load</param>
+    public static void StartBattle(PlayerUnit playerUnit, Unit enemy, AudioClip battleMusic, string currentSceneName, Transform currentLocation, string battleSceneName = "CastleBattle") {
+        SceneManager.LoadScene(battleSceneName);
 
         BattleController.inParameters = true;
         BattleController.inPlayerUnit = playerUnit;
@@ -257,11 +258,9 @@ public class BattleController : MonoBehaviour {
     private IEnumerator useItem(Consumable item) {
         Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         (string, bool) data = item.Use(playerUnit, enemyUnit, battleSFXHandler);
-        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         uiHandler.SetPlayerHUD(playerUnit.unit);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
         yield return new WaitForSeconds(2);
-        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         uiHandler.DisplayDialogueText(data.Item1);
         yield return new WaitForSeconds(1);
         bool isDead = data.Item2;

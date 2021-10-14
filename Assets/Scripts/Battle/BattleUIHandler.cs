@@ -48,7 +48,7 @@ public class BattleUIHandler : MonoBehaviour {
         playerHUD.SetupHUD(playerUnit);
         enemyHUD.SetupHUD(enemyUnit);
 
-        dialogueBox.ShowDialouge("Engaging " + enemyUnit.unitName + "!", 4);
+        dialogueBox.ShowDialouge("Engaging " + enemyUnit.unitName + "!", 3);
 
         // Update text on attack button based on equipped weapon
         AttackType atkType = playerUnit.weapon.atkType;
@@ -150,7 +150,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="newDiagText">The text to display in the dialogue box</param>
     public void DisplayDialogueText(string newDiagText) {
-        dialogueBox.EditDialogue(newDiagText, 4);
+        dialogueBox.EditDialogue(newDiagText, 3);
     }
 
     /// <summary>

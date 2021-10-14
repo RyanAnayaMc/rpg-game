@@ -34,7 +34,7 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
         if (dialogueBox is null)
             Debug.Log("dialogue box null");
         oldDialogueText = dialogueBox.Text.text;
-        dialogueBox.EditDialogue(element.GetDescriptionText(), 4);
+        dialogueBox.EditDialogue(element.GetDescriptionText(), 3);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
     /// </summary>
     /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData) {
-        dialogueBox.EditDialogue(oldDialogueText, 4);
+        dialogueBox.EditDialogue(oldDialogueText, 3);
     }
 
     /// <summary>

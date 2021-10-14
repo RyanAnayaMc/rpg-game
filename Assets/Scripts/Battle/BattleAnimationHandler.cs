@@ -144,6 +144,8 @@ public class BattleAnimationHandler : MonoBehaviour {
             obj.GetComponent<SpriteRenderer>().color = new Color(r, g, b, a);
             yield return new WaitForFixedUpdate();
         }
+
+        Destroy(obj);
     }
 
     /// <summary>
