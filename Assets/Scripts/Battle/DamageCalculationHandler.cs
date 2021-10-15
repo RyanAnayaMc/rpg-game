@@ -69,6 +69,8 @@ public class DamageCalculationHandler : MonoBehaviour {
     /// Item4 - Whether or not the skill effect was scripted.
     /// </returns>
     public (string, int, bool, bool) SpecialAttack(Skill skill, BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
+        string diagMsg = attacker.unit.unitName + " used " + skill.skillName + "!\n";
+
         if (!skill.useScriptedSkillEffects) {
             if (skill.targetType == TargetType.ENEMY) {
                 int damage = skill.getValue(attacker.unit, defender.unit);
@@ -79,15 +81,15 @@ public class DamageCalculationHandler : MonoBehaviour {
                 if (damage < 0)
                     damage = 0;
 
-                string diagMsg = attacker.unit.unitName + " did " + damage + " special damage to " + defender.unit.unitName + ".";
+                diagMsg += attacker.unit.unitName + " did " + damage + " special damage to " + defender.unit.unitName + ".";
                 return (diagMsg, damage, true, false);
             } else if (skill.targetType == TargetType.SELF) {
                 int heal = skill.getValue(attacker.unit, defender.unit);
-                string diagMsg = attacker.unit.unitName + " healed " + heal + " HP.";
+               diagMsg += attacker.unit.unitName + " healed " + heal + " HP.";
                 return (diagMsg, heal, false, false);
             }
         } else {
-            string diagMsg = skill.doScriptedSkillEffect(attacker, defender, sfxHandler);
+            diagMsg += skill.doScriptedSkillEffect(attacker, defender, sfxHandler);
             return (diagMsg, -1, true, true);
         }
 

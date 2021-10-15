@@ -12,7 +12,7 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
     private TMP_Text elementNumberText;
     [SerializeField]
     private Image icon;
-    public TMP_Text dialogueText;
+    public DialogueBoxController dialogueBox;
     public ButtonTextable element;
     private string oldDialogueText = "";
 
@@ -31,8 +31,10 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
 	/// Puts the skill description in the dialogue box when mousing over the skill.
 	/// </summary>
 	public void OnPointerEnter(PointerEventData eventData) {
-        oldDialogueText = dialogueText.text;
-        dialogueText.text = element.GetDescriptionText();
+        if (dialogueBox is null)
+            Debug.Log("dialogue box null");
+        oldDialogueText = dialogueBox.Text.text;
+        dialogueBox.EditDialogue(element.GetDescriptionText(), 3);
     }
 
     /// <summary>
@@ -40,7 +42,7 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
     /// </summary>
     /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData) {
-        dialogueText.text = oldDialogueText;
+        dialogueBox.EditDialogue(oldDialogueText, 3);
     }
 
     /// <summary>

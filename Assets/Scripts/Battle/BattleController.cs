@@ -33,13 +33,13 @@ public class BattleController : MonoBehaviour {
     public static bool inParameters;
 
     #endregion
+
+
     #region Fields
     /// <summary>
     /// The prefab for the BattleUnit.
     /// </summary>
     [Header("Player and Enemy References")]
-    public GameObject baseBattleUnit;
-
     /// <summary>
     /// The location to place the player
     /// </summary>
@@ -130,8 +130,9 @@ public class BattleController : MonoBehaviour {
     /// <param name="battleMusic">The battle music.</param>
     /// <param name="currentSceneName">The name of the scene you are currently in (to return to after the battle).</param>
     /// <param name="currentLocation">The location to return to after the battle.</param>
-    public static void StartBattle(PlayerUnit playerUnit, Unit enemy, AudioClip battleMusic, string currentSceneName, Transform currentLocation) {
-        SceneManager.LoadScene("BattleScene");
+    /// <param name="battleSceneName">The name of the Battle scene to load</param>
+    public static void StartBattle(PlayerUnit playerUnit, Unit enemy, AudioClip battleMusic, string currentSceneName, Transform currentLocation, string battleSceneName = "CastleBattle") {
+        SceneManager.LoadScene(battleSceneName);
 
         BattleController.inParameters = true;
         BattleController.inPlayerUnit = playerUnit;
@@ -140,7 +141,7 @@ public class BattleController : MonoBehaviour {
         BattleController.inScene = currentSceneName;
         BattleController.inLocation = currentLocation;
     }
-    
+
     void Start() {
         StartCoroutine(BattleSetup());
 
@@ -164,15 +165,22 @@ public class BattleController : MonoBehaviour {
 
         // Spawn player and enemy
         phase = BattlePhase.START;
-        GameObject playerObj = Instantiate(baseBattleUnit, playerLocation);
-        GameObject enemyObj = Instantiate(baseBattleUnit, enemyLocation);
+        playerUnitObj = Instantiate(playerUnitObj);
+        enemyUnitObj = Instantiate(enemyUnitObj);
+
+        GameObject playerObj = Instantiate(playerUnitObj.unitPrefab, playerLocation);
+        GameObject enemyObj = Instantiate(enemyUnitObj.unitPrefab, enemyLocation);
 
         // Setup sprites
         playerUnit = playerObj.GetComponent<BattleUnit>();
         enemyUnit = enemyObj.GetComponent<BattleUnit>();
 
+        // Setup units
         playerUnit.unit = playerUnitObj;
-        enemyUnit.unit = Instantiate(enemyUnitObj);
+        enemyUnit.unit = enemyUnitObj;
+
+        playerUnit.unit.weapon = Instantiate(playerUnit.unit.weapon);
+        enemyUnit.unit.weapon = Instantiate(enemyUnit.unit.weapon);
 
         // Setup UI
         uiHandler.setupHUD(playerUnit.unit, enemyUnit.unit);
@@ -198,7 +206,7 @@ public class BattleController : MonoBehaviour {
         phase = BattlePhase.PLAYER;
         playerUnit.unit.isDefending = false;
         uiHandler.DisplayDialogueText("Choose an action.");
-        
+
     }
 
     /// <summary>
@@ -221,7 +229,6 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks the item button.
     /// </summary>
     public void OnItemButton() {
-        // TODO: show item menu
         if (phase != BattlePhase.PLAYER)
             return;
 
@@ -233,7 +240,7 @@ public class BattleController : MonoBehaviour {
         uiHandler.HidePlayerOptionWindow();
         yield return new WaitForSeconds(0.3f);
         uiHandler.ShowItemsWindow(PlayerInventory.INSTANCE.GetConsumableItems());
-	}
+    }
 
 
     public void OnItemButton(int index) {
@@ -250,13 +257,10 @@ public class BattleController : MonoBehaviour {
     }
 
     private IEnumerator useItem(Consumable item) {
-        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         (string, bool) data = item.Use(playerUnit, enemyUnit, battleSFXHandler);
-        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         uiHandler.SetPlayerHUD(playerUnit.unit);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
         yield return new WaitForSeconds(2);
-        Debug.Log(playerUnitObj.cHP + " " + enemyUnitObj.cHP);
         uiHandler.DisplayDialogueText(data.Item1);
         yield return new WaitForSeconds(1);
         bool isDead = data.Item2;
@@ -273,13 +277,13 @@ public class BattleController : MonoBehaviour {
     public void OnItemBackButton() {
         StartCoroutine(ItemBackButton());
         battleSFXHandler.PlayBackSFX();
-	}
+    }
 
     private IEnumerator ItemBackButton() {
         uiHandler.HideItemsWindow();
         yield return new WaitForSeconds(0.3f);
         uiHandler.ShowPlayerOptionWindow();
-	}
+    }
 
     /// <summary>
     /// Code ran when the player clicks the defend button.
@@ -338,8 +342,7 @@ public class BattleController : MonoBehaviour {
         if (playerUnit.unit.cSP < skill.costSP) {
             battleSFXHandler.PlayBackSFX();
             uiHandler.DisplayDialogueText("You do not have enough SP to use " + skill.skillName + "!");
-        }
-        else {
+        } else {
             StartCoroutine(PlayerSkill(skill));
             battleSFXHandler.PlayConfirmSFX();
         }
@@ -362,16 +365,14 @@ public class BattleController : MonoBehaviour {
 
             animationHandler.PlaySkillAnimation(playerUnit, enemyUnit, skill, battleSFXHandler);
 
-            if (isHeal)
-            {
-                playerUnit.Heal(data.Item2);
-            }
-            else
-            {
+            if (isHeal) {
+                int heal = playerUnit.Heal(data.Item2);
+                NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, playerUnit.transform);
+            } else {
                 isDead = enemyUnit.TakeDamage(data.Item2);
+                NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, enemyUnit.transform);
             }
-        }
-        else {
+        } else {
             isDead = enemyUnit.unit.cHP <= 0;
         }
 
@@ -387,8 +388,7 @@ public class BattleController : MonoBehaviour {
             animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
 
             StartCoroutine(Victory());
-        }
-        else {
+        } else {
             phase = BattlePhase.ENEMY;
             StartCoroutine(EnemyTurn());
         }
@@ -410,6 +410,7 @@ public class BattleController : MonoBehaviour {
 
         // Check if enemy is dead
         bool isEnemyDead = enemyUnit.TakeDamage(attackData.Item2);
+        NumberPopup.DisplayNumberPopup(attackData.Item2, NumberType.Damage, enemyUnit.transform);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
         uiHandler.DisplayDialogueText(attackData.Item1);
         yield return new WaitForSeconds(2);
@@ -422,8 +423,7 @@ public class BattleController : MonoBehaviour {
             animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
 
             StartCoroutine(Victory());
-        }
-        else {
+        } else {
             phase = BattlePhase.ENEMY;
             StartCoroutine(EnemyTurn());
         }
@@ -439,14 +439,32 @@ public class BattleController : MonoBehaviour {
         phase = BattlePhase.ENEMY;
         yield return new WaitForSeconds(2);
 
+        // Determine if enemy should attack or use a special
+
+        // Get random skill if enemy has skills
+        Skill skill = null;
+        if (enemyUnit.unit.skills.Count > 1) {
+            int index = Random.Range(0, enemyUnit.unit.skills.Count - 1);
+            skill = enemyUnit.unit.skills[index];
+            if (enemyUnit.unit.cSP < skill.costSP)
+                skill = null;
+        }
+
+        // Determine if enemy should do skill
+        int atkWeight = Mathf.Clamp(enemyUnit.unit.skills.Count, 1, 3);
+        float atkChance = (float) atkWeight / (float) (atkWeight + enemyUnit.unit.skills.Count);
+        bool doRegularAttack = Random.value < atkChance || skill is null;
+
         // Do enemy attack
-        AttackType atkType = enemyUnit.unit.weapon.atkType;
-        StartCoroutine(EnemyAttack(atkType));
+        if (doRegularAttack) {
+            AttackType atkType = enemyUnit.unit.weapon.atkType;
+            StartCoroutine(EnemyAttack(atkType));
+        } else
+            StartCoroutine(EnemySkill(skill));
+		// TODO: more logic for enemy attack
+	}
 
-        // TODO more logic for enemy attack
-    }
-
-    private IEnumerator EnemyAttack(AttackType type) {
+	private IEnumerator EnemyAttack(AttackType type) {
         (string, int) attackData = damageHandler.NormalAttack(enemyUnit.unit, playerUnit.unit);
 
         // Sound effect
@@ -454,6 +472,7 @@ public class BattleController : MonoBehaviour {
 
         // Check if player is dead
         bool isPlayerDead = playerUnit.TakeDamage(attackData.Item2);
+        NumberPopup.DisplayNumberPopup(attackData.Item2, NumberType.Damage, playerUnit.transform);
         uiHandler.SetPlayerHUD(playerUnit.unit);
         uiHandler.DisplayDialogueText(attackData.Item1);
         yield return new WaitForSeconds(2);
@@ -466,12 +485,55 @@ public class BattleController : MonoBehaviour {
             animationHandler.fadeOutSprite(playerUnit.gameObject, 0.1f);
 
             StartCoroutine(Lose());
-        }
-        else {
+        } else {
             phase = BattlePhase.PLAYER;
             StartCoroutine(PlayerTurn());
         }
     }
+
+    private IEnumerator EnemySkill(Skill skill) {
+        bool isDead = false;
+        enemyUnit.unit.cSP -= skill.costSP;
+        (string, int, bool, bool) data = damageHandler.SpecialAttack(skill, enemyUnit, playerUnit, battleSFXHandler);
+
+        yield return new WaitForSeconds(0.2f);
+
+        bool wasScripted = data.Item4;
+        uiHandler.DisplayDialogueText(data.Item1);
+
+        if (!wasScripted) {
+            bool isHeal = !data.Item3;
+
+            animationHandler.PlaySkillAnimation(enemyUnit, playerUnit, skill, battleSFXHandler);
+
+            if (isHeal) {
+                int heal = enemyUnit.Heal(data.Item2);
+                NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, enemyUnit.transform);
+            } else {
+                isDead = playerUnit.TakeDamage(data.Item2);
+                NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, playerUnit.transform);
+            }
+        } else
+            isDead = enemyUnit.unit.cHP <= 0;
+
+        uiHandler.SetPlayerHUD(playerUnit.unit);
+        uiHandler.SetEnemyHUD(enemyUnit.unit);
+
+        yield return new WaitForSeconds(2);
+
+        if (isDead) {
+            phase = BattlePhase.LOSE;
+
+            // Fade out player
+            battleSFXHandler.PlaySFX(enemyDefeatSFX);
+            animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
+
+            StartCoroutine(Lose());
+		} else {
+            phase = BattlePhase.PLAYER;
+            StartCoroutine(PlayerTurn());
+		}
+	}
     #endregion
 
     #region State Changes
@@ -492,12 +554,12 @@ public class BattleController : MonoBehaviour {
         
         yield return new WaitForSeconds(0);
 
-        // TODO put player back to map screen
+        // TODO: put player back to map screen
     }
 
     // Player lost
     private IEnumerator Lose() {
-        // TODO make game over screen
+        // TODO: make game over screen
         uiHandler.DisplayDialogueText("You lose...");
         yield return new WaitForSeconds(0);
     }

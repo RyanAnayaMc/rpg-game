@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Lesser Healing
   itemDescription: A weak healing potion. Restores 10 HP.
   isSellable: 0
-  buyPrice: 25
+  buyPrice: 20
   stackableMax: 0
   type: 0
   recovery: 10

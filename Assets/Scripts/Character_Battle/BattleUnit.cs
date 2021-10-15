@@ -13,35 +13,8 @@ public class BattleUnit : MonoBehaviour {
     /// The BattleUnit's effect renderer. Has an Animator component that handles
     /// animation effects on the unit.
     /// </summary>
-    public GameObject effectRenderer;
-
-    public void Start() {
-        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-
-        if (unit is PlayerUnit) {
-            if (!((PlayerUnit) unit).useBasicSpriteMode) {
-                switch (unit.weapon.atkType) {
-                    case AttackType.MELEE:
-                        spriteRenderer.sprite = ((PlayerUnit) unit).meleeSprite;
-                        break;
-                    case AttackType.MAGIC:
-                        spriteRenderer.sprite = ((PlayerUnit) unit).magicSprite;
-                        break;
-                    case AttackType.RANGED:
-                        spriteRenderer.sprite = ((PlayerUnit) unit).rangedSprite;
-                        break;
-                }
-            }
-            else
-                spriteRenderer.sprite = unit.unitSprite;
-
-            spriteRenderer.flipX = true;
-		}
-        else
-            spriteRenderer.sprite = unit.unitSprite;
-
-        spriteRenderer.sortingOrder = 10;
-    }
+    [SerializeField]
+    private GameObject effectRenderer;
 
     /// <summary>
     /// Makes the unit take damage.
@@ -57,6 +30,14 @@ public class BattleUnit : MonoBehaviour {
 
         return isDead;
     }
+
+    /// <summary>
+    /// Performs an animation on this unit. Includes lighting effects.
+    /// </summary>
+    /// <param name="animation"></param>
+    public void DoAnimation(WeaponAnimation animation) {
+        effectRenderer.GetComponent<EffectRenderer>().DoAnimation(animation);
+	}
 
     /// <summary>
     /// Heals the current unit's HP. cHP cannot exceed maxHP.

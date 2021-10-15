@@ -14,10 +14,11 @@ public class Mend : ScriptedSkillEffect {
         // Get HP and SP to heal
         int hpHeal = (int) ((float) user.unit.maxHP * 0.1 + user.unit.level);
         int spHeal = (int) ((float) user.unit.maxSP * 0.1 + user.unit.level);
+        NumberPopup.DisplayNumberPopup(hpHeal, NumberType.Heal, user.transform, 0, 2);
+        NumberPopup.DisplayNumberPopup(spHeal, NumberType.SpHeal, user.transform, 0, 1);
 
         // Play heal animation
-        Animator animator = user.effectRenderer.GetComponent<Animator>();
-        animator.SetTrigger(WeaponAnimation.HealAnimation.ToString());
+        user.DoAnimation(WeaponAnimation.HealAnimation);
         sfxHandler.PlaySFX(healSFX);
 
         // Recover HP and SP

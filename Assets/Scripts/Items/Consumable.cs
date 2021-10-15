@@ -88,15 +88,16 @@ public class Consumable : Item {
     /// Item2 - Whether or not defender died.
     /// </returns>
     public (string, bool) Use(BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
-        Debug.Log("2 " + attacker.unit.cHP + " " + defender.unit.cHP);
         switch (type) {
             case ConsumableType.HealthRecover:
                 int heal = attacker.Heal(recovery);
                 playAnimationAndSFX(attacker, sfxHandler);
+                NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, attacker.transform);
                 return (attacker.unit.unitName + " restored " + heal + " HP.", false);
             case ConsumableType.SpecialRecover:
                 int recover = attacker.RecoverSP(recovery);
                 playAnimationAndSFX(attacker, sfxHandler);
+                NumberPopup.DisplayNumberPopup(recover, NumberType.SpHeal, attacker.transform);
                 return (attacker.unit.unitName + " recovered " + recover + " SP.", false);
             case ConsumableType.StatBuff:
                 return ("not implemented yet", false);
@@ -104,6 +105,7 @@ public class Consumable : Item {
                 return ("not implemented yet", false);
             case ConsumableType.DamageDeal:
                 bool dead = defender.TakeDamage(damage);
+                NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, defender.transform);
                 playAnimationAndSFX(defender, sfxHandler);
                 return (defender.unit.unitName + " took " + damage + " item damage!", dead);
             case ConsumableType.Scripted:
@@ -114,7 +116,7 @@ public class Consumable : Item {
 	}
 
     private void playAnimationAndSFX(BattleUnit unit, BattleSFXHandler sfxHandler) {
-        unit.effectRenderer.GetComponent<Animator>().SetTrigger(animation.ToString());
+        unit.DoAnimation(animation);
         sfxHandler.PlaySFX(soundEffect);
     }
 }

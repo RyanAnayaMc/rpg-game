@@ -9,6 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 6ae6acacabd31874cb0eab19a9c3e477
   - enabled: 1
-    path: Assets/Scenes/BattleScene.unity
+    path: Assets/Scenes/BattleScene/CastleBattle.unity
     guid: a9cf5f1bb6273b34e835daff9497f419
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: b8317e328f1b35244be58978a0a34cc5, type: 2}

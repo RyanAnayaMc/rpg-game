@@ -10,7 +10,7 @@ public class SkillMenuController : MonoBehaviour {
     [SerializeField]
     private GameObject skillButtonPrefab; // The prefab for the Skill button
     [SerializeField]
-    private TMP_Text dialogueBoxText; // The dialogue box text on the battle screen
+    private DialogueBoxController dialogueBox; // The dialogue box on the battle screen
     [SerializeField]
     private BattleController battleController; // The battle controller for the battle
 
@@ -53,7 +53,7 @@ public class SkillMenuController : MonoBehaviour {
             // Setup the text on the button
             SkillButtonController buttonController = skillButton.GetComponent<SkillButtonController>();
             skillButtons.Add(buttonController);
-            buttonController.dialogueText = dialogueBoxText;
+            buttonController.dialogueBox = dialogueBox;
             buttonController.setData(skill);
             if (battleController.playerUnit.unit.cSP < skill.costSP)
                 buttonController.RedNumber();
