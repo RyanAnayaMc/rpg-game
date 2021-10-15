@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class DialogueBoxController : MonoBehaviour
@@ -8,9 +9,13 @@ public class DialogueBoxController : MonoBehaviour
     public TMP_Text Text;
     private Animator animator;
     private string currentText;
+    private string originalText;
     private const string kAlpha = "<color=#00000000>";
     private int speed;
-    private bool isTyping = false;
+    public bool isTyping = false;
+    public Image face;
+    public string characterName;
+    public TMP_Text characterNameText;
 
     void Awake()
     {
@@ -24,11 +29,26 @@ public class DialogueBoxController : MonoBehaviour
     /// </summary>
     /// <param name="text">The text to display in the text box.</param>
     /// <param name="spd">Text display speed in frames per letter.</param>
-    public void ShowDialouge(string text, int spd) {
+    public void ShowDialouge(string text, int spd, string name = null, Sprite characterFace = null) {
+        if (name == null)
+            characterNameText.gameObject.SetActive(false);
+        else {
+            characterNameText.gameObject.SetActive(true);
+            characterNameText.text = name;
+		}
+
+        if (characterFace == null)
+            face.color = new Color(0, 0, 0, 0);
+		else {
+            face.color = new Color(1, 1, 1, 1);
+            face.sprite = characterFace;
+		}
+
         if (animator.GetBool("isOpen")) {
             Debug.Log("is Open");
             return;
         }
+        Text.text = "";
         animator.SetBool("isOpen", true);
         currentText = text;
         speed = spd;
@@ -76,7 +96,7 @@ public class DialogueBoxController : MonoBehaviour
 
         isTyping = true;
 
-        string originalText = stripHTML(currentText);
+        originalText = stripHTML(currentText);
         string displayedText = "";
         int alphaIndex = 0;
 
@@ -92,6 +112,17 @@ public class DialogueBoxController : MonoBehaviour
 		}
 
         isTyping = false;
+	}
+
+    /// <summary>
+    /// If text is still typing, automatically finishes the message
+    /// </summary>
+    public void ForceFinishText() {
+        if (isTyping) {
+            StopAllCoroutines();
+            Text.text = originalText;
+            isTyping = false;
+		}
 	}
 
     /// <summary>

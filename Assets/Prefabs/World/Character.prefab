@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 4377302702287878599}
   m_Layer: 0
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -387,6 +387,7 @@ MonoBehaviour:
   animator: {fileID: 4377302701862103013}
   speed: 5
   sprintModifier: 0.8
+  jumpForce: 1
   lightData: {fileID: 4377302703650743505}
   sfxHandler: {fileID: 0}
 --- !u!1 &4377302702380004975

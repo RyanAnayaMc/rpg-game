@@ -1,39 +1,44 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class SimpleDialogue : MonoBehaviour {
 	public string dialogue;
 	public GameObject dialogueBoxObj;
+	public Sprite face;
+	public string characterName;
 	private DialogueBoxController dialogueBox;
-	Collider charCollider;
-	private bool isTriggered;
+	private bool isDisplayed = false;
 
 	private void Awake() {
-		charCollider = GetComponent<Collider>();
 		dialogueBox = dialogueBoxObj.GetComponent<DialogueBoxController>();
-		isTriggered = false;
-
-		displayDialogue();
 	}
 
-	private void FixedUpdate() {
-		if (isTriggered && Input.GetAxis("Interact") > 0.01)
-			displayDialogue();
+	public void DisplayDialogue() {
+		if (isDisplayed)
+			return;
+		isDisplayed = true;
+		CharacterMovementController.isPlayerLocked = true;
+		StartCoroutine(displayDialogue());
 	}
 
-	private void displayDialogue() {
-		dialogueBox.ShowDialouge(dialogue, 6);
-		while (Input.GetAxis("Interact") < 0.01);
-		dialogueBox.CloseDialogue();
+	private IEnumerator displayDialogue() {
+		dialogueBox.ShowDialouge(dialogue, 6, characterName, face);
+		yield return new WaitForSeconds(0.5f);
+
+		yield return new WaitUntil(() => Input.GetButtonDown("Interact"));
+		if (dialogueBox.isTyping) {
+			dialogueBox.ForceFinishText();
+			yield return new WaitUntil(() => Input.GetButtonDown("Interact"));
+		}
+
+			dialogueBox.CloseDialogue();
+		yield return new WaitForSeconds(1);
+		isDisplayed = false;
+		CharacterMovementController.isPlayerLocked = false;
 	}
 
-	private void OnTriggerEnter(Collider other) {
-		Debug.Log(isTriggered);
-		isTriggered = true;
-	}
-
-	private void OnTriggerExit(Collider other) {
-		Debug.Log(isTriggered);
-		isTriggered = false;
+	public void DebugMessage() {
+		Debug.Log(dialogue);
 	}
 }

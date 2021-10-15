@@ -13,6 +13,7 @@ public enum Direction {
 
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMovementController : MonoBehaviour {
+    public static bool isPlayerLocked = false;
     [SerializeField]
     private Animator animator;
     public float speed = 5;
@@ -25,6 +26,7 @@ public class CharacterMovementController : MonoBehaviour {
     private GameObject flashlight;
     [SerializeField]
     private WorldSFXHandler sfxHandler;
+    private bool isJumping = false;
 
     void Start() {
         characterController = GetComponent<CharacterController>();
@@ -33,6 +35,9 @@ public class CharacterMovementController : MonoBehaviour {
     }
 
     void Update() {
+        if (isPlayerLocked)
+            return;
+
         // Check for sprint
         float sprint = 0;
         if (Input.GetAxis("Sprint") > 0.01)
@@ -42,12 +47,14 @@ public class CharacterMovementController : MonoBehaviour {
 
         // Check for lateral movement
         float moveX = (Input.GetAxis("Horizontal") * speed) * (1 + sprint * sprintModifier);
-        float moveY = characterController.velocity.y + Physics.gravity.y * Time.deltaTime;
+        float moveY = Physics.gravity.y;
         float moveZ = (Input.GetAxis("Vertical") * speed) * (1 + sprint * sprintModifier);
 
+        /*
         // Check for jump
         if (characterController.isGrounded && Input.GetButton("Jump"))
             moveY += jumpForce;
+        */
 
         Vector3 movement = new Vector3(moveX, moveY, moveZ);
 
