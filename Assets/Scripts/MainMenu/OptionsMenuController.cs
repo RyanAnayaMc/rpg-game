@@ -12,6 +12,7 @@ public class OptionsMenuController : MonoBehaviour {
 	public Slider musicVolumeSlider;
 	public Slider sfxVolumeSlider;
 	public Toggle damageNumberToggle;
+	public Toggle dankShitToggle;
 
 	// Read settings from file
 	public void Awake() {
@@ -23,6 +24,7 @@ public class OptionsMenuController : MonoBehaviour {
 		musicVolumeSlider.value = Settings.INSTANCE.musicVolume;
 		sfxVolumeSlider.value = Settings.INSTANCE.sfxVolume;
 		damageNumberToggle.isOn = Settings.INSTANCE.showDamageNumbers;
+		dankShitToggle.isOn = Settings.INSTANCE.doDankShit;
 	}
 	public void SetMusicVolume(float newVolume) {
 		Settings.INSTANCE.musicVolume = newVolume;
@@ -34,6 +36,10 @@ public class OptionsMenuController : MonoBehaviour {
 
 	public void UseDamageNumbers(bool value) {
 		Settings.INSTANCE.showDamageNumbers = value;
+	}
+
+	public void DoDankShit(bool value) {
+		Settings.INSTANCE.doDankShit = value;
 	}
 
 	public void SaveSettings() {

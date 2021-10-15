@@ -17,17 +17,20 @@ MonoBehaviour:
   weaponType: 1
   weapon: {fileID: 11400000, guid: 938afa262450f3e459ed52270c17eab9, type: 2}
   level: 4
-  cHP: 17
-  maxHP: 17
-  cSP: 25
-  maxSP: 25
-  str: 1
-  mag: 5
-  dex: 3
-  def: 2
-  res: 3
-  arm: 2
-  agi: 3
+  cHP: 65
+  maxHP: 65
+  cSP: 30
+  maxSP: 30
+  str: 15
+  mag: 40
+  dex: 35
+  def: 25
+  res: 35
+  arm: 15
+  agi: 20
   isDefending: 0
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: ce1136145612b4f4ab6b4ad775e93936, type: 2}
+  - {fileID: 11400000, guid: d1be76e2a4aac534698dab9742b9be2a, type: 2}
+  - {fileID: 11400000, guid: 22fd397702bc09445acf4492a88ec5b0, type: 2}
   showStats: 1

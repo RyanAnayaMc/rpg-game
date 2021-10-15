@@ -12,7 +12,7 @@ public class DialogueBoxController : MonoBehaviour
     private int speed;
     private bool isTyping = false;
 
-    void Start()
+    void Awake()
     {
         transform.localScale = new Vector3(1, 0, 1);
         animator = GetComponent<Animator>();
@@ -25,9 +25,10 @@ public class DialogueBoxController : MonoBehaviour
     /// <param name="text">The text to display in the text box.</param>
     /// <param name="spd">Text display speed in frames per letter.</param>
     public void ShowDialouge(string text, int spd) {
-        if (animator.GetBool("isOpen"))
+        if (animator.GetBool("isOpen")) {
+            Debug.Log("is Open");
             return;
-
+        }
         animator.SetBool("isOpen", true);
         currentText = text;
         speed = spd;

@@ -37,9 +37,16 @@ public class Settings {
 	[SerializeField]
 	public bool showDamageNumbers;
 
+	/// <summary>
+	/// Whether or not dank shit should happen.
+	/// </summary>
+	[SerializeField]
+	public bool doDankShit;
+
 	private Settings() {
 		musicVolume = 1;
 		sfxVolume = 1;
 		showDamageNumbers = true;
+		doDankShit = false;
 	}
 }
