@@ -34,7 +34,6 @@ public class BattleController : MonoBehaviour {
 
     #endregion
 
-
     #region Fields
     /// <summary>
     /// The prefab for the BattleUnit.
@@ -147,6 +146,9 @@ public class BattleController : MonoBehaviour {
 
     }
     private IEnumerator BattleSetup() {
+        battleSFXHandler.battleController = this;
+        uiHandler.battleController = this;
+
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
@@ -184,6 +186,7 @@ public class BattleController : MonoBehaviour {
 
         // Setup UI
         uiHandler.setupHUD(playerUnit.unit, enemyUnit.unit);
+        uiHandler.enemyHUD.HideBars();
 
         yield return new WaitForSeconds(2);
 
@@ -195,9 +198,9 @@ public class BattleController : MonoBehaviour {
     #region Player Turn
     private IEnumerator PlayerTurn() {
         // Show player phase image
-        uiHandler.ShowPlayerPhaseImage();
+        // uiHandler.ShowPlayerPhaseImage();
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         // Show option menu
         uiHandler.ShowPlayerOptionWindow();
@@ -261,6 +264,7 @@ public class BattleController : MonoBehaviour {
         uiHandler.SetPlayerHUD(playerUnit.unit);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
         yield return new WaitForSeconds(2);
+        uiHandler.enemyHUD.HideBars();
         uiHandler.DisplayDialogueText(data.Item1);
         yield return new WaitForSeconds(1);
         bool isDead = data.Item2;
@@ -369,6 +373,7 @@ public class BattleController : MonoBehaviour {
                 int heal = playerUnit.Heal(data.Item2);
                 NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, playerUnit.transform);
             } else {
+                uiHandler.enemyHUD.ShowHPBar();
                 isDead = enemyUnit.TakeDamage(data.Item2);
                 NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, enemyUnit.transform);
             }
@@ -380,6 +385,7 @@ public class BattleController : MonoBehaviour {
         uiHandler.SetEnemyHUD(enemyUnit.unit);
 
         yield return new WaitForSeconds(2);
+        uiHandler.enemyHUD.HideHPBar();
         if (isDead) {
             phase = BattlePhase.WIN;
 
@@ -409,11 +415,13 @@ public class BattleController : MonoBehaviour {
         animationHandler.PlayDamageAnimation(playerUnit, enemyUnit, battleSFXHandler);
 
         // Check if enemy is dead
+        uiHandler.enemyHUD.ShowHPBar();
         bool isEnemyDead = enemyUnit.TakeDamage(attackData.Item2);
         NumberPopup.DisplayNumberPopup(attackData.Item2, NumberType.Damage, enemyUnit.transform);
         uiHandler.SetEnemyHUD(enemyUnit.unit);
         uiHandler.DisplayDialogueText(attackData.Item1);
         yield return new WaitForSeconds(2);
+        uiHandler.enemyHUD.HideHPBar();
 
         if (isEnemyDead) {
             phase = BattlePhase.WIN;
@@ -434,10 +442,10 @@ public class BattleController : MonoBehaviour {
     // Enemy Actions
     private IEnumerator EnemyTurn() {
         // Show enemy phase UI
-        uiHandler.ShowEnemyPhaseImage();
+        // uiHandler.ShowEnemyPhaseImage();
 
         phase = BattlePhase.ENEMY;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         // Determine if enemy should attack or use a special
 

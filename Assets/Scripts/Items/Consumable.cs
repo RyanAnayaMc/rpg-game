@@ -104,6 +104,7 @@ public class Consumable : Item {
             case ConsumableType.DebuffInflict:
                 return ("not implemented yet", false);
             case ConsumableType.DamageDeal:
+                sfxHandler.battleController.uiHandler.enemyHUD.ShowHPBar();
                 bool dead = defender.TakeDamage(damage);
                 NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, defender.transform);
                 playAnimationAndSFX(defender, sfxHandler);

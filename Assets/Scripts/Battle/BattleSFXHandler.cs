@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleSFXHandler : MonoBehaviour {
+    public BattleController battleController;
     [SerializeField]
     private AudioSource sfxSource;
     [SerializeField]

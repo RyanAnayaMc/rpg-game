@@ -7,6 +7,8 @@ public class BattleUIHandler : MonoBehaviour {
     [SerializeField]
     private BattleAnimationHandler animationHandler; // The BattleAnimationHandler for the battle
 
+    public BattleController battleController;
+
     [SerializeField]
     private GameObject playerOptionWindow; // The window with the player's options
     [SerializeField]
@@ -18,8 +20,7 @@ public class BattleUIHandler : MonoBehaviour {
 
     [SerializeField]
     private HUDController playerHUD; // The location of the HUD that shows the player's info
-    [SerializeField]
-    private HUDController enemyHUD; // The location of the HUD that shows the enemy's info
+    public HUDController enemyHUD; // The location of the HUD that shows the enemy's info
 
     [SerializeField]
     private GameObject playerPhaseUI; // The GameObject to display at the beginning of Player Phase
@@ -46,6 +47,9 @@ public class BattleUIHandler : MonoBehaviour {
 
         // Display player and enemy HUDs
         playerHUD.SetupHUD(playerUnit);
+
+        GameObject enemyHUDPrefab = Resources.Load<GameObject>("UI/Battle/EnemyHUD");
+        enemyHUD = Instantiate(enemyHUDPrefab, battleController.enemyLocation).GetComponentInChildren<HUDController>();
         enemyHUD.SetupHUD(enemyUnit);
 
         dialogueBox.ShowDialouge("Engaging " + enemyUnit.unitName + "!", 3);
