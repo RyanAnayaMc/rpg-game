@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class DamageCalculationHandler : MonoBehaviour {
     /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
+    /// <summary>
     /// Gets damage done for a normal attack and text to display.
     /// </summary>
     /// <param name="attacker">The attacking Unit.</param>

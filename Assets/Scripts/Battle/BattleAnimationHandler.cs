@@ -16,6 +16,12 @@ public enum WeaponAnimation {
 
 public class BattleAnimationHandler : MonoBehaviour {
     /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
+    /// <summary>
     /// Plays a flicker animation for when a unit takes damage.
     /// </summary>
     /// <param name="unitObject">GameObject to play the flicker animation on. Must have a SpriteRenderer.</param>

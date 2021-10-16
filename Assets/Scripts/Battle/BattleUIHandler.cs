@@ -7,6 +7,10 @@ public class BattleUIHandler : MonoBehaviour {
     [SerializeField]
     private BattleAnimationHandler animationHandler; // The BattleAnimationHandler for the battle
 
+    /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
     public BattleController battleController;
 
     [SerializeField]
@@ -20,7 +24,6 @@ public class BattleUIHandler : MonoBehaviour {
 
     [SerializeField]
     private HUDController playerHUD; // The location of the HUD that shows the player's info
-    public HUDController enemyHUD; // The location of the HUD that shows the enemy's info
 
     [SerializeField]
     private GameObject playerPhaseUI; // The GameObject to display at the beginning of Player Phase
@@ -37,7 +40,10 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="playerUnit">The Unit representing the player.</param>
     /// <param name="enemyUnit">The Unit representing the enemy.</param>
-    public void setupHUD(Unit playerUnit, Unit enemyUnit) {
+    public void setupHUD(BattleUnit playerUnit, BattleUnit enemyUnit) {
+        skillMenuController.battleController = battleController;
+        itemMenuController.battleController = battleController;
+
         if (isSetup)
             return;
 
@@ -45,17 +51,19 @@ public class BattleUIHandler : MonoBehaviour {
         playerOptionWindow.SetActive(false);
 
 
-        // Display player and enemy HUDs
-        playerHUD.SetupHUD(playerUnit);
-
+        // Setup player's HUD
+        playerHUD.SetupHUD(playerUnit.unit);
+        playerUnit.unitHUD = playerHUD;
+        
+        // Setup HUD for enemies
         GameObject enemyHUDPrefab = Resources.Load<GameObject>("UI/Battle/EnemyHUD");
-        enemyHUD = Instantiate(enemyHUDPrefab, battleController.enemyLocation).GetComponentInChildren<HUDController>();
-        enemyHUD.SetupHUD(enemyUnit);
+        enemyUnit.unitHUD = Instantiate(enemyHUDPrefab, battleController.enemyLocation).GetComponentInChildren<HUDController>();
+        enemyUnit.unitHUD.SetupHUD(enemyUnit.unit);
 
-        dialogueBox.ShowDialouge("Engaging " + enemyUnit.unitName + "!", 3);
+        dialogueBox.ShowDialouge("Engaging " + enemyUnit.unit.unitName + "!", 3);
 
         // Update text on attack button based on equipped weapon
-        AttackType atkType = playerUnit.weapon.atkType;
+        AttackType atkType = playerUnit.unit.weapon.atkType;
         switch (atkType) {
             case AttackType.MELEE:
                 attackButtonText.text = "Melee";
@@ -170,8 +178,8 @@ public class BattleUIHandler : MonoBehaviour {
     /// Updates the cHP, mHP, cSP, and mSP values on the player's HUD.
     /// </summary>
     /// <param name="enemyUnit">The uint representing the Enemy.</param>
-    public void SetEnemyHUD(Unit enemyUnit) {
-        enemyHUD.SetHP(enemyUnit);
-        enemyHUD.SetSP(enemyUnit);
+    public void SetEnemyHUD(BattleUnit enemyUnit) {
+        enemyUnit.unitHUD.SetHP(enemyUnit.unit);
+        enemyUnit.unitHUD.SetSP(enemyUnit.unit);
     }
 }

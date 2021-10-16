@@ -101,11 +101,6 @@ public class BattleController : MonoBehaviour {
     public BattleUIHandler uiHandler;
 
     /// <summary>
-    /// The SkillMenuController for the battle.
-    /// </summary>
-    public SkillMenuController skillMenuController;
-
-    /// <summary>
     ///  The BattleSFXHandler for the battle.
     /// </summary>
     public BattleSFXHandler battleSFXHandler;
@@ -146,8 +141,13 @@ public class BattleController : MonoBehaviour {
 
     }
     private IEnumerator BattleSetup() {
+        // Setup helpers
         battleSFXHandler.battleController = this;
         uiHandler.battleController = this;
+        musicHandler.battleController = this;
+        animationHandler.battleController = this;
+        damageHandler.battleController = this;
+        
 
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
@@ -185,8 +185,8 @@ public class BattleController : MonoBehaviour {
         enemyUnit.unit.weapon = Instantiate(enemyUnit.unit.weapon);
 
         // Setup UI
-        uiHandler.setupHUD(playerUnit.unit, enemyUnit.unit);
-        uiHandler.enemyHUD.HideBars();
+        uiHandler.setupHUD(playerUnit, enemyUnit);
+        enemyUnit.unitHUD.HideBars();
 
         yield return new WaitForSeconds(2);
 
@@ -261,10 +261,10 @@ public class BattleController : MonoBehaviour {
 
     private IEnumerator useItem(Consumable item) {
         (string, bool) data = item.Use(playerUnit, enemyUnit, battleSFXHandler);
-        uiHandler.SetPlayerHUD(playerUnit.unit);
-        uiHandler.SetEnemyHUD(enemyUnit.unit);
+        playerUnit.UpdateHUD();
+        enemyUnit.UpdateHUD();
         yield return new WaitForSeconds(2);
-        uiHandler.enemyHUD.HideBars();
+        enemyUnit.unitHUD.HideBars();
         uiHandler.DisplayDialogueText(data.Item1);
         yield return new WaitForSeconds(1);
         bool isDead = data.Item2;
@@ -373,7 +373,7 @@ public class BattleController : MonoBehaviour {
                 int heal = playerUnit.Heal(data.Item2);
                 NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, playerUnit.transform);
             } else {
-                uiHandler.enemyHUD.ShowHPBar();
+                enemyUnit.unitHUD.ShowHPBar();
                 isDead = enemyUnit.TakeDamage(data.Item2);
                 NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, enemyUnit.transform);
             }
@@ -381,11 +381,11 @@ public class BattleController : MonoBehaviour {
             isDead = enemyUnit.unit.cHP <= 0;
         }
 
-        uiHandler.SetPlayerHUD(playerUnit.unit);
-        uiHandler.SetEnemyHUD(enemyUnit.unit);
+        playerUnit.UpdateHUD();
+        enemyUnit.UpdateHUD();
 
         yield return new WaitForSeconds(2);
-        uiHandler.enemyHUD.HideHPBar();
+        enemyUnit.unitHUD.HideBars();
         if (isDead) {
             phase = BattlePhase.WIN;
 
@@ -412,16 +412,16 @@ public class BattleController : MonoBehaviour {
         (string, int) attackData = damageHandler.NormalAttack(playerUnit.unit, enemyUnit.unit);
 
         // Sound effect and animation
+        enemyUnit.unitHUD.ShowHPBar();
         animationHandler.PlayDamageAnimation(playerUnit, enemyUnit, battleSFXHandler);
 
         // Check if enemy is dead
-        uiHandler.enemyHUD.ShowHPBar();
         bool isEnemyDead = enemyUnit.TakeDamage(attackData.Item2);
         NumberPopup.DisplayNumberPopup(attackData.Item2, NumberType.Damage, enemyUnit.transform);
-        uiHandler.SetEnemyHUD(enemyUnit.unit);
+        enemyUnit.UpdateHP();
         uiHandler.DisplayDialogueText(attackData.Item1);
         yield return new WaitForSeconds(2);
-        uiHandler.enemyHUD.HideHPBar();
+        enemyUnit.unitHUD.HideHPBar();
 
         if (isEnemyDead) {
             phase = BattlePhase.WIN;
@@ -524,17 +524,18 @@ public class BattleController : MonoBehaviour {
         } else
             isDead = enemyUnit.unit.cHP <= 0;
 
-        uiHandler.SetPlayerHUD(playerUnit.unit);
-        uiHandler.SetEnemyHUD(enemyUnit.unit);
+        playerUnit.UpdateHUD();
+        enemyUnit.UpdateHUD();
 
         yield return new WaitForSeconds(2);
+        enemyUnit.unitHUD.HideBars();
 
         if (isDead) {
             phase = BattlePhase.LOSE;
 
             // Fade out player
             battleSFXHandler.PlaySFX(enemyDefeatSFX);
-            animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
+            animationHandler.fadeOutSprite(playerUnit.gameObject, 0.1f);
 
             StartCoroutine(Lose());
 		} else {

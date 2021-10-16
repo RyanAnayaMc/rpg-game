@@ -5,6 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class BattleUnit : MonoBehaviour {
     /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
+    /// <summary>
+    /// The unit's battle HUD controller. Player HUDs do not float
+    /// but enemy HUDs do float.
+    /// </summary>
+    public HUDController unitHUD;
+
+    /// <summary>
     /// The Unit associated with this BattleUnit. Contains all attributes.
     /// </summary>
     public Unit unit;
@@ -64,4 +76,26 @@ public class BattleUnit : MonoBehaviour {
 
         return recover;
     }
+
+    /// <summary>
+    /// Updates the unit's HP and SP on their HUD.
+    /// </summary>
+    public void UpdateHUD() {
+        unitHUD.SetHP(unit);
+        unitHUD.SetSP(unit);
+	}
+
+    /// <summary>
+    /// Updates the unit's HP on their HUD
+    /// </summary>
+    public void UpdateHP() {
+        unitHUD.SetHP(unit);
+	}
+
+    /// <summary>
+    /// Updates the unit's SP on their HUD
+    /// </summary>
+    public void UpdateSP() {
+        unitHUD.SetSP(unit);
+	}
 }

@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleMusicHandler : MonoBehaviour {
+    /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
     public AudioSource musicSource; // The Scene's music player
     public AudioClip battleMusic; // The music to play during the battle
     public AudioClip victoryFanfare; // Fanfare that plays if you win

@@ -14,6 +14,7 @@ public class Mend : ScriptedSkillEffect {
         // Get HP and SP to heal
         int hpHeal = (int) ((float) user.unit.maxHP * 0.1 + user.unit.level);
         int spHeal = (int) ((float) user.unit.maxSP * 0.1 + user.unit.level);
+        user.unitHUD.ShowBars();
         NumberPopup.DisplayNumberPopup(hpHeal, NumberType.Heal, user.transform, 0, 2);
         NumberPopup.DisplayNumberPopup(spHeal, NumberType.SpHeal, user.transform, 0, 1);
 
