@@ -21,6 +21,8 @@ public class BattleUIHandler : MonoBehaviour {
     private SkillMenuController skillMenuController;
     [SerializeField]
     private ItemMenuController itemMenuController;
+    [SerializeField]
+    private EnemyTargetingMenuController enemyTargetingMenuController;
 
     [SerializeField]
     private HUDController playerHUD; // The location of the HUD that shows the player's info
@@ -40,9 +42,10 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="playerUnit">The Unit representing the player.</param>
     /// <param name="enemyUnit">The Unit representing the enemy.</param>
-    public void setupHUD(BattleUnit playerUnit, BattleUnit enemyUnit) {
+    public void setupHUD(BattleUnit playerUnit, List<BattleUnit> enemyUnits) {
         skillMenuController.battleController = battleController;
         itemMenuController.battleController = battleController;
+        enemyTargetingMenuController.battleController = battleController;
 
         if (isSetup)
             return;
@@ -57,11 +60,18 @@ public class BattleUIHandler : MonoBehaviour {
         
         // Setup HUD for enemies
         GameObject enemyHUDPrefab = Resources.Load<GameObject>("UI/Battle/EnemyHUD");
-        enemyUnit.unitHUD = Instantiate(enemyHUDPrefab, battleController.enemyLocation).GetComponentInChildren<HUDController>();
-        enemyUnit.unitHUD.SetupHUD(enemyUnit.unit);
+        foreach (BattleUnit enemyUnit in enemyUnits) {
+            enemyUnit.unitHUD = Instantiate(enemyHUDPrefab, enemyUnit.transform).GetComponentInChildren<HUDController>();
+            enemyUnit.unitHUD.SetupHUD(enemyUnit.unit);
+            enemyUnit.unitHUD.HideBars();
+        }
 
-        dialogueBox.ShowDialouge("Engaging " + enemyUnit.unit.unitName + "!", 3);
-
+        // Show battle start message
+        if (enemyUnits.Count == 1)
+            dialogueBox.ShowDialouge("Engaging " + enemyUnits[0].unit.unitName + "!", 3);
+        else
+            dialogueBox.ShowDialouge("Engaging " + enemyUnits.Count + " enemies!", 3);
+                 
         // Update text on attack button based on equipped weapon
         AttackType atkType = playerUnit.unit.weapon.atkType;
         switch (atkType) {
@@ -136,6 +146,24 @@ public class BattleUIHandler : MonoBehaviour {
     public void HideSkillWindow() {
         GameObject skillWindow = skillMenuController.gameObject;
         animationHandler.stretchOut(skillWindow, 0.1f);
+    }
+
+    /// <summary>
+    /// Shows the enemy targeting menu
+    /// </summary>
+    public void ShowEnemyTargetingWindow() {
+        GameObject enemyWindow = enemyTargetingMenuController.gameObject;
+        enemyTargetingMenuController.SetEnemyMenu(battleController.enemyUnits);
+        animationHandler.stretchIn(enemyWindow, 0.1f);
+    }
+
+    /// <summary>
+    /// Hides the enemy targeting menu
+    /// </summary>
+    public void HideEnemyTargetingWindow() {
+        GameObject enemyWindow = enemyTargetingMenuController.gameObject;
+        enemyTargetingMenuController.ResetEnemyMenu();
+        animationHandler.stretchOut(enemyWindow, 0.1f);
     }
 
     /// <summary>

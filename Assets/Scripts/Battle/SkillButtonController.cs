@@ -6,8 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 
 public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
-    [SerializeField]
-    private TMP_Text elementName;
+    public TMP_Text elementName;
     [SerializeField]
     private TMP_Text elementNumberText;
     [SerializeField]
@@ -24,7 +23,10 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
         element = textable;
         elementName.text = textable.GetName();
         elementNumberText.text = textable.GetNumber().ToString();
-        icon.sprite = textable.GetIcon();
+        if (textable.GetIcon() == null)
+            icon.color = Color.clear;
+		else 
+            icon.sprite = textable.GetIcon();
     }
 
 	/// <summary>

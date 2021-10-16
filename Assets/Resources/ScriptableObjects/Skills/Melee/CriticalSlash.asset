@@ -27,9 +27,9 @@ MonoBehaviour:
   unitMhpMultiplier: 0
   unitCspMultiplier: 0
   unitMspMultiplier: 0
-  unitStrMultiplier: 1
+  unitStrMultiplier: 0.6
   unitMagMultiplier: 0
-  unitDexMultiplier: 1.5
+  unitDexMultiplier: 0.7
   unitDefMultiplier: 0
   unitResMultiplier: 0
   unitArmMultiplier: 0

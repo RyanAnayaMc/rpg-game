@@ -19,9 +19,11 @@ MonoBehaviour:
   buyPrice: 150
   stackableMax: 0
   atkType: 1
-  subtype: 7
+  meleeType: 0
+  magicType: 0
+  rangedType: 0
   castAnimation: 0
   weaponAnimation: 2
-  might: 4
+  might: 12
   attackSFX: {fileID: 8300000, guid: 704ff3486fd4f7a4f8fd4cccf6626a4d, type: 3}
   castSFX: {fileID: 0}

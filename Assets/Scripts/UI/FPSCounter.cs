@@ -4,21 +4,16 @@ using UnityEngine;
 using TMPro;
 
 public class FPSCounter : MonoBehaviour {
-	private float countdown;
     private TMP_Text fpsText;
 
 	public void Start() {
-		countdown = 0.125f;
+		gameObject.SetActive(Settings.INSTANCE.showFPS);
+
 		fpsText = GetComponentInChildren<TMP_Text>();
 	}
-	public void FixedUpdate() {
-		float timeDelta = Time.unscaledDeltaTime;
-
-		if (countdown > 0)
-			countdown -= timeDelta;
-		else {
-			countdown = 0.125f;
-			int fps = (int) (1 / timeDelta);
+	public void Update() {
+		if (Settings.INSTANCE.showFPS) {
+			int fps = (int) (1 / Time.unscaledDeltaTime);
 			fpsText.text = fps + "FPS";
 		}
 	}

@@ -20,8 +20,8 @@ MonoBehaviour:
   costSP: 8
   useScriptedSkillEffects: 0
   scriptedSkillEffect: {fileID: 0}
-  skillSFX: {fileID: 8300000, guid: bc0ec6c698c39ad49afc75af080bb418, type: 3}
-  skillAnimation: 1
+  skillSFX: {fileID: 8300000, guid: b60b406109876634992e75dc5c418da4, type: 3}
+  skillAnimation: 7
   targetType: 2
   unitChpMultiplier: 0
   unitMhpMultiplier: 0

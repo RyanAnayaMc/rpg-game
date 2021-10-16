@@ -11,7 +11,11 @@ public enum WeaponAnimation {
     CastAnimation,
     BowAttack,
     ThunderBowAttack,
-    HealAnimation
+    HealAnimation,
+    FireSlashAttack,
+    GunAttack,
+    MendAnimation,
+    RecoveryAnimation
 }
 
 public class BattleAnimationHandler : MonoBehaviour {

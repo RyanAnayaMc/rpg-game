@@ -15,6 +15,7 @@ MonoBehaviour:
   unitPrefab: {fileID: 7381284348630786295, guid: 4b488eacfd53c4e4c881e654cd71937d, type: 3}
   unitName: Fire Mage
   weaponType: 1
+  unitIcon: {fileID: 8764766198528609078, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
   weapon: {fileID: 11400000, guid: 938afa262450f3e459ed52270c17eab9, type: 2}
   level: 4
   cHP: 65
@@ -22,8 +23,8 @@ MonoBehaviour:
   cSP: 30
   maxSP: 30
   str: 15
-  mag: 40
-  dex: 35
+  mag: 30
+  dex: 25
   def: 25
   res: 35
   arm: 15

@@ -10,6 +10,7 @@ public class UnitEditor : Editor {
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("unitName"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("level"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("unitIcon"));
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("unitPrefab"));
 

@@ -15,15 +15,16 @@ MonoBehaviour:
   unitPrefab: {fileID: 2164450066092167372, guid: 45258d1326fa03e40a5f171161c0cb1b, type: 3}
   unitName: Player
   weaponType: 0
+  unitIcon: {fileID: 0}
   weapon: {fileID: 11400000, guid: 964f54d70acc2ef499a97f9c863e4bdc, type: 2}
   level: 4
   cHP: 100
   maxHP: 100
   cSP: 30
   maxSP: 30
-  str: 40
-  mag: 20
-  dex: 40
+  str: 30
+  mag: 15
+  dex: 30
   def: 40
   res: 20
   arm: 25

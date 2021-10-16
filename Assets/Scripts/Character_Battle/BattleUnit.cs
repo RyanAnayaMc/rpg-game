@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class BattleUnit : MonoBehaviour {
+public class BattleUnit : MonoBehaviour, ButtonTextable {
     /// <summary>
     /// Reference to the battle's BattleController for convenience.
     /// </summary>
@@ -97,5 +97,21 @@ public class BattleUnit : MonoBehaviour {
     /// </summary>
     public void UpdateSP() {
         unitHUD.SetSP(unit);
+	}
+
+	public string GetDescriptionText() {
+        return "Left click to attack " + unit.unitName + " Lv. " + unit.level + ".";
+	}
+
+	public string GetName() {
+        return unit.unitName;
+	}
+
+	public int GetNumber() {
+        return unit.level;
+	}
+
+	public Sprite GetIcon() {
+        return unit.unitIcon;
 	}
 }
