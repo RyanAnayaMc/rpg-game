@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using XNode;
 
-public class NodeParser : MonoBehaviour {
+public class DialogueGraphHandler : MonoBehaviour {
     public DialogueGraph graph;
 	public DialogueBoxController dialogueBox;
 	private string previousName;

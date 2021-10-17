@@ -9,6 +9,7 @@ public class MainMenuController : MonoBehaviour {
     public AudioClip buttonClickSFX;
     public AudioClip backSFX;
     public string buyURL;
+    public string websiteURL;
 
     // TODO use SFXHandler
     
@@ -32,5 +33,9 @@ public class MainMenuController : MonoBehaviour {
 
     public void onBuyButton() {
         Application.OpenURL(buyURL);
+	}
+
+    public void onWebsiteButton() {
+        Application.OpenURL(websiteURL);
 	}
 }
