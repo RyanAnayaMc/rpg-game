@@ -27,6 +27,11 @@ public class Unit : ScriptableObject {
     public AttackType weaponType;
 
     /// <summary>
+    /// The sprite for the unit's icon in menus.
+    /// </summary>
+    public Sprite unitIcon;
+
+    /// <summary>
     /// The unit's equipped <see cref="Weapon"/>.
     /// </summary>
     public Weapon weapon;

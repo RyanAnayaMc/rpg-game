@@ -5,14 +5,18 @@ using UnityEngine.UI;
 using TMPro;
 
 public class SkillMenuController : MonoBehaviour {
+    /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
     [SerializeField]
     private Transform content; // The transform for the content field for the Skills menu
     [SerializeField]
     private GameObject skillButtonPrefab; // The prefab for the Skill button
     [SerializeField]
     private DialogueBoxController dialogueBox; // The dialogue box on the battle screen
-    [SerializeField]
-    private BattleController battleController; // The battle controller for the battle
 
     private List<Skill> playerSkills;
     private List<SkillButtonController> skillButtons;

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e369d494391e748bf5ded5f86cfd9a, type: 3}
+  m_Name: Gunman
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 5745669318410303289, guid: 5853123417b80004f89bb048967b6526, type: 3}
+  unitName: Gunman
+  weaponType: 0
+  unitIcon: {fileID: -1780516334461364560, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  weapon: {fileID: 11400000, guid: 91f9376521886df4db74a6acf67103cc, type: 2}
+  level: 4
+  cHP: 70
+  maxHP: 70
+  cSP: 15
+  maxSP: 15
+  str: 20
+  mag: 20
+  dex: 40
+  def: 25
+  res: 25
+  arm: 25
+  agi: 30
+  isDefending: 0
+  skills:
+  - {fileID: 11400000, guid: de9082a978a873e4c959b9dd318f4178, type: 2}
+  - {fileID: 11400000, guid: 7abcd7a0bd690074b8d05170fc626dca, type: 2}
+  showStats: 1

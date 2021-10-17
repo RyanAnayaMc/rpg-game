@@ -4,6 +4,16 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewPlayerUnit", menuName = "RPG Element/Unit/Player Unit")]
 public class PlayerUnit : Unit {
+	private static PlayerUnit _instance;
+	public static PlayerUnit INSTANCE {
+		get {
+			if (_instance == null)
+				_instance = Resources.Load<PlayerUnit>("Player/Unit");
+
+			return _instance;
+		}
+	}
+
 	public GameObject meleePrefab;
 
 	public GameObject magicPrefab;

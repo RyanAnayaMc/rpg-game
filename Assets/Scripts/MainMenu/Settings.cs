@@ -43,6 +43,17 @@ public class Settings {
 	[SerializeField]
 	public bool doDankShit;
 
+	/// <summary>
+	/// Whether or not the game is using raytracing.
+	/// </summary>
+	[SerializeField]
+	public bool useRaytracing;
+
+	/// <summary>
+	/// Whether or not the FPS counter is shown in game.
+	/// </summary>
+	public bool showFPS;
+
 	private Settings() {
 		musicVolume = 1;
 		sfxVolume = 1;

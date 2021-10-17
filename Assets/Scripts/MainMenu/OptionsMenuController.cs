@@ -13,6 +13,9 @@ public class OptionsMenuController : MonoBehaviour {
 	public Slider sfxVolumeSlider;
 	public Toggle damageNumberToggle;
 	public Toggle dankShitToggle;
+	public Toggle raytracingToggle;
+	public Toggle fpsToggle;
+	public GameObject fpsCounter;
 
 	// Read settings from file
 	public void Awake() {
@@ -25,6 +28,8 @@ public class OptionsMenuController : MonoBehaviour {
 		sfxVolumeSlider.value = Settings.INSTANCE.sfxVolume;
 		damageNumberToggle.isOn = Settings.INSTANCE.showDamageNumbers;
 		dankShitToggle.isOn = Settings.INSTANCE.doDankShit;
+		raytracingToggle.isOn = Settings.INSTANCE.useRaytracing;
+		fpsToggle.isOn = Settings.INSTANCE.showFPS;
 	}
 	public void SetMusicVolume(float newVolume) {
 		Settings.INSTANCE.musicVolume = newVolume;
@@ -40,6 +45,16 @@ public class OptionsMenuController : MonoBehaviour {
 
 	public void DoDankShit(bool value) {
 		Settings.INSTANCE.doDankShit = value;
+	}
+
+	public void UseRaytracing(bool value) {
+		QualitySettings.SetQualityLevel(value ? 0 : 1);
+		Settings.INSTANCE.useRaytracing = value;
+	}
+
+	public void ShowFPS(bool value) {
+		Settings.INSTANCE.showFPS = value;
+		fpsCounter.SetActive(value);
 	}
 
 	public void SaveSettings() {

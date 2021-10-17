@@ -3,7 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class BattleUnit : MonoBehaviour {
+public class BattleUnit : MonoBehaviour, ButtonTextable {
+    /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
+    /// <summary>
+    /// The unit's battle HUD controller. Player HUDs do not float
+    /// but enemy HUDs do float.
+    /// </summary>
+    public HUDController unitHUD;
+
     /// <summary>
     /// The Unit associated with this BattleUnit. Contains all attributes.
     /// </summary>
@@ -64,4 +76,42 @@ public class BattleUnit : MonoBehaviour {
 
         return recover;
     }
+
+    /// <summary>
+    /// Updates the unit's HP and SP on their HUD.
+    /// </summary>
+    public void UpdateHUD() {
+        unitHUD.SetHP(unit);
+        unitHUD.SetSP(unit);
+	}
+
+    /// <summary>
+    /// Updates the unit's HP on their HUD
+    /// </summary>
+    public void UpdateHP() {
+        unitHUD.SetHP(unit);
+	}
+
+    /// <summary>
+    /// Updates the unit's SP on their HUD
+    /// </summary>
+    public void UpdateSP() {
+        unitHUD.SetSP(unit);
+	}
+
+	public string GetDescriptionText() {
+        return "Left click to attack " + unit.unitName + " Lv. " + unit.level + ".";
+	}
+
+	public string GetName() {
+        return unit.unitName;
+	}
+
+	public int GetNumber() {
+        return unit.level;
+	}
+
+	public Sprite GetIcon() {
+        return unit.unitIcon;
+	}
 }

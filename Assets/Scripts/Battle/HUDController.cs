@@ -11,19 +11,31 @@ public class HUDController : MonoBehaviour {
     public Slider hpBar; // HP bar
     public TMP_Text spText; // Text that displays cSP / maxSP
     public Slider spBar; // SP bar
+    public bool isFloating; // Is this a floating HP bar?
 
     /// <summary>
     /// Sets up the HUD based on a Unit's data
     /// </summary>
     /// <param name="unit">The Unit to set up this HUD with.</param>
-    public void SetupHUD(Unit unit) {
-        unitName.text = unit.unitName;
-        hpBar.maxValue = unit.maxHP;
-        hpBar.value = unit.cHP;
-        hpText.text = unit.cHP + "/" + unit.maxHP;
-        spBar.maxValue = unit.maxSP;
-        spBar.value = unit.cSP;
-        spText.text = unit.cSP + "/" + unit.maxSP;
+    public void SetupHUD(Unit unit, bool isFloating = false) {
+        if (unitName != null)
+            unitName.text = unit.unitName;
+        
+        if (hpBar != null) {
+            hpBar.maxValue = unit.maxHP;
+            hpBar.value = unit.cHP;
+        }
+
+        if (hpText != null)
+            hpText.text = unit.cHP + "/" + unit.maxHP;
+
+        if (spBar != null) {
+            spBar.maxValue = unit.maxSP;
+            spBar.value = unit.cSP;
+        }
+        
+        if (spText != null)
+            spText.text = unit.cSP + "/" + unit.maxSP;
     }
 
     /// <summary>
@@ -31,9 +43,13 @@ public class HUDController : MonoBehaviour {
     /// </summary>
     /// <param name="unit">The Unit to update this HUD with.</param>
     public void SetHP(Unit unit) {
-        hpBar.value = unit.cHP;
-        hpBar.maxValue = unit.maxHP;
-        hpText.text = unit.cHP + "/" + unit.maxHP;
+        if (hpBar != null) {
+            hpBar.maxValue = unit.maxHP;
+            hpBar.value = unit.cHP;
+        }
+
+        if (hpText != null)
+            hpText.text = unit.cHP + "/" + unit.maxHP;
     }
 
     /// <summary>
@@ -41,8 +57,70 @@ public class HUDController : MonoBehaviour {
     /// </summary>
     /// <param name="unit">The Unit to update this HUD with.</param>
     public void SetSP(Unit unit) {
-        spBar.value = unit.cSP;
-        spBar.maxValue = unit.maxSP;
-        spText.text = unit.cSP + "/" + unit.maxSP;
+        if (spBar != null) {
+            spBar.maxValue = unit.maxSP;
+            spBar.value = unit.cSP;
+        }
+
+        if (spText != null)
+            spText.text = unit.cSP + "/" + unit.maxSP;
     }
+
+    /// <summary>
+    /// Shows the unit's HP bar if it's floating.
+    /// Does nothing to non-floating HUDs.
+    /// </summary>
+    public void ShowHPBar() {
+        if (isFloating)
+            hpBar.gameObject.SetActive(true);
+	}
+
+    /// <summary>
+    /// Hides the unit's HP bar if it's floating.
+    /// Does nothing to non-floating HUDs.
+    /// </summary>
+    public void HideHPBar() {
+        if (isFloating)
+            hpBar.gameObject.SetActive(false);
+	}
+
+    /// <summary>
+    /// Shows the unit's SP bar if it's floating.
+    /// Does nothing to non-floating HUDs.
+    /// </summary>
+    public void ShowSPBar() {
+        if (isFloating)
+            spBar.gameObject.SetActive(true);
+	}
+
+    /// <summary>
+    /// Hides the unit's SP bar if it's floating.
+    /// Does nothing to non-floating HUDs.
+    /// </summary>
+    public void HideSPBar() {
+        if (isFloating)
+            spBar.gameObject.SetActive(false);
+	}
+
+    /// <summary>
+    /// Shows the unit's HP and SP bars if it's floating.
+    /// Does nothing to non-floating HUDs.
+    /// </summary>
+    public void ShowBars() {
+        if (isFloating) {
+            hpBar.gameObject.SetActive(true);
+            spBar.gameObject.SetActive(true);
+        }
+	}
+
+    /// <summary>
+    /// Hides the unit's HP and SP bars if it's floating.
+    /// Does nothing to non-floating HUDs.
+    /// </summary>
+    public void HideBars() {
+        if (isFloating) {
+            hpBar.gameObject.SetActive(false);
+            spBar.gameObject.SetActive(false);
+        }
+	}
 }

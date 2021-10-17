@@ -11,10 +11,20 @@ public enum WeaponAnimation {
     CastAnimation,
     BowAttack,
     ThunderBowAttack,
-    HealAnimation
+    HealAnimation,
+    FireSlashAttack,
+    GunAttack,
+    MendAnimation,
+    RecoveryAnimation
 }
 
 public class BattleAnimationHandler : MonoBehaviour {
+    /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
     /// <summary>
     /// Plays a flicker animation for when a unit takes damage.
     /// </summary>

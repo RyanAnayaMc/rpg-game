@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ItemMenuController : MonoBehaviour
-{
+public class ItemMenuController : MonoBehaviour {
+    /// <summary>
+    /// Reference to the battle's BattleController for convenience.
+    /// </summary>
+    [HideInInspector]
+    public BattleController battleController;
+
     [SerializeField]
     private Transform content; // The transform for the content field for the skills menu
     [SerializeField]
     private GameObject itemButtonPrefab; // The prefab for the item buttons
-    [SerializeField]
-    private BattleController battleController; // The battle controller for the battle
     [SerializeField]
     private DialogueBoxController dialogueBox; // The text on the dialogue box
 
