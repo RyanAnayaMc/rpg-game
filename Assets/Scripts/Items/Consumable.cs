@@ -83,37 +83,38 @@ public class Consumable : Item {
     /// <param name="attacker">The unit using the item.</param>
     /// <param name="defender">The enemy of the user.</param>
     /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
-    /// <returns>
-    /// Item1 - The dialogue box message.
-    /// Item2 - Whether or not defender died.
-    /// </returns>
-    public (string, bool) Use(BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
+    /// <returns>The dialogue box message.</returns>
+    public string Use(BattleUnit attacker, BattleSFXHandler sfxHandler) {
         switch (type) {
             case ConsumableType.HealthRecover:
                 int heal = attacker.Heal(recovery);
                 playAnimationAndSFX(attacker, sfxHandler);
                 NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, attacker.transform);
-                return (attacker.unit.unitName + " restored " + heal + " HP.", false);
+                return attacker.unit.unitName + " restored " + heal + " HP.";
             case ConsumableType.SpecialRecover:
                 int recover = attacker.RecoverSP(recovery);
                 playAnimationAndSFX(attacker, sfxHandler);
                 NumberPopup.DisplayNumberPopup(recover, NumberType.SpHeal, attacker.transform);
-                return (attacker.unit.unitName + " recovered " + recover + " SP.", false);
+                return attacker.unit.unitName + " recovered " + recover + " SP.";
             case ConsumableType.StatBuff:
-                return ("not implemented yet", false);
+                return "not implemented yet";
             case ConsumableType.DebuffInflict:
-                return ("not implemented yet", false);
+                return "not implemented yet";
             case ConsumableType.DamageDeal:
-                defender.unitHUD.ShowHPBar();
-                bool dead = defender.TakeDamage(damage);
-                NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, defender.transform);
-                playAnimationAndSFX(defender, sfxHandler);
-                return (defender.unit.unitName + " took " + damage + " item damage!", dead);
+                int total = 0;
+                foreach (BattleUnit defender in sfxHandler.battleController.enemyUnits) {
+                    defender.unitHUD.ShowHPBar();
+                    bool dead = defender.TakeDamage(damage);
+                    NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, defender.transform);
+                    playAnimationAndSFX(defender, sfxHandler);
+                    total += damage;
+                }
+                return attacker.unit.unitName + " did a total of " + total + " item damage!";
             case ConsumableType.Scripted:
-                return (scriptedSkillEffect.DoSkill(attacker, defender, sfxHandler), defender.unit.cHP <= 0);
+                return scriptedSkillEffect.DoSkill(attacker, null, sfxHandler);
 		}
 
-        return ("error", false);
+        return "error";
 	}
 
     private void playAnimationAndSFX(BattleUnit unit, BattleSFXHandler sfxHandler) {

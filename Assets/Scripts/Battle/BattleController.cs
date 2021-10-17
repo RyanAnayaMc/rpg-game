@@ -51,12 +51,6 @@ public class BattleController : MonoBehaviour {
     public List<Transform> enemyLocations;
 
     /// <summary>
-    /// The Unit to spawn for the battle representing the player.
-    /// </summary>
-    [SerializeField]
-    private PlayerUnit playerUnitObj;
-
-    /// <summary>
     /// The Unit to spawn for the battle representing the enemy.
     /// A duplicate of the enemy Unit is spawned in.
     /// </summary>
@@ -113,9 +107,9 @@ public class BattleController : MonoBehaviour {
     public AudioClip enemyDefeatSFX;
 
     private string currentScene;
-    private Transform location;
     private bool isInAttackWindow;
     private Skill chosenSkill;
+    private Vector3 position;
     #endregion
 
     #region Setup
@@ -128,15 +122,16 @@ public class BattleController : MonoBehaviour {
     /// <param name="currentSceneName">The name of the scene you are currently in (to return to after the battle).</param>
     /// <param name="currentLocation">The location to return to after the battle.</param>
     /// <param name="battleSceneName">The name of the Battle scene to load</param>
-    public static void StartBattle(PlayerUnit playerUnit, List<Unit> enemies, AudioClip battleMusic, string currentSceneName, Transform currentLocation, string battleSceneName = "CastleBattle") {
+    public static void StartBattle(List<Unit> enemies, AudioClip battleMusic, string scene, string battleSceneName = "CastleBattle") {
+        CharacterMovementController.loadSavedLocation = true;
+        CharacterMovementController.savedLocation = GameObject.FindGameObjectWithTag("Player").transform.position;
+
         SceneManager.LoadScene(battleSceneName);
 
         BattleController.inParameters = true;
-        BattleController.inPlayerUnit = playerUnit;
         BattleController.inEnemyUnits = enemies;
         BattleController.inMusic = battleMusic;
-        BattleController.inScene = currentSceneName;
-        BattleController.inLocation = currentLocation;
+        BattleController.inScene = scene;
     }
 
     void Start() {
@@ -157,11 +152,9 @@ public class BattleController : MonoBehaviour {
 
         // Get parameters from other scene if present
         if (inParameters) {
-            playerUnitObj = inPlayerUnit;
             enemyUnitObjs = inEnemyUnits;
             musicHandler.battleMusic = inMusic;
             currentScene = inScene;
-            location = inLocation;
             inParameters = false;
         }
 
@@ -170,16 +163,14 @@ public class BattleController : MonoBehaviour {
 
         // Spawn player
         phase = BattlePhase.START;
-        playerUnitObj = Instantiate(playerUnitObj);
-        playerUnit = Instantiate(playerUnitObj.unitPrefab, playerLocation)
+        playerUnit = Instantiate(PlayerUnit.INSTANCE.unitPrefab, playerLocation)
             .GetComponent<BattleUnit>();
-        playerUnit.unit = playerUnitObj;
+        playerUnit.unit = PlayerUnit.INSTANCE;
         playerUnit.unit.weapon = Instantiate(playerUnit.unit.weapon);
 
         // Spawn enemies
         List<BattleUnit> enemies = new List<BattleUnit>();
         for (int i = 0; i < enemyLocations.Count && i < enemyUnitObjs.Count; i++) {
-            Debug.Log(i);
             enemyUnitObjs[i] = Instantiate(enemyUnitObjs[i]);
             BattleUnit enemy = Instantiate(enemyUnitObjs[i].unitPrefab, enemyLocations[i])
                 .GetComponent<BattleUnit>();
@@ -298,28 +289,49 @@ public class BattleController : MonoBehaviour {
         Item item = PlayerInventory.INSTANCE.GetConsumableItems()[index].item;
         PlayerInventory.INSTANCE.RemoveItem(item);
 
-        uiHandler.DisplayDialogueText(playerUnitObj.unitName + " uses a " + item.itemName + "!");
+        uiHandler.DisplayDialogueText(playerUnit.unit.unitName + " uses a " + item.itemName + "!");
         StartCoroutine(useItem(item as Consumable));
+
+        if ((item as Consumable).type == ConsumableType.DamageDeal) {
+            for (int i = 0; i < enemyUnits.Count; i++) {
+                if (enemyUnits[i].unit.cHP <= 0) {
+                    animationHandler.fadeOutSprite(enemyUnits[i].gameObject, 0.1f);
+                    enemyUnits.Remove(enemyUnits[i]);
+                    i--;
+                }
+            }
+        } else if ((item as Consumable).type == ConsumableType.DamageDeal) {
+
+		}
+
+        if (enemyUnits.Count <= 0)
+            Win();
     }
 
+
     private IEnumerator useItem(Consumable item) {
-        /*
-        (string, bool) data = item.Use(playerUnit, enemyUnit, battleSFXHandler);
-        playerUnit.UpdateHUD();
-        enemyUnit.UpdateHUD();
-        yield return new WaitForSeconds(2);
-        enemyUnit.unitHUD.HideBars();
-        uiHandler.DisplayDialogueText(data.Item1);
-        yield return new WaitForSeconds(1);
-        bool isDead = data.Item2;
+        string dialogueText = item.Use(playerUnit, battleSFXHandler);
 
+        if (item.type == ConsumableType.DamageDeal) {
+            yield return new WaitForSeconds(2);
 
-        if (isDead)
-            Win();
-        else
-            StartCoroutine(EnemyTurn());
-        */
-        yield return null;
+            foreach (BattleUnit enemy in enemyUnits) {
+                enemy.UpdateHUD();
+                for (int i = 0; i < enemyUnits.Count; i++) {
+                    if (enemyUnits[i].unit.cHP <= 0) {
+                        animationHandler.fadeOutSprite(enemyUnits[i].gameObject, 0.1f);
+                        enemyUnits.Remove(enemyUnits[i]);
+                        i--;
+                    }
+                }
+            }
+
+            if (enemyUnits.Count <= 0)
+                Win();
+            else
+                StartCoroutine(EnemyTurn());
+        } else
+            playerUnit.UpdateHUD();
     }
 
     /// <summary>
@@ -396,60 +408,51 @@ public class BattleController : MonoBehaviour {
             uiHandler.DisplayDialogueText("You do not have enough SP to use " + skill.skillName + "!");
         } else {
             battleSFXHandler.PlayConfirmSFX();
-            chosenSkill = skill;
-            uiHandler.HideSkillWindow();
-
-            uiHandler.ShowEnemyTargetingWindow();
+            
+            if (skill.targetType == TargetType.ENEMY || (skill.useScriptedSkillEffects && skill.needsTarget)) {
+                chosenSkill = skill;
+                uiHandler.HideSkillWindow();
+                uiHandler.ShowEnemyTargetingWindow();
+            } else {
+                uiHandler.HideSkillWindow();
+                StartCoroutine(PlayerSkill(skill, null));
+            }
         }
     }
 
     private IEnumerator PlayerSkill(Skill skill, BattleUnit enemyUnit) {
-        bool isDead = false;
-        uiHandler.HideSkillWindow();
-        battleSFXHandler.PlayConfirmSFX();
-        playerUnit.unit.cSP -= skill.costSP;
-        (string, int, bool, bool) data = damageHandler.SpecialAttack(skill, playerUnit, enemyUnit, battleSFXHandler);
-
-        yield return new WaitForSeconds(0.2f);
-
-        bool wasScripted = data.Item4;
-        uiHandler.DisplayDialogueText(data.Item1);
-
-        if (!wasScripted) {
-            bool isHeal = !data.Item3;
-
-            animationHandler.PlaySkillAnimation(playerUnit, enemyUnit, skill, battleSFXHandler);
-
-            if (isHeal) {
-                int heal = playerUnit.Heal(data.Item2);
-                NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, playerUnit.transform);
-            } else {
-                enemyUnit.unitHUD.ShowHPBar();
-                isDead = enemyUnit.TakeDamage(data.Item2);
-                NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, enemyUnit.transform);
-            }
-        } else {
-            isDead = enemyUnit.unit.cHP <= 0;
-        }
+        string diagMessage = skill.DoSkill(playerUnit, enemyUnit, battleSFXHandler);
+        uiHandler.DisplayDialogueText(diagMessage);
 
         playerUnit.UpdateHUD();
-        enemyUnit.UpdateHUD();
+
+        if (enemyUnit != null)
+            enemyUnit.UpdateHUD();
+        else foreach (BattleUnit enemy in enemyUnits)
+            enemy.UpdateHUD();
 
         yield return new WaitForSeconds(2);
-        enemyUnit.unitHUD.HideBars();
-        if (isDead) {
-            phase = BattlePhase.WIN;
 
-            // Fade out enemy
-            battleSFXHandler.PlaySFX(enemyDefeatSFX);
-            animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
+        // Remove enemies if killed
+        if (enemyUnit != null) {
+            if (enemyUnit.unit.cHP <= 0) {
+                enemyUnits.Remove(enemyUnit);
+                animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
+            }
+		} else {
+            for (int i = 0; i < enemyUnits.Count; i++) {
+                if (enemyUnits[i].unit.cHP <= 0) {
+                    animationHandler.fadeOutSprite(enemyUnits[i].gameObject, 0.1f);
+                    enemyUnits.Remove(enemyUnits[i]);
+                    i--;
+                }
+			}
+		}
 
-            StartCoroutine(Victory());
-        } else {
-            phase = BattlePhase.ENEMY;
+        if (enemyUnits.Count <= 0)
+            Win();
+        else
             StartCoroutine(EnemyTurn());
-        }
-        yield return null;
     }
 
     // Make the player defend themselves
@@ -482,7 +485,14 @@ public class BattleController : MonoBehaviour {
             battleSFXHandler.PlaySFX(enemyDefeatSFX);
             animationHandler.fadeOutSprite(target.gameObject, 0.1f);
 
-            Win();
+            enemyUnits.Remove(target);
+
+            if (enemyUnits.Count == 0)
+                Win();
+            else {
+                phase = BattlePhase.ENEMY;
+                StartCoroutine(EnemyTurn());
+            }
         } else {
             phase = BattlePhase.ENEMY;
             StartCoroutine(EnemyTurn());
@@ -500,7 +510,7 @@ public class BattleController : MonoBehaviour {
 
         foreach (BattleUnit enemy in enemyUnits) {
             EnemyAction(enemy);
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(2);
         }
 
         StartCoroutine(PlayerTurn());
@@ -557,29 +567,10 @@ public class BattleController : MonoBehaviour {
     }
 
     private IEnumerator EnemySkill(Skill skill, BattleUnit enemyUnit) {
-        bool isDead = false;
         enemyUnit.unit.cSP -= skill.costSP;
-        (string, int, bool, bool) data = damageHandler.SpecialAttack(skill, enemyUnit, playerUnit, battleSFXHandler);
+        string diagMessage = skill.DoSkill(enemyUnit, playerUnit, battleSFXHandler);
 
-        yield return new WaitForSeconds(0.2f);
-
-        bool wasScripted = data.Item4;
-        uiHandler.DisplayDialogueText(data.Item1);
-
-        if (!wasScripted) {
-            bool isHeal = !data.Item3;
-
-            animationHandler.PlaySkillAnimation(enemyUnit, playerUnit, skill, battleSFXHandler);
-
-            if (isHeal) {
-                int heal = enemyUnit.Heal(data.Item2);
-                NumberPopup.DisplayNumberPopup(heal, NumberType.Heal, enemyUnit.transform);
-            } else {
-                isDead = playerUnit.TakeDamage(data.Item2);
-                NumberPopup.DisplayNumberPopup(data.Item2, NumberType.Damage, playerUnit.transform);
-            }
-        } else
-            isDead = enemyUnit.unit.cHP <= 0;
+        uiHandler.DisplayDialogueText(diagMessage);
 
         playerUnit.UpdateHUD();
         enemyUnit.UpdateHUD();
@@ -587,7 +578,7 @@ public class BattleController : MonoBehaviour {
         yield return new WaitForSeconds(2);
         enemyUnit.unitHUD.HideBars();
 
-        if (isDead) {
+        if (playerUnit.unit.cHP <= 0) {
             phase = BattlePhase.LOSE;
 
             // Fade out player
@@ -595,12 +586,14 @@ public class BattleController : MonoBehaviour {
             animationHandler.fadeOutSprite(playerUnit.gameObject, 0.1f);
 
             StartCoroutine(Lose());
-		}
+        }
 	}
     #endregion
 
     #region State Changes
+
     // Player wins
+
     public void Win() {
         phase = BattlePhase.WIN;
 
@@ -611,9 +604,9 @@ public class BattleController : MonoBehaviour {
         uiHandler.DisplayDialogueText("You win!");
         musicHandler.PlayVictoryFanfare();
         
-        yield return new WaitForSeconds(0);
+        yield return new WaitUntil(() => Input.GetButtonDown("Interact"));
 
-        // TODO: put player back to map screen
+        SceneManager.LoadScene(currentScene);
     }
 
     // Player lost

@@ -14,6 +14,8 @@ public enum Direction {
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMovementController : MonoBehaviour {
     public static bool isPlayerLocked = false;
+    public static Vector3 savedLocation;
+    public static bool loadSavedLocation;
     [SerializeField]
     private Animator animator;
     public float speed = 5;
@@ -32,11 +34,19 @@ public class CharacterMovementController : MonoBehaviour {
         characterController = GetComponent<CharacterController>();
         if (lightData != null)
             flashlight = lightData.gameObject;
+
+        if (loadSavedLocation) {
+            transform.position = savedLocation;
+            loadSavedLocation = false;
+		}
     }
 
     void Update() {
-        if (isPlayerLocked)
+
+        if (isPlayerLocked) {
+            animator.SetFloat("speed", 0);
             return;
+        }
 
         // Check for sprint
         float sprint = 0;
@@ -46,9 +56,9 @@ public class CharacterMovementController : MonoBehaviour {
             sprint = -0.5f;
 
         // Check for lateral movement
-        float moveX = (Input.GetAxis("Horizontal") * speed) * (1 + sprint * sprintModifier);
-        float moveY = Physics.gravity.y;
-        float moveZ = (Input.GetAxis("Vertical") * speed) * (1 + sprint * sprintModifier);
+        float moveX = isPlayerLocked ? 0 : (Input.GetAxis("Horizontal") * speed) * (1 + sprint * sprintModifier);
+        float moveY = isPlayerLocked ? 0 : Physics.gravity.y;
+        float moveZ = isPlayerLocked ? 0 : (Input.GetAxis("Vertical") * speed) * (1 + sprint * sprintModifier);
 
         /*
         // Check for jump
@@ -62,7 +72,7 @@ public class CharacterMovementController : MonoBehaviour {
 
         // Play sound effect and animation
         direction = getDirection(characterController.velocity);
-        if (characterController.velocity.magnitude > 0.5)
+        if (sfxHandler != null && characterController.velocity.magnitude > 0.5)
             sfxHandler.PlayWalkSFX();
 
         float magnitude = characterController.velocity.magnitude;

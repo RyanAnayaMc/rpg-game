@@ -60,45 +60,4 @@ public class DamageCalculationHandler : MonoBehaviour {
 
         return (text, damage);
     }
-
-    /// <summary>
-    /// Performs a Skill.
-    /// </summary>
-    /// <param name="skill">The skill being used.</param>
-    /// <param name="attacker">The unit attacking.</param>
-    /// <param name="defender">The unit being attacked.</param>
-    /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
-    /// <returns>
-    /// Item1 - The dialogue text message to display.
-    /// Item2 - The damage done or HP to heal to user. Meaningless if skill is scripted.
-    /// Item3 - True if it is a damage skill, false if it is a heal skill. Meaningless if skill is scripted.
-    /// Item4 - Whether or not the skill effect was scripted.
-    /// </returns>
-    public (string, int, bool, bool) SpecialAttack(Skill skill, BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
-        string diagMsg = attacker.unit.unitName + " used " + skill.skillName + "!\n";
-
-        if (!skill.useScriptedSkillEffects) {
-            if (skill.targetType == TargetType.ENEMY) {
-                int damage = skill.getValue(attacker.unit, defender.unit);
-
-                if (defender.unit.isDefending)
-                    damage /= 2;
-
-                if (damage < 0)
-                    damage = 0;
-
-                diagMsg += attacker.unit.unitName + " did " + damage + " special damage to " + defender.unit.unitName + ".";
-                return (diagMsg, damage, true, false);
-            } else if (skill.targetType == TargetType.SELF) {
-                int heal = skill.getValue(attacker.unit, defender.unit);
-               diagMsg += attacker.unit.unitName + " healed " + heal + " HP.";
-                return (diagMsg, heal, false, false);
-            }
-        } else {
-            diagMsg += skill.doScriptedSkillEffect(attacker, defender, sfxHandler);
-            return (diagMsg, -1, true, true);
-        }
-
-        return (null, -1, false, false);
-    }
 }

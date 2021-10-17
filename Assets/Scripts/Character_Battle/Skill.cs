@@ -5,7 +5,8 @@ using UnityEngine;
 public enum TargetType {
     NONE,
     SELF,
-    ENEMY
+    ENEMY,
+    ALLENEMY
 }
 
 public enum AbilityType {
@@ -54,6 +55,11 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// Whether or not this skill uses scripted skill effects.
     /// </summary>
     public bool useScriptedSkillEffects;
+
+    /// <summary>
+    /// Whether or not the scripted skill effect needs a target
+    /// </summary>
+    public bool needsTarget;
 
     /// <summary>
     /// If useScriptedSkillEffects, the ScriptedSkillEffect.
@@ -168,6 +174,33 @@ public class Skill : ScriptableObject, ButtonTextable {
     }
 
     /// <summary>
+    /// Gets the amount of healing to do for the skill if not scripted.
+    /// </summary>
+    /// <param name="user">The user of the skill.</param>
+    /// <param name="enemy">The Unit targeted by the skill.</param>
+    /// <returns></returns>
+    public int getValue(Unit user) {
+        // Get skill damage
+        float value =
+            user.cHP * unitChpMultiplier +
+            user.maxHP * unitMhpMultiplier +
+            user.cSP * unitCspMultiplier +
+            user.maxSP * unitMspMultiplier +
+            user.str * unitStrMultiplier +
+            user.mag * unitMagMultiplier +
+            user.dex * unitDexMultiplier +
+            user.def * unitDefMultiplier +
+            user.res * unitResMultiplier +
+            user.arm * unitArmMultiplier +
+            user.agi * unitAgiMultiplier +
+            user.weapon.might * unitMtMultiplier
+            + flatValue;
+
+        // Round damage to an integer and return it
+        return (int) value;
+    }
+
+    /// <summary>
     /// If scripted, does the scripted skill effect.
     /// </summary>
     /// <param name="user">The user of the skill.</param>
@@ -196,4 +229,75 @@ public class Skill : ScriptableObject, ButtonTextable {
 	public Sprite GetIcon() {
         return icon;
 	}
+
+    /// <summary>
+    /// Performs the skill.
+    /// </summary>
+    /// <param name="attacker">The unit using the skill</param>
+    /// <param name="defender">
+    /// The target of the skill. Meaningless for skills that
+    /// target all enemies or heal skills.
+    /// </param>
+    /// <param name="sfxHandler">The battle's BattleSFXHandler</param>
+    /// <returns> The dialogue message</returns>
+    public string DoSkill(BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
+        string diagMsg = attacker.unit.unitName + " used " + skillName + "!\n";
+        int value = 0;
+        BattleAnimationHandler animationHandler = sfxHandler.battleController.animationHandler;
+
+        if (!useScriptedSkillEffects) {
+            switch (targetType) {
+                case TargetType.ENEMY:
+                    int damage = getValue(attacker.unit, defender.unit);
+
+                    if (defender.unit.isDefending)
+                        damage /= 2;
+
+                    if (damage < 0)
+                        damage = 0;
+
+                    diagMsg += attacker.unit.unitName + " did " + damage + " special damage to " + defender.unit.unitName + ".";
+                    defender.TakeDamage(damage);
+                    
+                    NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, defender.transform);
+                    defender.DoAnimation(skillAnimation);
+                    sfxHandler.PlaySFX(skillSFX);
+                    animationHandler.FlickerAnimation(defender.gameObject);
+
+                    value = damage;
+                    break;
+                case TargetType.SELF:
+                    int heal = getValue(attacker.unit);
+                    diagMsg += attacker.unit.unitName + " healed " + heal + " HP.";
+                    value = attacker.Heal(heal);
+
+                    NumberPopup.DisplayNumberPopup(value, NumberType.Heal, attacker.transform);
+                    break;
+                case TargetType.ALLENEMY:
+                    int totalDamage = 0;
+
+                    foreach (BattleUnit enemy in sfxHandler.battleController.enemyUnits) {
+                        int temp = getValue(attacker.unit, enemy.unit);
+                        if (enemy.unit.isDefending)
+                            temp /= 2;
+                        if (temp < 0)
+                            temp = 0;
+
+                        totalDamage += temp;
+
+                        NumberPopup.DisplayNumberPopup(temp, NumberType.Damage, enemy.transform);
+                        enemy.TakeDamage(temp);
+                        enemy.DoAnimation(skillAnimation);
+                        animationHandler.FlickerAnimation(enemy.gameObject);
+                        sfxHandler.PlaySFX(skillSFX);
+                    }
+
+                    diagMsg += attacker.unit.unitName + " did a total of " + totalDamage + " special damage!";
+                    break;
+            }
+        } else
+            diagMsg += doScriptedSkillEffect(attacker, defender, sfxHandler);
+
+        return diagMsg;
+    }
 }

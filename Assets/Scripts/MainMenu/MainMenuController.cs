@@ -10,10 +10,6 @@ public class MainMenuController : MonoBehaviour {
     public AudioClip backSFX;
     public string buyURL;
 
-    public PlayerUnit playerUnit;
-    public List<Unit> enemyUnits;
-    public AudioClip battleMusic;
-
     // TODO use SFXHandler
     
     public void playSFX() {
@@ -26,7 +22,7 @@ public class MainMenuController : MonoBehaviour {
 
     public void onPlayButton() {
         playSFX();
-        BattleController.StartBattle(playerUnit, enemyUnits, battleMusic, gameObject.scene.name, gameObject.transform, playButtonScene);
+        SceneManager.LoadScene(playButtonScene);
         // TODO: loading screen?
     }
 

@@ -17,16 +17,17 @@ public class SkillEditor : Editor {
         SerializedProperty requiresWeapon = serializedObject.FindProperty("requiresWeaponType");
         EditorGUILayout.PropertyField(requiresWeapon);
 
-        if (requiresWeapon.boolValue)
+        if (requiresWeapon.boolValue) 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("requiredAtkType"));
 
         // Draw skill effect info
         SerializedProperty scriptedSkillEff = serializedObject.FindProperty("useScriptedSkillEffects");
         EditorGUILayout.PropertyField(scriptedSkillEff);
 
-        if (scriptedSkillEff.boolValue)
+        if (scriptedSkillEff.boolValue) {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scriptedSkillEffect"));
-        else {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("needsTarget"));
+        } else {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("skillSFX"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("skillAnimation"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("targetType"));

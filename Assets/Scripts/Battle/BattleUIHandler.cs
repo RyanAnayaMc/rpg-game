@@ -190,7 +190,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="newDiagText">The text to display in the dialogue box</param>
     public void DisplayDialogueText(string newDiagText) {
-        dialogueBox.EditDialogue(newDiagText, 3);
+        dialogueBox.EditDialogue(newDiagText, 2);
     }
 
     /// <summary>

@@ -19,6 +19,7 @@ MonoBehaviour:
   requiredAtkType: 0
   costSP: 4
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: bc0ec6c698c39ad49afc75af080bb418, type: 3}
   skillAnimation: 1
@@ -27,9 +28,9 @@ MonoBehaviour:
   unitMhpMultiplier: 0
   unitCspMultiplier: 0
   unitMspMultiplier: 0
-  unitStrMultiplier: 0.6
+  unitStrMultiplier: 0.7
   unitMagMultiplier: 0
-  unitDexMultiplier: 0.7
+  unitDexMultiplier: 0.8
   unitDefMultiplier: 0
   unitResMultiplier: 0
   unitArmMultiplier: 0
