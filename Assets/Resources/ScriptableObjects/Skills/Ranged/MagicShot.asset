@@ -12,16 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: MagicShot
   m_EditorClassIdentifier: 
-  icon: {fileID: -5279779517305490698, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: 8d95bcf261f259f4786a397bc66e3705, type: 3}
   skillName: Magic Shot
   skillDescription: 'A magical bow attack. Damage reduced by enemy RES instead of
     ARM. '
   requiresWeaponType: 1
   requiredAtkType: 2
-  requiresSubtype: 0
-  requiredSubtype: 0
   costSP: 3
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: d99882e319cf44a4386d1e04e935fb4e, type: 3}
   skillAnimation: 4

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: HollowPoint
   m_EditorClassIdentifier: 
-  icon: {fileID: -5599270617625653286, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: df3edba90cf3d164abec6b9abac2f4ed, type: 3}
   skillName: Hollow Point
   skillDescription: Fire a hollow point round that does increased attack power but
     is worse against armor.
@@ -20,6 +20,7 @@ MonoBehaviour:
   requiredAtkType: 2
   costSP: 3
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: f0e844e37acf7374f92e5869493e1892, type: 3}
   skillAnimation: 8

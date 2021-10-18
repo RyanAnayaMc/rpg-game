@@ -14,6 +14,8 @@ public class PlayerUnit : Unit {
 		}
 	}
 
+	public Sprite characterFace;
+
 	public GameObject meleePrefab;
 
 	public GameObject magicPrefab;

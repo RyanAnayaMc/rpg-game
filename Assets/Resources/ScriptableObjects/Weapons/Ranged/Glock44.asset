@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2129677787867794ebfd4204bf47bf3f, type: 3}
   m_Name: Glock44
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 1868920480331969458, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  itemIcon: {fileID: 21300010, guid: 0bd96f6f4899f644ea1ffd9b4735a5e6, type: 3}
   itemName: Glock 44
   itemDescription: An easy to handle but weak .22LR handgun. Used by inexperienced
     adventurers and thugs.

@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: FullMetalJacket
   m_EditorClassIdentifier: 
-  icon: {fileID: 5477641254428148469, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: 5224c06e3b3a839428bee43c239e54d0, type: 3}
   skillName: Full Metal Jacket
   skillDescription: Fire a fully metal jacketed round. Ignores half of enemy ARM.
   requiresWeaponType: 1
   requiredAtkType: 2
   costSP: 3
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: f0e844e37acf7374f92e5869493e1892, type: 3}
   skillAnimation: 8

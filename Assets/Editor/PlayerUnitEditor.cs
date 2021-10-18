@@ -10,6 +10,7 @@ public class PlayerUnitEditor : Editor
 		serializedObject.Update();
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("unitName"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("characterFace"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("level"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("xp"));
 
