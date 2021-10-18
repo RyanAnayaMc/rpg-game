@@ -8,6 +8,6 @@ public class StartNode : BaseNode {
 	public int exit;
 
 	public override string GetString() {
-		return "Start";
+		return "StartNode";
 	}
 }

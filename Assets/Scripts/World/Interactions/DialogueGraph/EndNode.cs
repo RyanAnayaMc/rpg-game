@@ -8,6 +8,6 @@ public class EndNode : BaseNode {
     public int entry;
 
 	public override string GetString() {
-		return "End";
+		return "EndNode";
 	}
 }

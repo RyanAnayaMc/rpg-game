@@ -9,12 +9,14 @@ public class DialogueNode : BaseNode {
 	[Output]
 	public int exit;
 
-	public string characterName;
+	public string charName;
+	[TextArea]
 	public string message;
+	public bool parseVariables;
 	public Sprite face;
 
 	public override string GetString() {
-		return "DialogueNode/" + characterName + "/" + message;
+		return "DialogueNode/" + charName + "/" + message + "/" + parseVariables.ToString();
 	}
 
 	public Sprite GetSprite() {

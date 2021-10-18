@@ -3,10 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-[CreateAssetMenu]
+public enum LocalSwitch {
+	A = 0, B = 1, C = 2, D = 3, E = 4, F = 5
+}
+
+
+[CreateAssetMenu(fileName = "NewDialogueGraph", menuName = "Dialogue/DialogueGraph")]
 public class DialogueGraph : NodeGraph {
 	private BaseNode _startNode;
 	private BaseNode _currentNode;
+	private bool[] localSwitches = new bool[6];
+
+	public bool GetLocalSwitch(LocalSwitch localSwitch) {
+		return localSwitches[(int) localSwitch];
+	}
+
+	public void SetLocalSwitch(LocalSwitch localSwitch, bool value) {
+		localSwitches[(int) localSwitch] = value;
+	}
 
 	public BaseNode currentNode {
 		get {
@@ -22,7 +36,7 @@ public class DialogueGraph : NodeGraph {
 		get {
 			if (_startNode == null) {
 				foreach (BaseNode node in nodes) {
-					if (node.GetString() == "Start") {
+					if (node.GetString() == "StartNode") {
 						_startNode = node;
 						break;
 					}

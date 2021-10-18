@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class DialogueBoxController : MonoBehaviour
-{
+public class DialogueBoxController : MonoBehaviour {
     public TMP_Text Text;
     private Animator animator;
     private string currentText;
@@ -16,9 +15,15 @@ public class DialogueBoxController : MonoBehaviour
     public Image face;
     public string characterName;
     public TMP_Text characterNameText;
+    public GameObject dialogueSelectionWindow;
+    public GameObject dialogueButtonPrefab;
+
+    public int selectedOption;
 
     void Awake()
     {
+        if (dialogueSelectionWindow != null)
+            dialogueSelectionWindow.GetComponent<Animator>().SetBool("isOpen", false);
         transform.localScale = new Vector3(1, 0, 1);
         animator = GetComponent<Animator>();
         animator.SetBool("isOpen", false);
@@ -159,4 +164,67 @@ public class DialogueBoxController : MonoBehaviour
 
         return stripHTML(newStr);
     }
+
+    /// <summary>
+    /// Finds any global variable references in the string and puts the variables in.
+    /// Reference global variables like this:
+    /// {variableName}
+    /// For example, if the variable EnemiesKilled is 8, then this string:
+    /// "You killed {EnemiesKilled} enemies!"
+    /// as input would return:
+    /// "You killed 8 enemies!"
+    /// </summary>
+    /// <param name="str">The string to parse variables for.</param>
+    /// <returns>The parsed string.</returns>
+    public static string ParseGlobalVariables(string str) {
+        int index1 = str.IndexOf('{');
+        int index2 = str.IndexOf('}');
+
+        if (index1 < 0 || index2 < 0 || index2 < index1)
+            return str;
+
+        string varName = str.Substring(index1 + 1, index2 - index1 - 1);
+        int varValue = GlobalVariables.INSTANCE[varName];
+
+        string newString = str.Substring(0, index1) + varValue + str.Substring(index2 + 1);
+        return newString;
+	}
+
+    /// <summary>
+    /// Shows the given dialouge options, up to four of them. Saves result in
+    /// selectedOption field. It is set to -1 while waiting for the player to answer.
+    /// </summary>
+    /// <param name="options">The</param>
+    public IEnumerator ShowOptions(params string[] options) {
+        int optionCount = Mathf.Min(4, options.Length);
+
+        Debug.Log(optionCount);
+
+        GameObject[] optionButtons = new GameObject[optionCount];
+        Animator animator = dialogueSelectionWindow.GetComponent<Animator>();
+
+        animator.SetBool("isOpen", true);
+
+        int buttonPressed = -1;
+
+        for (int i = 0; i < optionCount; i++) {
+            optionButtons[i] = Instantiate(dialogueButtonPrefab, dialogueSelectionWindow.transform);
+            optionButtons[i].GetComponentInChildren<TMP_Text>().text = options[i];
+            int j = i;
+            optionButtons[i].GetComponent<Button>().onClick.
+                AddListener(() => {
+                    if (buttonPressed < 0)
+                        buttonPressed = j;
+			    });
+        }
+
+        yield return new WaitUntil(() => buttonPressed >= 0);
+
+        animator.SetBool("isOpen", false);
+
+        foreach (GameObject obj in optionButtons)
+            Destroy(obj);
+
+        selectedOption = buttonPressed;
+	}
 }
