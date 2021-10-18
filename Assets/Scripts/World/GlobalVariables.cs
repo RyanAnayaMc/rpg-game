@@ -8,12 +8,12 @@ using UnityEngine;
 /// </summary>
 public class GlobalVariables {
     private Dictionary<string, int> variables;
-    private GlobalVariables _instance;
+    private static GlobalVariables _instance;
 
     /// <summary>
     /// The game's GlobalVariables instance.
     /// </summary>
-    public GlobalVariables INSTANCE {
+    public static GlobalVariables INSTANCE {
         get {
             if (_instance is null)
                 _instance = new GlobalVariables();
@@ -26,7 +26,11 @@ public class GlobalVariables {
 	}
 
     public int this[string name] {
-        get { return GetVariable(name); }
+        get {
+            if (!variables.ContainsKey(name))
+                CreateVariable(name, 0);
+            return GetVariable(name);
+        }
         set {
             if (variables.ContainsKey(name))
                 SetVariable(name, value);

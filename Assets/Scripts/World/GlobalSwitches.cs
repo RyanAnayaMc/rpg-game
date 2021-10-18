@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class GlobalSwitches {
 	private Dictionary<string, bool> switches;
-	private GlobalSwitches _instance;
+	private static GlobalSwitches _instance;
 
 	/// <summary>
 	/// The game's GlobalSwitches instance.
 	/// </summary>
-	public GlobalSwitches INSTANCE {
+	public static GlobalSwitches INSTANCE {
 		get {
 			if (_instance is null)
 				_instance = new GlobalSwitches();

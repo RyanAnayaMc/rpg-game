@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 2654649736162482612}
   - component: {fileID: 2654649736162482613}
   m_Layer: 5
-  m_Name: BetterDialogueBox
+  m_Name: BetterDialogueBoxBattle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
