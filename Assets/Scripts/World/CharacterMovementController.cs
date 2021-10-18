@@ -29,6 +29,10 @@ public class CharacterMovementController : MonoBehaviour {
     [SerializeField]
     private WorldSFXHandler sfxHandler;
     private bool isJumping = false;
+    public float upGravity;
+    public float downGravity;
+    private bool flashlightOn = true;
+    private Light[] lights;
 
     void Start() {
         characterController = GetComponent<CharacterController>();
@@ -42,11 +46,14 @@ public class CharacterMovementController : MonoBehaviour {
     }
 
     void Update() {
-
         if (isPlayerLocked) {
             animator.SetFloat("speed", 0);
             return;
         }
+
+        // Check if on ground
+        if (characterController.isGrounded)
+            isJumping = false;
 
         // Check for sprint
         float sprint = 0;
@@ -57,14 +64,29 @@ public class CharacterMovementController : MonoBehaviour {
 
         // Check for lateral movement
         float moveX = isPlayerLocked ? 0 : (Input.GetAxis("Horizontal") * speed) * (1 + sprint * sprintModifier);
-        float moveY = isPlayerLocked ? 0 : Physics.gravity.y;
         float moveZ = isPlayerLocked ? 0 : (Input.GetAxis("Vertical") * speed) * (1 + sprint * sprintModifier);
 
-        /*
+        float moveY = 0;
+
+        if (isPlayerLocked) {
+            moveY = 0;
+		} else {
+            if (isJumping) {
+                Vector3 characterVelocity = characterController.velocity;
+                if (Vector3.Dot(characterVelocity, Vector3.up) < 0)
+                    moveY = characterVelocity.y - downGravity * Time.deltaTime;
+                else
+                    moveY = characterVelocity.y - upGravity * Time.deltaTime;
+			} else
+                moveY = Physics.gravity.y;
+		}
+
         // Check for jump
-        if (characterController.isGrounded && Input.GetButton("Jump"))
+        if (characterController.isGrounded && Input.GetButton("Jump")) {
             moveY += jumpForce;
-        */
+            isJumping = true;
+        }
+
 
         Vector3 movement = new Vector3(moveX, moveY, moveZ);
 
@@ -79,8 +101,11 @@ public class CharacterMovementController : MonoBehaviour {
         animator.SetFloat("speed", magnitude);
         animator.SetInteger("direction", (int) direction);
 
+        if (Input.GetButtonDown("Flashlight"))
+            ToggleFlashlight();
+
         // Rotate flashlight
-        if (lightData != null)
+        if (lightData != null && flashlightOn)
             rotateLight();
     }
 
@@ -95,11 +120,11 @@ public class CharacterMovementController : MonoBehaviour {
                 flashlight.transform.localRotation = Quaternion.Euler(0, 180, 0);
                 return;
             case Direction.LEFT:
-                flashlight.transform.localPosition = new Vector3(0, 1, 0.6f);
+                flashlight.transform.localPosition = new Vector3(-0.37f, 0.5f, 0.6f);
                 flashlight.transform.localRotation = Quaternion.Euler(0, -90, 0);
                 return;
             case Direction.RIGHT:
-                flashlight.transform.localPosition = new Vector3(0, 1, 0.6f);
+                flashlight.transform.localPosition = new Vector3(0.37f, 0.5f, 0.6f);
                 flashlight.transform.localRotation = Quaternion.Euler(0, 90, 0);
                 return;
 
@@ -115,5 +140,26 @@ public class CharacterMovementController : MonoBehaviour {
             return velocity.z > 0 ? Direction.UP : Direction.DOWN;
         } else
             return direction;
+	}
+    
+    /// <summary>
+    /// Turns the flashlight on or off.
+    /// </summary>
+    public void SetFlashlight(bool setting) {
+        flashlightOn = setting;
+        
+        if (lights == null)
+            lights = GetComponentsInChildren<Light>();
+        foreach (Light light in lights)
+            light.gameObject.SetActive(setting);
+	}
+
+    /// <summary>
+    /// Toggles the flashlight.
+    /// </summary>
+    /// <returns>Whether or not the flashlight is on.</returns>
+    public bool ToggleFlashlight() {
+        SetFlashlight(!flashlightOn);
+        return flashlightOn;
 	}
 }
