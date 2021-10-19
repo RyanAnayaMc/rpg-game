@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class WorldMenuController : MonoBehaviour {
     public GameObject mapHUD;
@@ -10,51 +11,9 @@ public class WorldMenuController : MonoBehaviour {
     public int popupMenuOpenOffset = 362;
 	public int extraMenuOffset = 438;
 	private bool isMenuOpen;
+	private IMenuWindow currentWindow;
+
 	private Coroutine _running;
-	[SerializeField]
-	private Button equipmentButton;
-	[SerializeField]
-	private Button inventoryButton;
-	[SerializeField]
-	private Button skillsButton;
-	[SerializeField]
-	private Button statusButton;
-	[SerializeField]
-	private Button saveButton;
-	[SerializeField]
-	private Button exitButton;
-	[SerializeField]
-	private Button closeMenuButton;
-
-	public void Start() {
-		equipmentButton.onClick.AddListener(() => {
-
-		});
-
-		inventoryButton.onClick.AddListener(() => {
-
-		});
-
-		skillsButton.onClick.AddListener(() => {
-
-		});
-
-		statusButton.onClick.AddListener(() => {
-
-		});
-
-		saveButton.onClick.AddListener(() => {
-
-		});
-
-		exitButton.onClick.AddListener(() => {
-
-		});
-
-		closeMenuButton.onClick.AddListener(() => {
-
-		});
-	}
 
 	public void Update() {
 		if (Input.GetButtonDown("Menu")) {
@@ -67,13 +26,64 @@ public class WorldMenuController : MonoBehaviour {
 		}
 	}
 
+	#region Menu Buttons
+	public void onStatusButton() {
+		if (_running == null) {
+			Debug.Log("_running is null");
+			if (statusMenu.isOpen) {
+				_running = StartCoroutine(shiftWorldMenuBack());
+				statusMenu.Close();
+				currentWindow = null;
+			} else {
+				_running = StartCoroutine(shiftWorldMenuMore());
+				statusMenu.Open();
+				currentWindow = statusMenu;
+			}
+		} else Debug.Log("_running is not null");
+	}
+
+	public void onMenuButton() {
+		SceneManager.LoadScene("MainMenu");
+	}
+
+	public void onCloseButton() {
+		StartCoroutineIfNoneRunning(closeMenu());
+	}
+	#endregion
+
 	#region Open and Close
+	private IEnumerator shiftWorldMenuMore() {
+		float positionDelta = extraMenuOffset / 10;
+
+		for (int i = 0; i < 10; i++) {
+			Vector3 newPosition = mapHUD.transform.localPosition;
+			newPosition.x += positionDelta;
+			mapHUD.transform.localPosition = newPosition;
+			yield return new WaitForSeconds(0.01f);
+		}
+
+		_running = null;
+	}
+
+	private IEnumerator shiftWorldMenuBack() {
+		float positionDelta = extraMenuOffset / 10;
+
+		for (int i = 0; i < 10; i++) {
+			Vector3 newPosition = mapHUD.transform.localPosition;
+			newPosition.x -= positionDelta;
+			mapHUD.transform.localPosition = newPosition;
+			yield return new WaitForSeconds(0.01f);
+		}
+
+		_running = null;
+	}
+
 	private IEnumerator openMenu() {
 		Debug.Log("menu open");
 		CharacterMovementController.isPlayerLocked = true;
 		isMenuOpen = true;
 
-		float positionDelta = (float) 362 / 10; ;
+		float positionDelta = (float) popupMenuOpenOffset / 10; ;
 
 		for (int i = 0; i < 10; i++) {
 
@@ -91,7 +101,7 @@ public class WorldMenuController : MonoBehaviour {
 
 	private IEnumerator closeMenu() {
 		Debug.Log("menu close");
-		float positionDelta = (float) 362 / 10; ;
+		float positionDelta = (float) popupMenuOpenOffset / 10; ;
 
 		for (int i = 0; i < 10; i++) {
 
@@ -106,6 +116,10 @@ public class WorldMenuController : MonoBehaviour {
 
 		CharacterMovementController.isPlayerLocked = false;
 		isMenuOpen = false;
+
+		if (currentWindow != null)
+			currentWindow.Close();
+
 		_running = null;
 	}
 

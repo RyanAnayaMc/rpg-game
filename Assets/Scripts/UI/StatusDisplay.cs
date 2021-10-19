@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class StatusDisplay : MonoBehaviour {
+public class StatusDisplay : MonoBehaviour, IMenuWindow {
 	public bool isOpen = false;
 	private CanvasGroup canvasGroup;
 	private PlayerUnit player;
@@ -68,6 +68,8 @@ public class StatusDisplay : MonoBehaviour {
 			canvasGroup.alpha -= 0.1f;
 			yield return new WaitForSeconds(0.01f);
 		}
+
+		isOpen = false;
 	}
 
 	private IEnumerator fadeIn() {
@@ -77,5 +79,7 @@ public class StatusDisplay : MonoBehaviour {
 			canvasGroup.alpha += 0.1f;
 			yield return new WaitForSeconds(0.01f);
 		}
+
+		isOpen = true;
 	}
 }
