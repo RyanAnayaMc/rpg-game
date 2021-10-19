@@ -24,6 +24,6 @@ MonoBehaviour:
   statChange: 0
   statMultiplier: 0
   damage: 0
-  animation: 0
-  soundEffect: {fileID: 0}
+  animation: 10
+  soundEffect: {fileID: 8300000, guid: 8d312ec45aa6e864fbb40ff376156cce, type: 3}
   scriptedSkillEffect: {fileID: 0}

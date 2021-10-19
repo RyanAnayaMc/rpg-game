@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 1808583244212410573, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
   itemName: Lesser Healing
-  itemDescription: A weak healing potion. Restores 10 HP.
-  isSellable: 0
+  itemDescription: A weak healing potion. Restores 30 HP.
+  isSellable: 1
   buyPrice: 20
   stackableMax: 0
   type: 0
-  recovery: 10
+  recovery: 30
   stat: 0
   statChange: 0
   statMultiplier: 0

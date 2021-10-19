@@ -24,7 +24,7 @@ public class PlayerUnitEditor : Editor
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("rangedPrefab"));
 		}
 
-		EditorGUILayout.PropertyField(serializedObject.FindProperty("weapon"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponId"));
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("showStats"));
 

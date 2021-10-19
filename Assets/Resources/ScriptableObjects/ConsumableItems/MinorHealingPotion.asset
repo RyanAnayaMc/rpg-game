@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 1808583244212410573, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
   itemName: Minor Healing
-  itemDescription: A healing potion used by beginner adventurers. Restores 20 HP.
+  itemDescription: A healing potion used by beginner adventurers. Restores 70 HP.
   isSellable: 1
   buyPrice: 30
   stackableMax: 0
   type: 0
-  recovery: 20
+  recovery: 70
   stat: 0
   statChange: 0
   statMultiplier: 0

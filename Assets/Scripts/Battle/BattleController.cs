@@ -276,7 +276,7 @@ public class BattleController : MonoBehaviour {
     private IEnumerator onItemMenu() {
         uiHandler.HidePlayerOptionWindow();
         yield return new WaitForSeconds(0.3f);
-        uiHandler.ShowItemsWindow(PlayerInventory.INSTANCE.GetConsumableItems());
+        uiHandler.ShowItemsWindow(Inventory.INSTANCE.GetConsumables());
     }
 
 
@@ -286,26 +286,11 @@ public class BattleController : MonoBehaviour {
 
         battleSFXHandler.PlayConfirmSFX();
 
-        Item item = PlayerInventory.INSTANCE.GetConsumableItems()[index].item;
-        PlayerInventory.INSTANCE.RemoveItem(item);
+        Consumable item = Inventory.INSTANCE.GetConsumables()[index].item as Consumable;
+        Inventory.INSTANCE.RemoveConsumable(Atlas.GetID(item));
 
         uiHandler.DisplayDialogueText(playerUnit.unit.unitName + " uses a " + item.itemName + "!");
         StartCoroutine(useItem(item as Consumable));
-
-        if ((item as Consumable).type == ConsumableType.DamageDeal) {
-            for (int i = 0; i < enemyUnits.Count; i++) {
-                if (enemyUnits[i].unit.cHP <= 0) {
-                    animationHandler.fadeOutSprite(enemyUnits[i].gameObject, 0.1f);
-                    enemyUnits.Remove(enemyUnits[i]);
-                    i--;
-                }
-            }
-        } else if ((item as Consumable).type == ConsumableType.DamageDeal) {
-
-		}
-
-        if (enemyUnits.Count <= 0)
-            Win();
     }
 
 

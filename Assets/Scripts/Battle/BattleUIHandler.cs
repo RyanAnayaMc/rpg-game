@@ -170,7 +170,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// Shows the Item menu
     /// </summary>
     /// <param name="items">The items the player has</param>
-    public void ShowItemsWindow(List<InventoryItem> items) {
+    public void ShowItemsWindow(InventoryItem[] items) {
         GameObject itemWindow = itemMenuController.gameObject;
         itemMenuController.SetItemMenu(items);
         animationHandler.stretchIn(itemWindow, 0.1f);

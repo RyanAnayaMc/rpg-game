@@ -34,9 +34,19 @@ public class Unit : ScriptableObject {
     /// <summary>
     /// The unit's equipped <see cref="Weapon"/>.
     /// </summary>
-    public Weapon weapon;
+    public Weapon weapon {
+        get {
+            return Atlas.GetWeapon(weaponId);
+		}
+        set {
+            weaponId = Atlas.GetID(value);
+		}
+	}
 
-    
+    /// <summary>
+    /// The unit's weapon ID.
+    /// </summary>
+    public int weaponId;
 
     // TODO add more equipment
 

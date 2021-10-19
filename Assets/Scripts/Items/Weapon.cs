@@ -67,4 +67,17 @@ public class Weapon : Item {
     /// The sound effect that plays when casting. Can be null.
     /// </summary>
     public AudioClip castSFX;
+
+    public new string itemDescription {
+        get {
+            return base.itemDescription + "\n" + might + " MT";
+        }
+        set {
+            base.itemDescription = value;
+        }
+    }
+
+	public override int GetNumber() {
+        return 1;
+	}
 }

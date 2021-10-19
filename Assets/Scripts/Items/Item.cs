@@ -8,7 +8,7 @@ using UnityEngine;
 /// Base class for items that the user can have in their inventory.
 /// </summary>
 [System.Serializable]
-public class Item : ScriptableObject {
+public class Item : ScriptableObject, ButtonTextable {
     /// <summary>
     /// The icon for the item.
     /// </summary>
@@ -53,4 +53,20 @@ public class Item : ScriptableObject {
 	public override bool Equals(object other) {
         return this == (Item) other;
 	}
+
+    public string GetDescriptionText() {
+        return itemDescription;
+    }
+
+    public Sprite GetIcon() {
+        return itemIcon;
+    }
+
+    public string GetName() {
+        return itemName;
+    }
+
+    public virtual int GetNumber() {
+        return 1;
+    }
 }

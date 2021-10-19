@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class WorldMenuController : MonoBehaviour {
     public GameObject mapHUD;
     public GameObject popupMenu;
+	public InventoryMenu inventoryMenu;
 	public StatusDisplay statusMenu;
     public int popupMenuOpenOffset = 362;
 	public int extraMenuOffset = 438;
@@ -27,19 +28,41 @@ public class WorldMenuController : MonoBehaviour {
 	}
 
 	#region Menu Buttons
+	public void onInventoryButton() {
+		if (_running == null) {
+			if (inventoryMenu.isOpen) {
+				_running = StartCoroutine(shiftWorldMenuBack());
+				inventoryMenu.Close();
+				currentWindow = null;
+			} else {
+				if (currentWindow != null) {
+					currentWindow.Close();
+					_running = StartCoroutine(shiftWorldMenuMore());
+				}
+
+				inventoryMenu.Open();
+				currentWindow = inventoryMenu;
+			}
+		}
+	}
+
 	public void onStatusButton() {
 		if (_running == null) {
-			Debug.Log("_running is null");
 			if (statusMenu.isOpen) {
 				_running = StartCoroutine(shiftWorldMenuBack());
 				statusMenu.Close();
 				currentWindow = null;
 			} else {
+				if (currentWindow != null) {
+					currentWindow.Close();
+					_running = StartCoroutine(shiftWorldMenuMore());
+				}
+
 				_running = StartCoroutine(shiftWorldMenuMore());
 				statusMenu.Open();
 				currentWindow = statusMenu;
 			}
-		} else Debug.Log("_running is not null");
+		}
 	}
 
 	public void onMenuButton() {
@@ -117,10 +140,14 @@ public class WorldMenuController : MonoBehaviour {
 		CharacterMovementController.isPlayerLocked = false;
 		isMenuOpen = false;
 
-		if (currentWindow != null)
-			currentWindow.Close();
-
 		_running = null;
+
+		if (currentWindow != null) {
+			currentWindow.Close();
+			_running = StartCoroutine(shiftWorldMenuBack());
+		}
+
+		
 	}
 
 	private void StartCoroutineIfNoneRunning(IEnumerator coroutine) {

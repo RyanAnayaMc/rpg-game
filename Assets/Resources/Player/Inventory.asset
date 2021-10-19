@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5800c6702fee6e242bb886aceeac487d, type: 3}
-  m_Name: PlayerInventory
+  m_Name: Inventory
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 11400000, guid: 25cfef2f49d3a1c4e895747e9cefa760, type: 2}
-  quantities: 03000000
+  consumables: 000000000100000002000000
+  quantities: 050000000500000002000000
+  weapons: 000000000100000002000000
+  apparel: 
+  accessories: 
   gold: 0
