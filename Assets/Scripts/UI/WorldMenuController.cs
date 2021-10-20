@@ -10,11 +10,16 @@ public class WorldMenuController : MonoBehaviour {
 	public InventoryMenu inventoryMenu;
 	public StatusDisplay statusMenu;
     public int popupMenuOpenOffset = 362;
-	public int extraMenuOffset = 438;
 	private bool isMenuOpen;
 	private IMenuWindow currentWindow;
+	[SerializeField] private CanvasGroup worldUI;
 
 	private Coroutine _running;
+
+	public void Start() {
+		inventoryMenu.gameObject.SetActive(false);
+		statusMenu.gameObject.SetActive(false);
+	}
 
 	public void Update() {
 		if (Input.GetButtonDown("Menu")) {
@@ -31,13 +36,11 @@ public class WorldMenuController : MonoBehaviour {
 	public void onInventoryButton() {
 		if (_running == null) {
 			if (inventoryMenu.isOpen) {
-				_running = StartCoroutine(shiftWorldMenuBack());
 				inventoryMenu.Close();
 				currentWindow = null;
 			} else {
 				if (currentWindow != null) {
 					currentWindow.Close();
-					_running = StartCoroutine(shiftWorldMenuMore());
 				}
 
 				inventoryMenu.Open();
@@ -49,16 +52,13 @@ public class WorldMenuController : MonoBehaviour {
 	public void onStatusButton() {
 		if (_running == null) {
 			if (statusMenu.isOpen) {
-				_running = StartCoroutine(shiftWorldMenuBack());
 				statusMenu.Close();
 				currentWindow = null;
 			} else {
 				if (currentWindow != null) {
 					currentWindow.Close();
-					_running = StartCoroutine(shiftWorldMenuMore());
 				}
 
-				_running = StartCoroutine(shiftWorldMenuMore());
 				statusMenu.Open();
 				currentWindow = statusMenu;
 			}
@@ -75,26 +75,23 @@ public class WorldMenuController : MonoBehaviour {
 	#endregion
 
 	#region Open and Close
-	private IEnumerator shiftWorldMenuMore() {
-		float positionDelta = extraMenuOffset / 10;
+	private IEnumerator fadeOut() {
+		worldUI.alpha = 1;
 
-		for (int i = 0; i < 10; i++) {
-			Vector3 newPosition = mapHUD.transform.localPosition;
-			newPosition.x += positionDelta;
-			mapHUD.transform.localPosition = newPosition;
+		while (worldUI.alpha > 0) {
+			worldUI.alpha -= 0.1f;
 			yield return new WaitForSeconds(0.01f);
 		}
 
 		_running = null;
 	}
 
-	private IEnumerator shiftWorldMenuBack() {
-		float positionDelta = extraMenuOffset / 10;
+	private IEnumerator fadeIn() {
+		yield return new WaitUntil(() => gameObject.activeSelf);
+		worldUI.alpha = 0;
 
-		for (int i = 0; i < 10; i++) {
-			Vector3 newPosition = mapHUD.transform.localPosition;
-			newPosition.x -= positionDelta;
-			mapHUD.transform.localPosition = newPosition;
+		while (worldUI.alpha < 1) {
+			worldUI.alpha += 0.1f;
 			yield return new WaitForSeconds(0.01f);
 		}
 
@@ -102,6 +99,7 @@ public class WorldMenuController : MonoBehaviour {
 	}
 
 	private IEnumerator openMenu() {
+		StartCoroutineIfNoneRunning(fadeOut());
 		Debug.Log("menu open");
 		CharacterMovementController.isPlayerLocked = true;
 		isMenuOpen = true;
@@ -140,14 +138,11 @@ public class WorldMenuController : MonoBehaviour {
 		CharacterMovementController.isPlayerLocked = false;
 		isMenuOpen = false;
 
-		_running = null;
-
 		if (currentWindow != null) {
 			currentWindow.Close();
-			_running = StartCoroutine(shiftWorldMenuBack());
 		}
 
-		
+		_running = StartCoroutine(fadeIn());
 	}
 
 	private void StartCoroutineIfNoneRunning(IEnumerator coroutine) {

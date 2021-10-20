@@ -51,6 +51,20 @@ public class Atlas : ScriptableObject {
     }
 
     public static Weapon GetWeapon(int id) {
+        if (id < 0 || id >= atlas.weapons.Length)
+            return null;
         return atlas.weapons[id];
+	}
+
+    public static Apparel GetApparel(int id) {
+        if (id < 0 || id >= atlas.apparel.Length)
+            return null;
+        return atlas.apparel[id];
+	}
+
+    public static Accessory GetAccessory(int id) {
+        if (id < 0 || id >= atlas.accessories.Length)
+            return null;
+        return atlas.accessories[id];
 	}
 }

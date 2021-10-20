@@ -14,13 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   consumables:
   - {fileID: 11400000, guid: 25cfef2f49d3a1c4e895747e9cefa760, type: 2}
-  - {fileID: 11400000, guid: 05a8522172ac4e7409ae167208d57499, type: 2}
   - {fileID: 11400000, guid: 3080bf5cfced3a24b8f8bd4ba5c71168, type: 2}
+  - {fileID: 11400000, guid: 68519af0a268a2a42af8c073a39cecc0, type: 2}
+  - {fileID: 11400000, guid: 05a8522172ac4e7409ae167208d57499, type: 2}
+  - {fileID: 11400000, guid: 3bcf6ff1175922e4e97225acddc5be26, type: 2}
+  - {fileID: 11400000, guid: d32f6a83875113846b0bfc7228ee0d75, type: 2}
   weapons:
+  - {fileID: 11400000, guid: deea3aeb8368bdb4795dfd0770e14e85, type: 2}
   - {fileID: 11400000, guid: 964f54d70acc2ef499a97f9c863e4bdc, type: 2}
+  - {fileID: 11400000, guid: 56f74fcdfa4f2b8458f152997201767d, type: 2}
+  - {fileID: 11400000, guid: 96708d6665f659147bc0f2700ae9a37f, type: 2}
+  - {fileID: 11400000, guid: a7f6c019b85ccd64badbcba66f39f370, type: 2}
   - {fileID: 11400000, guid: 938afa262450f3e459ed52270c17eab9, type: 2}
-  - {fileID: 11400000, guid: 91f9376521886df4db74a6acf67103cc, type: 2}
   - {fileID: 11400000, guid: 6560755d18c82004b952f07df0782787, type: 2}
-  apparel: []
+  - {fileID: 11400000, guid: 91f9376521886df4db74a6acf67103cc, type: 2}
+  - {fileID: 11400000, guid: 36ba979fb5dd4954baa310c54f48cdcd, type: 2}
+  - {fileID: 11400000, guid: 773ca2a6b22c08847acd694b3418085d, type: 2}
+  - {fileID: 11400000, guid: c5c16724093785a488a2d2f70c5404af, type: 2}
+  - {fileID: 11400000, guid: d0677ae083b63414d974ebc3352efa8a, type: 2}
+  apparel:
+  - {fileID: 11400000, guid: c9d43d088b66f5743b049301d7771bf2, type: 2}
+  - {fileID: 11400000, guid: 8e12d9e2450909e43b6eb9a464faf468, type: 2}
+  - {fileID: 11400000, guid: c3750055bcd63f849bbab66e2e995646, type: 2}
+  - {fileID: 11400000, guid: 8ddb768ccc6022e4896c74d8f14c16e6, type: 2}
   accessories: []
   skills: []

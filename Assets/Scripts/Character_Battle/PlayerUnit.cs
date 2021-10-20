@@ -30,11 +30,11 @@ public class PlayerUnit : Unit {
 				return base.unitPrefab;
 			else {
 				switch (weapon.atkType) {
-					case AttackType.MELEE:
+					case AttackType.Melee:
 						return meleePrefab;
-					case AttackType.MAGIC:
+					case AttackType.Magic:
 						return magicPrefab;
-					case AttackType.RANGED:
+					case AttackType.Ranged:
 						return rangedPrefab;
 					default:
 						return null;

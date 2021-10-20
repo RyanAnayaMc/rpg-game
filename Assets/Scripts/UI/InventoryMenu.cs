@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class InventoryMenu : MonoBehaviour, IMenuWindow {
 	public Transform content;
 	public GameObject buttonPrefab;
 	private CanvasGroup canvasGroup;
-	public bool isOpen;
+	[HideInInspector] public bool isOpen;
 	private List<GameObject> buttons;
+	public TMP_Text infoText;
 
 	public void Start() {
 		canvasGroup = GetComponent<CanvasGroup>();
@@ -18,43 +20,52 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 	}
 
 	public void Open() {
+		gameObject.SetActive(true);
 		StartCoroutine(fadeIn());
 		Inventory inv = Inventory.INSTANCE;
-		InventoryItem[] consumables = inv.GetConsumables();
-		Weapon[] weapons = inv.GetWeapons();
-		Apparel[] apparel = inv.GetApparel();
-		Accessory[] accessories = inv.GetAccessories();
+		InventoryItem<Consumable>[] consumables = inv.GetConsumables();
+		InventoryItem<Weapon>[] weapons = inv.GetWeapons();
+		InventoryItem<Apparel>[] apparel = inv.GetApparel();
+		InventoryItem<Accessory>[] accessories = inv.GetAccessories();
 
 		buttons = new List<GameObject>();
 
-		foreach (InventoryItem item in consumables) {
+		foreach (InventoryItem<Consumable> item in consumables) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
 			controller.setData(item);
+			controller.useTextField = true;
+			controller.textField = infoText;
 
 			buttons.Add(obj);
 		}
 
-		foreach (Weapon item in weapons) {
+		foreach (InventoryItem<Weapon> item in weapons) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
 			controller.setData(item);
+			controller.useTextField = true;
+			controller.textField = infoText;
 
 			buttons.Add(obj);
 		}
 
-		foreach (Apparel item in apparel) {
+		foreach (InventoryItem<Apparel> item in apparel) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
 			controller.setData(item);
+			controller.useTextField = true;
+			controller.textField = infoText;
 
 			buttons.Add(obj);
 		}
 
-		foreach (Accessory item in accessories) {
+		foreach (InventoryItem<Accessory> item in accessories) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
 			controller.setData(item);
+			controller.useTextField = true;
+			controller.textField = infoText;
 
 			buttons.Add(obj);
 		}
@@ -72,10 +83,11 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 			Destroy(obj);
 
 		isOpen = false;
-
+		gameObject.SetActive(false);
 	}
 
 	private IEnumerator fadeIn() {
+		yield return new WaitUntil(() => gameObject.activeSelf);
 		canvasGroup.alpha = 0;
 
 		while (canvasGroup.alpha < 1) {

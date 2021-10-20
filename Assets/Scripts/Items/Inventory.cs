@@ -10,8 +10,11 @@ public class Inventory : ScriptableObject {
     [SerializeField] private List<int> consumables;
     [SerializeField] private List<int> quantities;
     [SerializeField] private List<int> weapons;
+    [SerializeField] private List<int> weaponQuantities;
     [SerializeField] private List<int> apparel;
+    [SerializeField] private List<int> apparelQuantities;
     [SerializeField] private List<int> accessories;
+    [SerializeField] private List<int> accessoryQuantities;
 
     [SerializeField] private int gold;
 
@@ -19,14 +22,14 @@ public class Inventory : ScriptableObject {
 	/// <summary>
 	/// Get all the consumables in the inventory
 	/// </summary>
-	public InventoryItem[] GetConsumables() {
+	public InventoryItem<Consumable>[] GetConsumables() {
         Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
-        InventoryItem[] inventoryItems = new InventoryItem[consumables.Count];
+        InventoryItem<Consumable>[] inventoryItems = new InventoryItem<Consumable>[consumables.Count];
 
         for (int i = 0; i < consumables.Count; i++) {
-            InventoryItem invItem = ScriptableObject.CreateInstance<InventoryItem>();
-            invItem.item = atlas.consumables[consumables[i]];
+            InventoryItem<Consumable> invItem = new InventoryItem<Consumable>();
             invItem.quantity = quantities[i];
+            invItem.item = atlas.consumables[consumables[i]];
             inventoryItems[i] = invItem;
 		}
 
@@ -36,40 +39,52 @@ public class Inventory : ScriptableObject {
     /// <summary>
     /// Get all the weapons in the inventory
     /// </summary>
-    public Weapon[] GetWeapons() {
+    public InventoryItem<Weapon>[] GetWeapons() {
         Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
-        Weapon[] weps = new Weapon[weapons.Count];
+        InventoryItem<Weapon>[] inventoryItems = new InventoryItem<Weapon>[weapons.Count];
 
-        for (int i = 0; i < weapons.Count; i++)
-            weps[i] = atlas.weapons[weapons[i]];
+        for (int i = 0; i < weapons.Count; i++) {
+            InventoryItem<Weapon> invItem = new InventoryItem<Weapon>();
+            invItem.item = atlas.weapons[weapons[i]];
+            invItem.quantity = weaponQuantities[i];
+            inventoryItems[i] = invItem;
+		}
 
-        return weps;
+        return inventoryItems;
     }
 
     /// <summary>
     /// Get all the apparel in the inventory
     /// </summary>
-    public Apparel[] GetApparel() {
+    public InventoryItem<Apparel>[] GetApparel() {
         Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
-        Apparel[] apparelItems = new Apparel[apparel.Count];
+        InventoryItem<Apparel>[] inventoryItems = new InventoryItem<Apparel>[apparel.Count];
 
-        for (int i = 0; i < apparel.Count; i++)
-            apparelItems[i] = atlas.apparel[apparel[i]];
+        for (int i = 0; i < apparel.Count; i++) {
+            InventoryItem<Apparel> invItem = new InventoryItem<Apparel>();
+            invItem.item = atlas.apparel[apparel[i]];
+            invItem.quantity = apparelQuantities[i];
+            inventoryItems[i] = invItem;
+        }
 
-        return apparelItems;
+        return inventoryItems;
     }
 
     /// <summary>
     /// Get all the accessories in the inventory
     /// </summary>
-    public Accessory[] GetAccessories() {
+    public InventoryItem<Accessory>[] GetAccessories() {
         Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
-        Accessory[] accessoryItems = new Accessory[accessories.Count];
+        InventoryItem<Accessory>[] inventoryItems = new InventoryItem<Accessory>[accessories.Count];
 
-        for (int i = 0; i < accessories.Count; i++)
-            accessoryItems[i] = atlas.accessories[accessories[i]];
+        for (int i = 0; i < accessories.Count; i++) {
+            InventoryItem<Accessory> invItem = new InventoryItem<Accessory>();
+            invItem.item = atlas.accessories[weapons[i]];
+            invItem.quantity = accessoryQuantities[i];
+            inventoryItems[i] = invItem;
+        }
 
-        return accessoryItems;
+        return inventoryItems;
     }
 	#endregion
 
@@ -171,17 +186,27 @@ public class Inventory : ScriptableObject {
 
     #region Weapons
     /// <summary>
-    /// Adds a weapon to the inventory. You can only hold one of each weapon.
+    /// Adds a weapon to the inventory.
     /// </summary>
     /// <param name="itemId">The ID of the weapon. ID comes from the <see cref="Atlas"/></param>
-    /// <returns>Whether or not the weapon was added.</returns>
-    public bool AddWeapon(int itemId) {
-        if (weapons.Contains(itemId))
-            return false;
-        else {
+    public void AddWeapon(int itemId) {
+        AddWeapon(itemId, 1);
+	}
+
+    /// <summary>
+    /// Adds a weapon to the inventory.
+    /// </summary>
+    /// <param name="itemId">The ID of the weapon. ID comes from the <see cref="Atlas"/></param>
+    /// <param name="quantity">How many of the item to add.</param>
+    public void AddWeapon(int itemId, int quantity) {
+        int index = weapons.IndexOf(itemId);
+
+        if (index < 0) {
             weapons.Add(itemId);
-            return true;
-        }
+            weaponQuantities.Add(quantity);
+		} else {
+            weaponQuantities[index] += quantity;
+		}
     }
 
     /// <summary>
@@ -191,6 +216,30 @@ public class Inventory : ScriptableObject {
     /// <returns>Whether or not the item was in the inventory and removed.</returns>
     public bool RemoveWeapon(int itemId) {
         return weapons.Remove(itemId);
+    }
+
+    /// <summary>
+    /// Removes a weapon from the inventory if it exists. The inventory will not be changed if
+    /// not enough items exist.
+    /// </summary>
+    /// <param name="itemId">The ID of the weapon. ID comes from the <see cref="Atlas"/></param>
+    /// <param name="amount">How many of the item to remove.</param>
+    /// <returns>Whether or not the inventory was changed by this operation.</returns>
+    public bool RemoveWeapon(int itemId, int amount) {
+        int index = weapons.IndexOf(itemId);
+        if (index < 0)
+            return false;
+        else {
+            if (weaponQuantities[index] == amount) {
+                weaponQuantities.RemoveAt(index);
+                weapons.RemoveAt(index);
+                return true;
+            } else if (weaponQuantities[index] > amount) {
+                weaponQuantities[index] -= amount;
+                return true;
+            } else
+                return false;
+        }
     }
 
     /// <summary>
@@ -205,18 +254,27 @@ public class Inventory : ScriptableObject {
 
     #region Apparel
     /// <summary>
-    /// Adds an apparel item to the inventory. You can only hold one of each apparel.
+    /// Adds an apparel item to the inventory.
     /// </summary>
     /// <param name="itemId">The ID of the apparel. ID comes from the <see cref="Atlas"/></param>
-    /// <returns>Whether or not the apparel was added.</returns>
-    public bool AddApparel(int itemId) {
-        if (apparel.Contains(itemId))
-            return false;
-        else {
-            apparel.Add(itemId);
-            return true;
-        }
+    public void AddApparel(int itemId) {
+        AddApparel(itemId, 1);
     }
+
+    /// <summary>
+    /// Adds an apparel item to the inventory.
+    /// </summary>
+    /// <param name="itemId">The ID of the apparel. ID comes from the <see cref="Atlas"/></param>
+    /// <param name="amount">The amount of the apparel item to add.</param>
+    public void AddApparel(int itemId, int amount) {
+        int index = apparel.IndexOf(itemId);
+
+        if (index < 0) {
+            apparel.Add(itemId);
+            apparelQuantities.Add(amount);
+        } else
+            apparelQuantities[index] += amount;
+	}
 
     /// <summary>
     /// Removes an apparel item from the inventory if it exists.
@@ -224,7 +282,30 @@ public class Inventory : ScriptableObject {
     /// <param name="itemId">The ID of the apparel. ID comes from the <see cref="Atlas"/></param>
     /// <returns>Whether or not the item was in the inventory and removed.</returns>
     public bool RemoveApparel(int itemId) {
-        return apparel.Remove(itemId);
+        return RemoveApparel(itemId, 1);
+	}
+
+    /// <summary>
+    /// Removes an apparel item from the inventory if it exists.
+    /// </summary>
+    /// <param name="itemId">The ID of the apparel. ID comes from the <see cref="Atlas"/></param>
+    /// <param name="amount">The amount of the item to remove.</param>
+    /// <returns>Whether or not the item was in the inventory and removed.</returns>
+    public bool RemoveApparel(int itemId, int amount) {
+        int index = apparel.IndexOf(itemId);
+        if (index < 0)
+            return false;
+        else {
+            if (apparelQuantities[index] == amount) {
+                apparel.RemoveAt(index);
+                apparelQuantities.RemoveAt(index);
+                return true;
+            } else if (apparelQuantities[index] > amount) {
+                apparelQuantities[index] -= amount;
+                return true;
+            } else
+                return false;
+        }
     }
 
     /// <summary>
@@ -239,18 +320,26 @@ public class Inventory : ScriptableObject {
 
     #region Accessory
     /// <summary>
-    /// Adds an accessory item to the inventory. You can only hold one of each accessories.
+    /// Adds an accessory item to the inventory.
     /// </summary>
     /// <param name="itemId">The ID of the accessories. ID comes from the <see cref="Atlas"/></param>
-    /// <returns>Whether or not the accessory was added.</returns>
-    public bool AddAccessory(int itemId) {
-        if (accessories.Contains(itemId))
-            return false;
-        else {
-            accessories.Add(itemId);
-            return true;
-        }
+    public void AddAccessory(int itemId) {
+        AddAccessory(itemId, 1);
     }
+
+    /// <summary>
+    /// Adds an accessory item to the inventory.
+    /// </summary>
+    /// <param name="itemId">The ID of the accessories. ID comes from the <see cref="Atlas"/></param>
+    /// <param name="amount">The amount of the accessory to add.</param>
+    public void AddAccessory(int itemId, int amount) {
+        int index = accessories.IndexOf(itemId);
+        if (index < 0) {
+            accessories.Add(itemId);
+            accessoryQuantities.Add(amount);
+        } else
+            accessoryQuantities[index] += amount;
+	}
 
     /// <summary>
     /// Removes an accessory item from the inventory if it exists.
@@ -258,7 +347,30 @@ public class Inventory : ScriptableObject {
     /// <param name="itemId">The ID of the accessories. ID comes from the <see cref="Atlas"/></param>
     /// <returns>Whether or not the item was in the inventory and removed.</returns>
     public bool RemoveAccessory(int itemId) {
-        return accessories.Remove(itemId);
+        return RemoveAccessory(itemId);
+	}
+
+    /// <summary>
+    /// Removes an accessory item from the inventory if it exists.
+    /// </summary>
+    /// <param name="itemId">The ID of the accessories. ID comes from the <see cref="Atlas"/></param>
+    /// <param name="amount">The amount of the item to remove.</param>
+    /// <returns>Whether or not the item was in the inventory and removed.</returns>
+    public bool RemoveAccessory(int itemId, int amount) {
+        int index = accessories.IndexOf(itemId);
+        if (index < 0)
+            return false;
+        else {
+            if (accessoryQuantities[index] == amount) {
+                accessories.RemoveAt(index);
+                accessoryQuantities.RemoveAt(index);
+                return true;
+            } else if (accessoryQuantities[index] > amount) {
+                accessoryQuantities[index] -= amount;
+                return true;
+            } else
+                return false;
+        }
     }
 
     /// <summary>

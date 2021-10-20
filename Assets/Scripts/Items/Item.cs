@@ -54,7 +54,7 @@ public class Item : ScriptableObject, ButtonTextable {
         return this == (Item) other;
 	}
 
-    public string GetDescriptionText() {
+    public virtual string GetDescriptionText() {
         return itemDescription;
     }
 

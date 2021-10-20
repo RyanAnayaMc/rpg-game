@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2129677787867794ebfd4204bf47bf3f, type: 3}
-  m_Name: IronSword
+  m_Name: AK-12
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 21300000, guid: 490de5b67a54a914088038c8d2c8282f, type: 3}
-  itemName: Iron Sword
-  itemDescription: 
-  isSellable: 0
-  buyPrice: 0
+  itemIcon: {fileID: 21300000, guid: 1387227f73309734c8f5625112f66d26, type: 3}
+  itemName: AK-12
+  itemDescription: A modern Russian riffle using a moderate 5.45x39mm cartridge.
+  isSellable: 1
+  buyPrice: 500
   stackableMax: 0
-  atkType: 0
+  atkType: 2
   meleeType: 0
   magicType: 0
-  rangedType: 0
+  rangedType: 3
   castAnimation: 0
-  weaponAnimation: 1
-  might: 15
-  attackSFX: {fileID: 8300000, guid: 1f19933815890314fbfde5dfd3b4036f, type: 3}
+  weaponAnimation: 0
+  might: 90
+  attackSFX: {fileID: 0}
   castSFX: {fileID: 0}

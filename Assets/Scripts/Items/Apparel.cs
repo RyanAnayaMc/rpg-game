@@ -3,7 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+public enum ApparelType {
+    Armor,
+    Clothing,
+    Bulletproof
+}
+
+[CreateAssetMenu(fileName = "NewApparel", menuName = "RPG Element/Item/Apparel")]
 public class Apparel : Item {
+    public ApparelType type;
     public int defChange;
     public int resChange;
     public int armChange;
@@ -32,12 +40,16 @@ public class Apparel : Item {
         if (number == 0)
             return "";
         else if (number < 0)
-            return label + " <color=red>" + number + "<color=white> ";
+            return label + "<color=red>" + number + "<color=white> ";
         else
-            return label + " <color=green>" + number + "<color=white> ";
+            return label + "<color=green>+" + number + "<color=white> ";
     }
 
     public override int GetNumber() {
         return 1;
     }
+
+	public override string GetDescriptionText() {
+		return base.GetDescriptionText() + " " + GetInfo();
+	}
 }

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bfdb978d56d4cb4f975820a54d4cc91, type: 3}
+  m_Name: HealingPotion
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 21300000, guid: 85d9cb4337e7e7a40b7ec4cc99ea26a2, type: 3}
+  itemName: Healing Potion
+  itemDescription: A stronger healing potion for riskier adventurers. Restores 100
+    HP.
+  isSellable: 1
+  buyPrice: 50
+  stackableMax: 0
+  type: 0
+  recovery: 100
+  stat: 0
+  statChange: 0
+  statMultiplier: 0
+  damage: 0
+  animation: 6
+  soundEffect: {fileID: 8300000, guid: b701bbfd37b41164097ed1e3d131fbf5, type: 3}
+  scriptedSkillEffect: {fileID: 0}

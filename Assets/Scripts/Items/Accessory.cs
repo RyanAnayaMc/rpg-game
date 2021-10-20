@@ -10,11 +10,23 @@ public enum AccessoryEffect {
     DamageReductionFlat,
     HPRecoverPerTurn,
     SPRecoverPerTurn,
-    Fury
+    Fury,
+    Thermal,
+    ExtraHit
+}
+
+public enum AccessoryType {
+    Ring,
+    Optic,
+    Laser
 }
 
 public class Accessory : Item {
     public AccessoryEffect effect;
+    public AccessoryType accessoryType;
+    public MeleeWeaponType[] compatibleMelee;
+    public MagicWeaponType[] compatibleMagic;
+    public RangedWeaponType[] compatibleRanged;
     public int effectParameter;
     public int maxHPChange;
     public int maxSPChange;
@@ -74,6 +86,10 @@ public class Accessory : Item {
                 return effectParameter + " SP/turn";
             case AccessoryEffect.Fury:
                 return "Fury";
+            case AccessoryEffect.Thermal:
+                return "Thermal";
+            case AccessoryEffect.ExtraHit:
+                return effectParameter + "% Extra Hit";
             default:
                 return "";
 		}
