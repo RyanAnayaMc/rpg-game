@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: MagicSlash
   m_EditorClassIdentifier: 
-  icon: {fileID: 8764766198528609078, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: d8108e50be9cf7f49878337929803edd, type: 3}
   skillName: Magic Slash
   skillDescription: A sword attack that does magic damage based on STR and MAG.
   requiresWeaponType: 1
   requiredAtkType: 0
   costSP: 8
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: b60b406109876634992e75dc5c418da4, type: 3}
   skillAnimation: 7

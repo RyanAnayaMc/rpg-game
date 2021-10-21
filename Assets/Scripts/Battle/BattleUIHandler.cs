@@ -75,13 +75,13 @@ public class BattleUIHandler : MonoBehaviour {
         // Update text on attack button based on equipped weapon
         AttackType atkType = playerUnit.unit.weapon.atkType;
         switch (atkType) {
-            case AttackType.MELEE:
+            case AttackType.Melee:
                 attackButtonText.text = "Melee";
                 break;
-            case AttackType.MAGIC:
+            case AttackType.Magic:
                 attackButtonText.text = "Cast";
                 break;
-            case AttackType.RANGED:
+            case AttackType.Ranged:
                 attackButtonText.text = "Fire";
                 break;
         }
@@ -170,7 +170,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// Shows the Item menu
     /// </summary>
     /// <param name="items">The items the player has</param>
-    public void ShowItemsWindow(List<InventoryItem> items) {
+    public void ShowItemsWindow(InventoryItem<Consumable>[] items) {
         GameObject itemWindow = itemMenuController.gameObject;
         itemMenuController.SetItemMenu(items);
         animationHandler.stretchIn(itemWindow, 0.1f);

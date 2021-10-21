@@ -144,28 +144,28 @@ public class Skill : ScriptableObject, ButtonTextable {
         // Get skill damage
         float value =
             user.cHP * unitChpMultiplier +
-            user.maxHP * unitMhpMultiplier +
+            user.effMaxHP * unitMhpMultiplier +
             user.cSP * unitCspMultiplier +
-            user.maxSP * unitMspMultiplier +
-            user.str * unitStrMultiplier +
-            user.mag * unitMagMultiplier +
-            user.dex * unitDexMultiplier +
-            user.def * unitDefMultiplier +
-            user.res * unitResMultiplier +
-            user.arm * unitArmMultiplier +
-            user.agi * unitAgiMultiplier +
+            user.effMaxSP * unitMspMultiplier +
+            user.effStr * unitStrMultiplier +
+            user.effMag * unitMagMultiplier +
+            user.effDex * unitDexMultiplier +
+            user.effDef * unitDefMultiplier +
+            user.effRes * unitResMultiplier +
+            user.effArm * unitArmMultiplier +
+            user.effAgi * unitAgiMultiplier +
             user.weapon.might * unitMtMultiplier +
             enemy.cHP * enemyChpMultiplier +
-            enemy.maxHP * enemyMhpMultiplier +
+            enemy.effMaxHP * enemyMhpMultiplier +
             enemy.cSP * enemyCspMultiplier +
-            enemy.maxSP * enemyMspMultiplier +
-            enemy.str * enemyStrMultiplier +
-            enemy.mag * enemyMagMultiplier +
-            enemy.dex * enemyDexMultiplier +
-            enemy.def * enemyDefMultiplier +
-            enemy.res * enemyResMultiplier +
-            enemy.arm * enemyArmMultiplier +
-            enemy.agi * enemyAgiMultiplier +
+            enemy.effMaxSP * enemyMspMultiplier +
+            enemy.effStr * enemyStrMultiplier +
+            enemy.effMag * enemyMagMultiplier +
+            enemy.effDex * enemyDexMultiplier +
+            enemy.effDef * enemyDefMultiplier +
+            enemy.effRes * enemyResMultiplier +
+            enemy.effArm * enemyArmMultiplier +
+            enemy.effAgi * enemyAgiMultiplier +
             enemy.weapon.might * enemyMtMultiplier
             + flatValue;
 
@@ -183,16 +183,16 @@ public class Skill : ScriptableObject, ButtonTextable {
         // Get skill damage
         float value =
             user.cHP * unitChpMultiplier +
-            user.maxHP * unitMhpMultiplier +
+            user.effMaxHP * unitMhpMultiplier +
             user.cSP * unitCspMultiplier +
-            user.maxSP * unitMspMultiplier +
-            user.str * unitStrMultiplier +
-            user.mag * unitMagMultiplier +
-            user.dex * unitDexMultiplier +
-            user.def * unitDefMultiplier +
-            user.res * unitResMultiplier +
-            user.arm * unitArmMultiplier +
-            user.agi * unitAgiMultiplier +
+            user.effMaxSP * unitMspMultiplier +
+            user.effStr * unitStrMultiplier +
+            user.effMag * unitMagMultiplier +
+            user.effDex * unitDexMultiplier +
+            user.effDef * unitDefMultiplier +
+            user.effRes * unitResMultiplier +
+            user.effArm * unitArmMultiplier +
+            user.effAgi * unitAgiMultiplier +
             user.weapon.might * unitMtMultiplier
             + flatValue;
 

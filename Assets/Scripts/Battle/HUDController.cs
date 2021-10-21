@@ -22,20 +22,20 @@ public class HUDController : MonoBehaviour {
             unitName.text = unit.unitName;
         
         if (hpBar != null) {
-            hpBar.maxValue = unit.maxHP;
+            hpBar.maxValue = unit.effMaxHP;
             hpBar.value = unit.cHP;
         }
 
         if (hpText != null)
-            hpText.text = unit.cHP + "/" + unit.maxHP;
+            hpText.text = unit.cHP + "/" + unit.effMaxHP;
 
         if (spBar != null) {
-            spBar.maxValue = unit.maxSP;
+            spBar.maxValue = unit.effMaxSP;
             spBar.value = unit.cSP;
         }
         
         if (spText != null)
-            spText.text = unit.cSP + "/" + unit.maxSP;
+            spText.text = unit.cSP + "/" + unit.effMaxSP;
     }
 
     /// <summary>
@@ -44,12 +44,12 @@ public class HUDController : MonoBehaviour {
     /// <param name="unit">The Unit to update this HUD with.</param>
     public void SetHP(Unit unit) {
         if (hpBar != null) {
-            hpBar.maxValue = unit.maxHP;
+            hpBar.maxValue = unit.effMaxHP;
             hpBar.value = unit.cHP;
         }
 
         if (hpText != null)
-            hpText.text = unit.cHP + "/" + unit.maxHP;
+            hpText.text = unit.cHP + "/" + unit.effMaxHP;
     }
 
     /// <summary>
@@ -58,12 +58,12 @@ public class HUDController : MonoBehaviour {
     /// <param name="unit">The Unit to update this HUD with.</param>
     public void SetSP(Unit unit) {
         if (spBar != null) {
-            spBar.maxValue = unit.maxSP;
+            spBar.maxValue = unit.effMaxSP;
             spBar.value = unit.cSP;
         }
 
         if (spText != null)
-            spText.text = unit.cSP + "/" + unit.maxSP;
+            spText.text = unit.cSP + "/" + unit.effMaxSP;
     }
 
     /// <summary>

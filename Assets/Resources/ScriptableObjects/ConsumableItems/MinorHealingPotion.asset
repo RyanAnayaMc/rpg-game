@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bfdb978d56d4cb4f975820a54d4cc91, type: 3}
   m_Name: MinorHealingPotion
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 1808583244212410573, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  itemIcon: {fileID: 21300000, guid: be6615c522971674b8e47bdbd781d0ef, type: 3}
   itemName: Minor Healing
-  itemDescription: A healing potion used by beginner adventurers. Restores 20 HP.
+  itemDescription: A weak healing potion. Restores 50 HP.
   isSellable: 1
-  buyPrice: 30
+  buyPrice: 20
   stackableMax: 0
   type: 0
-  recovery: 20
+  recovery: 50
   stat: 0
   statChange: 0
   statMultiplier: 0

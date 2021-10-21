@@ -28,15 +28,15 @@ public class ItemMenuController : MonoBehaviour {
         itemButtons = new List<SkillButtonController>();
     }
 
-    public void SetItemMenu(List<InventoryItem> consumables) {
+    public void SetItemMenu(InventoryItem<Consumable>[] consumables) {
         // Create itemButtons array if it doesn't exist
         if (itemButtons == null)
             itemButtons = new List<SkillButtonController>();
 
         // Populate the item list
-        for (int i = 0; i < consumables.Count; i++) {
+        for (int i = 0; i < consumables.Length; i++) {
             // Get the item and instantiate the button
-            InventoryItem item = consumables[i];
+            InventoryItem<Consumable> item = consumables[i];
             GameObject itemButton = Instantiate(itemButtonPrefab, content);
 
             // Setup button text

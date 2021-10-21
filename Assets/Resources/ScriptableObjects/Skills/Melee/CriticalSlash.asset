@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: CriticalSlash
   m_EditorClassIdentifier: 
-  icon: {fileID: -3871836356909336669, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: b11f9c52da2945740b5078d84177a9ab, type: 3}
   skillName: Critical Slash
   skillDescription: A strong attack that scales on STR and DEX.
   requiresWeaponType: 1

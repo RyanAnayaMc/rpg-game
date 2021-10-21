@@ -12,7 +12,7 @@ public enum NumberType {
 }
 
 public class NumberPopup : MonoBehaviour {
-    private int number;
+    private string text;
     private NumberType numType;
     private TMP_Text numberText;
     private float functionTime;
@@ -34,11 +34,22 @@ public class NumberPopup : MonoBehaviour {
     /// <param name="displayOn">The Transform to instantiate this on.</param>
     /// <returns></returns>
     public static GameObject DisplayNumberPopup(int number, NumberType numberType, Transform displayOn, float offsetX = 0, float offsetY = 1, float offsetZ = 0.1f) {
+        return DisplayTextPopup(number.ToString(), numberType, displayOn, offsetX, offsetY, offsetZ);
+	}
+
+    /// <summary>
+    /// Instantiates a NumberPopup on the parent transform
+    /// </summary>
+    /// <param name="inText">The text to display on the popup.</param>
+    /// <param name="numberType">The type of number to put on the text. Determines color and animation.</param>
+    /// <param name="displayOn">The Transform to instantiate this on.</param>
+    /// <returns></returns>
+    public static GameObject DisplayTextPopup(string inText, NumberType numberType, Transform displayOn, float offsetX = 0, float offsetY = 1, float offsetZ = 0.1f) {
         GameObject prefab = Resources.Load("UI/DamageNumberPrefab") as GameObject;
         GameObject numberPopup = Instantiate(prefab, displayOn.transform);
         NumberPopup popup = numberPopup.GetComponent<NumberPopup>();
 
-        popup.number = number;
+        popup.text = inText;
         popup.numType = numberType;
         popup.numberText = numberPopup.GetComponent<TMP_Text>();
         popup.originalLocation = new Vector3(offsetX, offsetY, offsetZ);
@@ -46,10 +57,10 @@ public class NumberPopup : MonoBehaviour {
         numberPopup.transform.localPosition = popup.originalLocation;
 
         return numberPopup;
-	}
+    }
 
     void Start() {
-        numberText.text = number.ToString();
+        numberText.text = text;
         numberText.color = colors[numType].numColor;
         numberText.outlineColor = colors[numType].outlineColor;
         functionTime = 0;

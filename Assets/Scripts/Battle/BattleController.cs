@@ -7,7 +7,7 @@ using TMPro;
 
 // A class that handles the bulk of combat logic
 
-public enum BattlePhase {
+public enum BattlePhases {
     START, // Battle is being setup
     PLAYER, // Waiting for player to pick an option
     PLAYER_ACTION, // Player is perfomring an action
@@ -72,7 +72,7 @@ public class BattleController : MonoBehaviour {
     /// <summary>
     /// The current phase of the battle.
     /// </summary>
-    BattlePhase phase;
+    BattlePhases phase;
 
     /// <summary>
     /// The BattleMusicHandler for the battle.
@@ -145,7 +145,6 @@ public class BattleController : MonoBehaviour {
         musicHandler.battleController = this;
         animationHandler.battleController = this;
         damageHandler.battleController = this;
-        
 
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
@@ -162,7 +161,7 @@ public class BattleController : MonoBehaviour {
         musicHandler.PlayBattleMusic();
 
         // Spawn player
-        phase = BattlePhase.START;
+        phase = BattlePhases.START;
         playerUnit = Instantiate(PlayerUnit.INSTANCE.unitPrefab, playerLocation)
             .GetComponent<BattleUnit>();
         playerUnit.unit = PlayerUnit.INSTANCE;
@@ -177,7 +176,7 @@ public class BattleController : MonoBehaviour {
             enemy.unit = enemyUnitObjs[i];
             enemy.unit.weapon = Instantiate(enemy.unit.weapon);
             enemies.Add(enemy);
-		}
+        }
 
         enemyUnits = enemies;
 
@@ -202,7 +201,7 @@ public class BattleController : MonoBehaviour {
         uiHandler.ShowPlayerOptionWindow();
 
         // Let player pick an option
-        phase = BattlePhase.PLAYER;
+        phase = BattlePhases.PLAYER;
         playerUnit.unit.isDefending = false;
         uiHandler.DisplayDialogueText("Choose an action.");
 
@@ -212,7 +211,7 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks the attack button.
     /// </summary>
     public void OnAttackButton() {
-        if (phase != BattlePhase.PLAYER)
+        if (phase != BattlePhases.PLAYER)
             return;
 
         battleSFXHandler.PlayConfirmSFX();
@@ -228,7 +227,7 @@ public class BattleController : MonoBehaviour {
 
         if (isInAttackWindow) {
             // Do regular attack on enemy
-            phase = BattlePhase.PLAYER_ACTION;
+            phase = BattlePhases.PLAYER_ACTION;
             battleSFXHandler.PlayConfirmSFX();
 
             // Hide option menu
@@ -266,7 +265,7 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks the item button.
     /// </summary>
     public void OnItemButton() {
-        if (phase != BattlePhase.PLAYER)
+        if (phase != BattlePhases.PLAYER)
             return;
 
         battleSFXHandler.PlayConfirmSFX();
@@ -276,36 +275,21 @@ public class BattleController : MonoBehaviour {
     private IEnumerator onItemMenu() {
         uiHandler.HidePlayerOptionWindow();
         yield return new WaitForSeconds(0.3f);
-        uiHandler.ShowItemsWindow(PlayerInventory.INSTANCE.GetConsumableItems());
+        uiHandler.ShowItemsWindow(Inventory.INSTANCE.GetConsumables());
     }
 
 
     public void OnItemButton(int index) {
-        phase = BattlePhase.PLAYER_ACTION;
+        phase = BattlePhases.PLAYER_ACTION;
         uiHandler.HideItemsWindow();
 
         battleSFXHandler.PlayConfirmSFX();
 
-        Item item = PlayerInventory.INSTANCE.GetConsumableItems()[index].item;
-        PlayerInventory.INSTANCE.RemoveItem(item);
+        Consumable item = Inventory.INSTANCE.GetConsumables()[index].item as Consumable;
+        Inventory.INSTANCE.RemoveConsumable(Atlas.GetID(item));
 
         uiHandler.DisplayDialogueText(playerUnit.unit.unitName + " uses a " + item.itemName + "!");
         StartCoroutine(useItem(item as Consumable));
-
-        if ((item as Consumable).type == ConsumableType.DamageDeal) {
-            for (int i = 0; i < enemyUnits.Count; i++) {
-                if (enemyUnits[i].unit.cHP <= 0) {
-                    animationHandler.fadeOutSprite(enemyUnits[i].gameObject, 0.1f);
-                    enemyUnits.Remove(enemyUnits[i]);
-                    i--;
-                }
-            }
-        } else if ((item as Consumable).type == ConsumableType.DamageDeal) {
-
-		}
-
-        if (enemyUnits.Count <= 0)
-            Win();
     }
 
 
@@ -328,10 +312,12 @@ public class BattleController : MonoBehaviour {
 
             if (enemyUnits.Count <= 0)
                 Win();
-            else
-                StartCoroutine(EnemyTurn());
         } else
             playerUnit.UpdateHUD();
+
+        yield return new WaitForSeconds(2);
+
+        StartCoroutine(EnemyTurn());
     }
 
     /// <summary>
@@ -352,7 +338,7 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks the defend button.
     /// </summary>
     public void OnDefendButton() {
-        if (phase != BattlePhase.PLAYER)
+        if (phase != BattlePhases.PLAYER)
             return;
 
         battleSFXHandler.PlayConfirmSFX();
@@ -360,7 +346,7 @@ public class BattleController : MonoBehaviour {
         // Hide option menu
         uiHandler.HidePlayerOptionWindow();
 
-        phase = BattlePhase.PLAYER_ACTION;
+        phase = BattlePhases.PLAYER_ACTION;
         StartCoroutine(PlayerDefend());
         StartCoroutine(EnemyTurn());
     }
@@ -369,7 +355,7 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks the skills menu button.
     /// </summary>
     public void onSkillsMenuButton() {
-        if (phase != BattlePhase.PLAYER)
+        if (phase != BattlePhases.PLAYER)
             return;
 
         isInAttackWindow = false;
@@ -401,14 +387,15 @@ public class BattleController : MonoBehaviour {
     /// Code ran when the player clicks a skill button.
     /// </summary>
     /// <param name="index">The skill button pressed.</param>
-    public void onSkillButton(int index) {
+    public void OnSkillButton(int index) {
         Skill skill = playerUnit.unit.skills[index];
         if (playerUnit.unit.cSP < skill.costSP) {
             battleSFXHandler.PlayBackSFX();
             uiHandler.DisplayDialogueText("You do not have enough SP to use " + skill.skillName + "!");
         } else {
             battleSFXHandler.PlayConfirmSFX();
-            
+            playerUnit.unit.cSP -= skill.costSP;
+
             if (skill.targetType == TargetType.ENEMY || (skill.useScriptedSkillEffects && skill.needsTarget)) {
                 chosenSkill = skill;
                 uiHandler.HideSkillWindow();
@@ -429,7 +416,7 @@ public class BattleController : MonoBehaviour {
         if (enemyUnit != null)
             enemyUnit.UpdateHUD();
         else foreach (BattleUnit enemy in enemyUnits)
-            enemy.UpdateHUD();
+                enemy.UpdateHUD();
 
         yield return new WaitForSeconds(2);
 
@@ -439,15 +426,15 @@ public class BattleController : MonoBehaviour {
                 enemyUnits.Remove(enemyUnit);
                 animationHandler.fadeOutSprite(enemyUnit.gameObject, 0.1f);
             }
-		} else {
+        } else {
             for (int i = 0; i < enemyUnits.Count; i++) {
                 if (enemyUnits[i].unit.cHP <= 0) {
                     animationHandler.fadeOutSprite(enemyUnits[i].gameObject, 0.1f);
                     enemyUnits.Remove(enemyUnits[i]);
                     i--;
                 }
-			}
-		}
+            }
+        }
 
         if (enemyUnits.Count <= 0)
             Win();
@@ -479,7 +466,7 @@ public class BattleController : MonoBehaviour {
         target.unitHUD.HideHPBar();
 
         if (isEnemyDead) {
-            phase = BattlePhase.WIN;
+            phase = BattlePhases.WIN;
 
             // Fade out enemy
             battleSFXHandler.PlaySFX(enemyDefeatSFX);
@@ -490,11 +477,11 @@ public class BattleController : MonoBehaviour {
             if (enemyUnits.Count == 0)
                 Win();
             else {
-                phase = BattlePhase.ENEMY;
+                phase = BattlePhases.ENEMY;
                 StartCoroutine(EnemyTurn());
             }
         } else {
-            phase = BattlePhase.ENEMY;
+            phase = BattlePhases.ENEMY;
             StartCoroutine(EnemyTurn());
         }
     }
@@ -506,14 +493,15 @@ public class BattleController : MonoBehaviour {
     private IEnumerator EnemyTurn() {
         // Show enemy phase UI
         // uiHandler.ShowEnemyPhaseImage();
-        phase = BattlePhase.ENEMY;
+        phase = BattlePhases.ENEMY;
 
         foreach (BattleUnit enemy in enemyUnits) {
             EnemyAction(enemy);
             yield return new WaitForSeconds(2);
         }
 
-        StartCoroutine(PlayerTurn());
+        if (playerUnit.unit.cHP > 0)
+            StartCoroutine(PlayerTurn());
     }
 
     private void EnemyAction(BattleUnit enemyUnit) {
@@ -539,10 +527,10 @@ public class BattleController : MonoBehaviour {
             StartCoroutine(EnemyAttack(atkType, enemyUnit));
         } else
             StartCoroutine(EnemySkill(skill, enemyUnit));
-		// TODO: more logic for enemy attack
-	}
+        // TODO: more logic for enemy attack
+    }
 
-	private IEnumerator EnemyAttack(AttackType type, BattleUnit enemyUnit) {
+    private IEnumerator EnemyAttack(AttackType type, BattleUnit enemyUnit) {
         (string, int) attackData = damageHandler.NormalAttack(enemyUnit.unit, playerUnit.unit);
 
         // Sound effect
@@ -556,7 +544,7 @@ public class BattleController : MonoBehaviour {
         yield return new WaitForSeconds(2);
 
         if (isPlayerDead) {
-            phase = BattlePhase.LOSE;
+            phase = BattlePhases.LOSE;
 
             // Fade out player
             battleSFXHandler.PlaySFX(enemyDefeatSFX);
@@ -579,7 +567,7 @@ public class BattleController : MonoBehaviour {
         enemyUnit.unitHUD.HideBars();
 
         if (playerUnit.unit.cHP <= 0) {
-            phase = BattlePhase.LOSE;
+            phase = BattlePhases.LOSE;
 
             // Fade out player
             battleSFXHandler.PlaySFX(enemyDefeatSFX);
@@ -587,7 +575,7 @@ public class BattleController : MonoBehaviour {
 
             StartCoroutine(Lose());
         }
-	}
+    }
     #endregion
 
     #region State Changes
@@ -595,7 +583,7 @@ public class BattleController : MonoBehaviour {
     // Player wins
 
     public void Win() {
-        phase = BattlePhase.WIN;
+        phase = BattlePhases.WIN;
 
         StartCoroutine(Victory());
     }
@@ -603,7 +591,7 @@ public class BattleController : MonoBehaviour {
     private IEnumerator Victory() {
         uiHandler.DisplayDialogueText("You win!");
         musicHandler.PlayVictoryFanfare();
-        
+
         yield return new WaitUntil(() => Input.GetButtonDown("Interact"));
 
         SceneManager.LoadScene(currentScene);

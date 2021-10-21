@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2129677787867794ebfd4204bf47bf3f, type: 3}
+  m_Name: ColtPython
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 21300000, guid: 92b792dd1da2ce8429598f3ae554e86c, type: 3}
+  itemName: Colt Python
+  itemDescription: A reliable and powerful .357 magnum loved by detectives.
+  isSellable: 1
+  buyPrice: 275
+  stackableMax: 0
+  atkType: 0
+  meleeType: 0
+  magicType: 0
+  rangedType: 0
+  castAnimation: 0
+  weaponAnimation: 8
+  might: 62
+  attackSFX: {fileID: 8300000, guid: f0e844e37acf7374f92e5869493e1892, type: 3}
+  castSFX: {fileID: 0}

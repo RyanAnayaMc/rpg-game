@@ -24,13 +24,13 @@ public class WeaponEditor : Editor
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("atkType"));
 		switch ((AttackType) serializedObject.FindProperty("atkType").enumValueIndex) {
-			case AttackType.MELEE:
+			case AttackType.Melee:
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("meleeType"));
 				break;
-			case AttackType.MAGIC:
+			case AttackType.Magic:
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("magicType"));
 				break;
-			case AttackType.RANGED:
+			case AttackType.Ranged:
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("rangedType"));
 				break;
 		}

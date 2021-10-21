@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2129677787867794ebfd4204bf47bf3f, type: 3}
   m_Name: FireStaff
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: -3809880059509074563, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  itemIcon: {fileID: 21300000, guid: a6855a8589ac6ec4ebbbb2a084836fc1, type: 3}
   itemName: Fire Staff
   itemDescription: A basic fire staff for intermediate mages.
   isSellable: 1

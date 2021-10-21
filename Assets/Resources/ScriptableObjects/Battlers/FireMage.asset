@@ -16,7 +16,7 @@ MonoBehaviour:
   unitName: Fire Mage
   weaponType: 1
   unitIcon: {fileID: 8764766198528609078, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
-  weapon: {fileID: 11400000, guid: 938afa262450f3e459ed52270c17eab9, type: 2}
+  weaponId: 1
   level: 4
   cHP: 65
   maxHP: 65

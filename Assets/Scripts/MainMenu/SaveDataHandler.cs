@@ -18,15 +18,17 @@ public static class SaveDataHandler {
 	}
 
 	public static void LoadSettings() {
+
+	}
+
+	internal static Settings LoadSettingsAndReturn() {
 		if (File.Exists(settingsPath)) {
 			BinaryFormatter binFormatter = new BinaryFormatter();
 			FileStream fileStream = new FileStream(settingsPath, FileMode.Open);
 
 			Settings settings = binFormatter.Deserialize(fileStream) as Settings;
 
-			Settings.INSTANCE.musicVolume = settings.musicVolume;
-			Settings.INSTANCE.sfxVolume = settings.sfxVolume;
-			Settings.INSTANCE.showDamageNumbers = settings.showDamageNumbers;
-		}
+			return settings;
+		} else return Settings.INSTANCE;
 	}
 }

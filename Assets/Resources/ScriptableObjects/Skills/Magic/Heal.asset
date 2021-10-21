@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
-  icon: {fileID: -6737271339988783208, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: feb8709f10385a94095b55fe8d0f625c, type: 3}
   skillName: Heal
   skillDescription: A basic healing skill.
   requiresWeaponType: 1
   requiredAtkType: 1
   costSP: 5
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: b701bbfd37b41164097ed1e3d131fbf5, type: 3}
   skillAnimation: 6

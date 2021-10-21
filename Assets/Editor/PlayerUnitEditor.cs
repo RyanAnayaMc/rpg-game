@@ -10,6 +10,7 @@ public class PlayerUnitEditor : Editor
 		serializedObject.Update();
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("unitName"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("characterFace"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("level"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("xp"));
 
@@ -23,7 +24,7 @@ public class PlayerUnitEditor : Editor
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("rangedPrefab"));
 		}
 
-		EditorGUILayout.PropertyField(serializedObject.FindProperty("weapon"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponId"));
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("showStats"));
 

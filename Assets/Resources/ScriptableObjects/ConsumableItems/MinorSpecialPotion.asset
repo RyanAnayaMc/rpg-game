@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bfdb978d56d4cb4f975820a54d4cc91, type: 3}
+  m_Name: MinorSpecialPotion
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 21300000, guid: ae13544a7f9c51e4c857abd4c8a207cf, type: 3}
+  itemName: Minor Special
+  itemDescription: A weak special recovery potion. Restores 7 SP.
+  isSellable: 1
+  buyPrice: 25
+  stackableMax: 0
+  type: 1
+  recovery: 7
+  stat: 0
+  statChange: 0
+  statMultiplier: 0
+  damage: 0
+  animation: 10
+  soundEffect: {fileID: 8300000, guid: 8d312ec45aa6e864fbb40ff376156cce, type: 3}
+  scriptedSkillEffect: {fileID: 0}

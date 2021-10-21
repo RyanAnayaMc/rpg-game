@@ -4,32 +4,27 @@ using UnityEngine;
 
 // A weapon is an equippable item that allows you to attack and use special moves
 public enum AttackType {
-    MELEE, // Damage scales on STR, MT and enemy DEF
-    MAGIC, // Damage scales on MAG, MT and enemy RES
-    RANGED // Damage scales on MT and enemy ARM
+    Melee, // Damage scales on STR, MT and enemy DEF
+    Magic, // Damage scales on MAG, MT and enemy RES
+    Ranged // Damage scales on MT and enemy ARM
 }
 
 public enum MeleeWeaponType {
-    SWORD,
-    DAGGER,
-    LANCE,
-    AXE,
-    CLUB
+    Sword,
+    Dagger
 }
 
 public enum MagicWeaponType {
-    STAFF,
-    TOME,
-    RING,
-    SPELL,
-    SCROLL
+    Staff,
+    Tome,
+    Spell
 }
 
 public enum RangedWeaponType {
-    BOW,
-    CROSSBOW,
-    HANDGUN,
-    RIFLE
+    Bow,
+    Crossbow,
+    Handgun,
+    Rifle
 }
 
 [CreateAssetMenu(fileName = "NewWeapon", menuName = "RPG Element/Item/Weapon")]
@@ -67,4 +62,12 @@ public class Weapon : Item {
     /// The sound effect that plays when casting. Can be null.
     /// </summary>
     public AudioClip castSFX;
+
+    public override string GetDescriptionText() {
+        return base.itemDescription + " <color=green>" + might + "<color=white>MT";
+	}
+
+	public override int GetNumber() {
+        return 1;
+	}
 }

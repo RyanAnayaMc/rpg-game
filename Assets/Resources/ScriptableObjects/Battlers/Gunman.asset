@@ -16,7 +16,7 @@ MonoBehaviour:
   unitName: Gunman
   weaponType: 0
   unitIcon: {fileID: -1780516334461364560, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
-  weapon: {fileID: 11400000, guid: 91f9376521886df4db74a6acf67103cc, type: 2}
+  weaponId: 2
   level: 4
   cHP: 70
   maxHP: 70

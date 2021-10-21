@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: SpinAttack
   m_EditorClassIdentifier: 
-  icon: {fileID: 4581673445965212441, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: c890dd06d4a350946ab11e4778bf47d8, type: 3}
   skillName: Spin Attack
   skillDescription: A powerful spinning attack that damages all enemies.
   requiresWeaponType: 0

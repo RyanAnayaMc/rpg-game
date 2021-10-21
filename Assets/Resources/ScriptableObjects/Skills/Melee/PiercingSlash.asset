@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb732c4b07494b469356c967ce51998, type: 3}
   m_Name: PiercingSlash
   m_EditorClassIdentifier: 
-  icon: {fileID: -3871836356909336669, guid: f2ecba016a31f6644aeb523ef84f6b6f, type: 3}
+  icon: {fileID: 21300000, guid: 917871e5c6d34ed4b93dfafad1277db5, type: 3}
   skillName: Piercing Slash
   skillDescription: A strong slashing attack that ignores half of enemy DEF.
   requiresWeaponType: 1
   requiredAtkType: 0
   costSP: 5
   useScriptedSkillEffects: 0
+  needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: bc0ec6c698c39ad49afc75af080bb418, type: 3}
   skillAnimation: 1

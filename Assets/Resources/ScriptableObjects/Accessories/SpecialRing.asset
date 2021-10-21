@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aff334b5160191440a7a2b20f98607ad, type: 3}
+  m_Name: SpecialRing
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 21300000, guid: 2542aec62e872774091681489fd654bf, type: 3}
+  itemName: Minor SP Ring
+  itemDescription: A ring with a small sapphire, capable of small amounts of sustained
+    restoration.
+  isSellable: 0
+  buyPrice: 0
+  stackableMax: 0
+  effect: 5
+  accessoryType: 0
+  compatibleMelee: 
+  compatibleMagic: 
+  compatibleRanged: 
+  effectParameter: 8
+  maxHPChange: 0
+  maxSPChange: 5
+  strChange: 0
+  magChange: 0
+  dexChange: 0
+  defChange: 0
+  resChange: 0
+  armChange: 0
+  agiChange: 0
