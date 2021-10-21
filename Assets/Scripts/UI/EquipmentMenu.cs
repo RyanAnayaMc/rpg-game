@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+#pragma warning disable CS8632
+
 [RequireComponent(typeof(CanvasGroup))]
 public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 
@@ -174,13 +176,21 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 	private void equipItem(int id) {
 		PlayerUnit player = PlayerUnit.INSTANCE;
 		Inventory inventory = Inventory.INSTANCE;
-
+		string? infotext = null;
 
 		switch (openWindow) {
 			case EquipWindow.Weapon:
 				inventory.AddWeapon(player.weaponId);
 				player.weaponId = id;
 				inventory.RemoveWeapon(id);
+				if (player.accessoryID >= 0) {
+					(bool isCompatible, string msg) data = player.accessory.CheckCompatibility(Atlas.GetWeapon(id));
+					if (!data.isCompatible) {
+						inventory.AddAccessory(player.accessoryID);
+						player.accessoryID = -1;
+						infotext = data.msg;
+					}
+				}
 				break;
 			case EquipWindow.Apparel:
 				if (player.apparelID >= 0)
@@ -189,14 +199,18 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 				inventory.RemoveApparel(id);
 				break;
 			case EquipWindow.Accessory:
-				if (player.accessoryID >= 0)
-					inventory.AddAccessory(player.accessoryID);
-				player.accessoryID = id;
-				inventory.RemoveAccessory(id);
+				(bool isCompatible, string msg) itemData = Atlas.GetAccessory(id).CheckCompatibility(player.weapon);
+				if (itemData.isCompatible) {
+					if (player.accessoryID >= 0)
+						inventory.AddAccessory(player.accessoryID);
+					player.accessoryID = id;
+					inventory.RemoveAccessory(id);
+				} else
+					infotext = itemData.msg;
 				break;
 		}
 
-		StartCoroutine(refresh());
+		StartCoroutine(refresh(infotext));
 	}
 
 	private void hideCurrent() {
@@ -205,7 +219,8 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 				Destroy(obj);
 	}
 
-	private IEnumerator refresh() {
+
+	private IEnumerator refresh(string? refreshMsg = null) {
 		hideCurrent();
 
 		yield return new WaitForEndOfFrame();
@@ -233,6 +248,11 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 			accessoryIcon.sprite = PlayerUnit.INSTANCE.accessory.itemIcon;
 		else
 			accessoryIcon.sprite = blankAccessoryIcon;
+
+		yield return new WaitForSeconds(0.1f);
+
+		if (refreshMsg != null)
+			infoText.text = refreshMsg;
 	}
 
 	private IEnumerator fadeOut() {

@@ -25,9 +25,9 @@ public enum AccessoryType {
 public class Accessory : Item {
     public AccessoryEffect effect;
     public AccessoryType accessoryType;
-    public MeleeWeaponType[] compatibleMelee;
-    public MagicWeaponType[] compatibleMagic;
-    public RangedWeaponType[] compatibleRanged;
+    public List<MeleeWeaponType> compatibleMelee;
+    public List<MagicWeaponType> compatibleMagic;
+    public List<RangedWeaponType> compatibleRanged;
     public int effectParameter;
     public int maxHPChange;
     public int maxSPChange;
@@ -45,6 +45,54 @@ public class Accessory : Item {
         set {
             base.itemDescription = value;
 		}
+	}
+
+    public (bool isCompatible, string errorMessage) CheckCompatibility(Weapon weapon) {
+        string msg = "";
+
+        switch (weapon.atkType) {
+            case AttackType.Melee:
+                if (compatibleMelee.Count == 0) {
+                    msg = itemName + " is not compatible with Melee weapons.";
+                    return (false, msg);
+                } else {
+                    MeleeWeaponType type = weapon.meleeType;
+                    if (compatibleMelee.Contains(type))
+                        return (true, "");
+                    else {
+                        msg = itemName + " is not compatible with " + type.ToString() + "s.";
+                        return (false, msg);
+					}
+				}
+            case AttackType.Magic:
+                if (compatibleMagic.Count == 0) {
+                    msg = itemName + " is not compatible with Magic weapons.";
+                    return (false, msg);
+                } else {
+                    MagicWeaponType type = weapon.magicType;
+                    if (compatibleMagic.Contains(type))
+                        return (true, "");
+                    else {
+                        msg = itemName + " is not compatible with " + type.ToString() + "s.";
+                        return (false, msg);
+                    }
+                }
+            case AttackType.Ranged:
+                if (compatibleRanged.Count == 0) {
+                    msg = itemName + " is not compatible with Ranged weapons.";
+                    return (false, msg);
+                } else {
+                    RangedWeaponType type = weapon.rangedType;
+                    if (compatibleRanged.Contains(type))
+                        return (true, "");
+                    else {
+                        msg = itemName + " is not compatible with " + type.ToString() + "s.";
+                        return (false, msg);
+                    }
+                }
+        }
+
+		return (false, "error");
 	}
 
     public string GetInfo() {

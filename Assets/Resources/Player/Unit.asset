@@ -13,19 +13,21 @@ MonoBehaviour:
   m_Name: Unit
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 2164450066092167372, guid: 45258d1326fa03e40a5f171161c0cb1b, type: 3}
-  unitName: Bill Nye
+  unitName: Bob
   weaponType: 0
   unitIcon: {fileID: 0}
-  weaponId: 0
+  weaponId: 3
+  apparelID: -1
+  accessoryID: -1
   level: 7
   cHP: 200
   maxHP: 200
   cSP: 40
   maxSP: 40
-  str: 50
+  str: 55
   mag: 25
   dex: 30
-  def: 50
+  def: 55
   res: 30
   arm: 30
   agi: 30
