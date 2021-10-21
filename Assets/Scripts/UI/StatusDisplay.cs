@@ -59,18 +59,25 @@ public class StatusDisplay : MonoBehaviour, IMenuWindow {
 	[SerializeField]
 	private Sprite emptyAccessoryIcon;
 
+	public bool IsOpen() {
+		return isOpen;
+	}
+
 	private void Awake() {
 		player = PlayerUnit.INSTANCE;
 		canvasGroup = GetComponent<CanvasGroup>();
 	}
 
 	public void toggleStats() {
+		// Toggle showing base stats and effective stats
 		baseStats = !baseStats;
 
 		if (baseStats)
 			statsToggleButton.text = "<color=white>Base Stats";
 		else
 			statsToggleButton.text = "<color=green>Effective Stats";
+
+		SetData();
 	}
 
 	public void Open() {
@@ -96,15 +103,15 @@ public class StatusDisplay : MonoBehaviour, IMenuWindow {
 			armField.text = "<color=white>" + player.arm.ToString();
 			agiField.text = "<color=white>" + player.agi.ToString();
 		} else {
-			hpField.text = player.cHP + " / " + ((player.effMaxHP == player.maxHP) ? "<color=green>" : "<color=white>") + player.effMaxHP;
-			spField.text = player.cSP + " / " + ((player.effMaxSP == player.maxSP) ? "<color=green>" : "<color=white>") + player.effMaxSP;
-			strField.text = ((player.effStr == player.str) ? "<color=green>" : "<color=white>") + player.effStr.ToString();
-			magField.text = ((player.effMag == player.mag) ? "<color=green>" : "<color=white>") + player.effMag.ToString();
-			dexField.text = ((player.effDex == player.dex) ? "<color=green>" : "<color=white>") + player.effDex.ToString();
-			defField.text = ((player.effDef == player.def) ? "<color=green>" : "<color=white>") + player.effDef.ToString();
-			resField.text = ((player.effRes == player.res) ? "<color=green>" : "<color=white>") + player.effRes.ToString();
-			armField.text = ((player.effArm == player.arm) ? "<color=green>" : "<color=white>") + player.effArm.ToString();
-			agiField.text = ((player.effAgi == player.agi) ? "<color=green>" : "<color=white>") + player.effAgi.ToString();
+			hpField.text = player.cHP + " / " + ((player.effMaxHP != player.maxHP) ? "<color=green>" : "<color=white>") + player.effMaxHP;
+			spField.text = player.cSP + " / " + ((player.effMaxSP != player.maxSP) ? "<color=green>" : "<color=white>") + player.effMaxSP;
+			strField.text = ((player.effStr != player.str) ? "<color=green>" : "<color=white>") + player.effStr.ToString();
+			magField.text = ((player.effMag != player.mag) ? "<color=green>" : "<color=white>") + player.effMag.ToString();
+			dexField.text = ((player.effDex != player.dex) ? "<color=green>" : "<color=white>") + player.effDex.ToString();
+			defField.text = ((player.effDef != player.def) ? "<color=green>" : "<color=white>") + player.effDef.ToString();
+			resField.text = ((player.effRes != player.res) ? "<color=green>" : "<color=white>") + player.effRes.ToString();
+			armField.text = ((player.effArm != player.arm) ? "<color=green>" : "<color=white>") + player.effArm.ToString();
+			agiField.text = ((player.effAgi != player.agi) ? "<color=green>" : "<color=white>") + player.effAgi.ToString();
 		}
 
 		// Draw weapon info

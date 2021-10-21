@@ -18,6 +18,7 @@ MonoBehaviour:
   isSellable: 0
   buyPrice: 0
   stackableMax: 0
+  type: 1
   defChange: 5
   resChange: 45
   armChange: 0

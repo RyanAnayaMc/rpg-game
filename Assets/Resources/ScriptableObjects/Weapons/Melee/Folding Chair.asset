@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 21300000, guid: db92646c4495ffd48b28f117b247ebae, type: 3}
   itemName: Folding Chair
-  itemDescription: But... Why?
+  itemDescription: What? Did you ever get hit by one of these? It fucking hurts!
   isSellable: 0
   buyPrice: 0
   stackableMax: 0

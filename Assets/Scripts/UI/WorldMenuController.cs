@@ -9,6 +9,7 @@ public class WorldMenuController : MonoBehaviour {
     public GameObject popupMenu;
 	public InventoryMenu inventoryMenu;
 	public StatusDisplay statusMenu;
+	public EquipmentMenu equipMenu;
     public int popupMenuOpenOffset = 362;
 	private bool isMenuOpen;
 	private IMenuWindow currentWindow;
@@ -19,6 +20,7 @@ public class WorldMenuController : MonoBehaviour {
 	public void Start() {
 		inventoryMenu.gameObject.SetActive(false);
 		statusMenu.gameObject.SetActive(false);
+		equipMenu.gameObject.SetActive(false);
 	}
 
 	public void Update() {
@@ -34,33 +36,29 @@ public class WorldMenuController : MonoBehaviour {
 
 	#region Menu Buttons
 	public void onInventoryButton() {
-		if (_running == null) {
-			if (inventoryMenu.isOpen) {
-				inventoryMenu.Close();
-				currentWindow = null;
-			} else {
-				if (currentWindow != null) {
-					currentWindow.Close();
-				}
-
-				inventoryMenu.Open();
-				currentWindow = inventoryMenu;
-			}
-		}
+		onButton(inventoryMenu);
 	}
 
 	public void onStatusButton() {
+		onButton(statusMenu);
+	}
+
+	public void onEquipmentButton() {
+		onButton(equipMenu);
+	}
+
+	private void onButton(IMenuWindow window) {
 		if (_running == null) {
-			if (statusMenu.isOpen) {
-				statusMenu.Close();
+			if (window.IsOpen()) {
+				window.Close();
 				currentWindow = null;
 			} else {
 				if (currentWindow != null) {
 					currentWindow.Close();
 				}
 
-				statusMenu.Open();
-				currentWindow = statusMenu;
+				window.Open();
+				currentWindow = window;
 			}
 		}
 	}

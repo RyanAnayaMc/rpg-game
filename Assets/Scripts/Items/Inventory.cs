@@ -194,7 +194,7 @@ public class Inventory : ScriptableObject {
 	}
 
     /// <summary>
-    /// Adds a weapon to the inventory.
+    /// Adds a weapon to the inventory. Ensures that the weapons are sorted by index.
     /// </summary>
     /// <param name="itemId">The ID of the weapon. ID comes from the <see cref="Atlas"/></param>
     /// <param name="quantity">How many of the item to add.</param>
@@ -202,8 +202,10 @@ public class Inventory : ScriptableObject {
         int index = weapons.IndexOf(itemId);
 
         if (index < 0) {
-            weapons.Add(itemId);
-            weaponQuantities.Add(quantity);
+            index = 0;
+            while (weapons[index] < itemId) { index++; }
+            weapons.Insert(index, itemId);
+            weaponQuantities.Insert(index, quantity);
 		} else {
             weaponQuantities[index] += quantity;
 		}
@@ -215,7 +217,7 @@ public class Inventory : ScriptableObject {
     /// <param name="itemId">The ID of the weapon. ID comes from the <see cref="Atlas"/></param>
     /// <returns>Whether or not the item was in the inventory and removed.</returns>
     public bool RemoveWeapon(int itemId) {
-        return weapons.Remove(itemId);
+        return RemoveWeapon(itemId, 1);
     }
 
     /// <summary>
@@ -262,7 +264,7 @@ public class Inventory : ScriptableObject {
     }
 
     /// <summary>
-    /// Adds an apparel item to the inventory.
+    /// Adds an apparel item to the inventory. Keeps items sorted by item ID.
     /// </summary>
     /// <param name="itemId">The ID of the apparel. ID comes from the <see cref="Atlas"/></param>
     /// <param name="amount">The amount of the apparel item to add.</param>
@@ -270,8 +272,10 @@ public class Inventory : ScriptableObject {
         int index = apparel.IndexOf(itemId);
 
         if (index < 0) {
-            apparel.Add(itemId);
-            apparelQuantities.Add(amount);
+            index = 0;
+            while (apparel[index] < itemId) { index++; }
+            apparel.Insert(index, itemId);
+            apparelQuantities.Insert(index, itemId);
         } else
             apparelQuantities[index] += amount;
 	}
@@ -328,15 +332,17 @@ public class Inventory : ScriptableObject {
     }
 
     /// <summary>
-    /// Adds an accessory item to the inventory.
+    /// Adds an accessory item to the inventory. Keeps items sorted by item ID.
     /// </summary>
     /// <param name="itemId">The ID of the accessories. ID comes from the <see cref="Atlas"/></param>
     /// <param name="amount">The amount of the accessory to add.</param>
     public void AddAccessory(int itemId, int amount) {
         int index = accessories.IndexOf(itemId);
         if (index < 0) {
-            accessories.Add(itemId);
-            accessoryQuantities.Add(amount);
+            index = 0;
+            while (accessories[index] < itemId) { index++; }
+            accessories.Insert(index, itemId);
+            accessoryQuantities.Insert(index, amount);
         } else
             accessoryQuantities[index] += amount;
 	}
@@ -347,7 +353,7 @@ public class Inventory : ScriptableObject {
     /// <param name="itemId">The ID of the accessories. ID comes from the <see cref="Atlas"/></param>
     /// <returns>Whether or not the item was in the inventory and removed.</returns>
     public bool RemoveAccessory(int itemId) {
-        return RemoveAccessory(itemId);
+        return RemoveAccessory(itemId, 1);
 	}
 
     /// <summary>

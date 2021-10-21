@@ -11,12 +11,16 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 	private List<GameObject> buttons;
 	public TMP_Text infoText;
 
-	public void Start() {
+	public void Awake() {
 		canvasGroup = GetComponent<CanvasGroup>();
 	}
 
 	public void Close() {
 		StartCoroutine(fadeOut());
+	}
+
+	public bool IsOpen() {
+		return isOpen;
 	}
 
 	public void Open() {

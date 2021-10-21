@@ -3423,12 +3423,16 @@ PrefabInstance:
       objectReference: {fileID: 1908869457}
     - target: {fileID: 6572228644332126296, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
       propertyPath: enemyUnitObjs.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6572228644332126296, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
       propertyPath: enemyLocations.Array.size
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6572228644332126296, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: enemyUnitObjs.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: aeb5828acd12e364885229edae589a9b, type: 2}
     - target: {fileID: 6572228644332126296, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
       propertyPath: enemyUnitObjs.Array.data[2]
       value: 

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e369d494391e748bf5ded5f86cfd9a, type: 3}
+  m_Name: SwoleSquirrel
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 2596101195563128358, guid: c0266203d54858f4a81a648588d9d82b, type: 3}
+  unitName: Swole Squirrel
+  weaponType: 0
+  unitIcon: {fileID: 21300000, guid: 030d61925e2f98f4d86e171153ec39e1, type: 3}
+  weaponId: 5
+  apparelID: -1
+  accessoryID: -1
+  level: 99
+  cHP: 400
+  maxHP: 400
+  cSP: 45
+  maxSP: 45
+  str: 65
+  mag: 25
+  dex: 30
+  def: 40
+  res: 15
+  arm: 70
+  agi: 20
+  isDefending: 0
+  skills:
+  - {fileID: 11400000, guid: 841408cb381ca454fa72c09e45c844d8, type: 2}
+  - {fileID: 11400000, guid: d883e208e4b08684784515f9a9bef23c, type: 2}
+  - {fileID: 11400000, guid: e71d470cf039efd409a32f56d436b90a, type: 2}
+  - {fileID: 11400000, guid: ce1136145612b4f4ab6b4ad775e93936, type: 2}
+  showStats: 1

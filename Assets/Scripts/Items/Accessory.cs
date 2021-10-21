@@ -21,6 +21,7 @@ public enum AccessoryType {
     Laser
 }
 
+[CreateAssetMenu(fileName = "NewAccessory", menuName = "RPG Element/Item/Accessory")]
 public class Accessory : Item {
     public AccessoryEffect effect;
     public AccessoryType accessoryType;
