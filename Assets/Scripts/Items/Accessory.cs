@@ -48,7 +48,7 @@ public class Accessory : Item {
 	}
 
     public (bool isCompatible, string errorMessage) CheckCompatibility(Weapon weapon) {
-        string msg = "";
+        string msg;
 
         switch (weapon.atkType) {
             case AttackType.Melee:
@@ -122,26 +122,17 @@ public class Accessory : Item {
     }
 
     private string GetRichText(AccessoryEffect effect) {
-        switch (effect) {
-            case AccessoryEffect.ExtraTurn:
-                return "Extra Turn";
-            case AccessoryEffect.DamageReductionPercent:
-                return effectParameter + "% Damage Reduction";
-            case AccessoryEffect.DamageReductionFlat:
-                return "-" + effectParameter + " Damage Taken";
-            case AccessoryEffect.HPRecoverPerTurn:
-                return effectParameter + " HP/turn";
-            case AccessoryEffect.SPRecoverPerTurn:
-                return effectParameter + " SP/turn";
-            case AccessoryEffect.Fury:
-                return "Fury";
-            case AccessoryEffect.Thermal:
-                return "Thermal";
-            case AccessoryEffect.ExtraHit:
-                return effectParameter + "% Extra Hit";
-            default:
-                return "";
-		}
+		return effect switch {
+			AccessoryEffect.ExtraTurn => "Extra Turn",
+			AccessoryEffect.DamageReductionPercent => effectParameter + "% Damage Reduction",
+			AccessoryEffect.DamageReductionFlat => "-" + effectParameter + " Damage Taken",
+			AccessoryEffect.HPRecoverPerTurn => effectParameter + " HP/turn",
+			AccessoryEffect.SPRecoverPerTurn => effectParameter + " SP/turn",
+			AccessoryEffect.Fury => "Fury",
+			AccessoryEffect.Thermal => "Thermal",
+			AccessoryEffect.ExtraHit => effectParameter + "% Extra Hit",
+			_ => "",
+		};
 	}
 
     public override int GetNumber() {
