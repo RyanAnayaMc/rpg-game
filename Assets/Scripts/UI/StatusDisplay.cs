@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
+
+#pragma warning disable IDE0044, IDE0051
 
 public class StatusDisplay : MonoBehaviour, IMenuWindow {
-	public bool isOpen = false;
-	public bool baseStats = true;
-	public TMP_Text statsToggleButton;
+	#region Fields
+	private const string kWhite = "<color=white>";
+	private const string kGreen = "<color=green>";
+	private const string kRed = "<color=red>";
+
+	private bool isOpen = false;
+	private bool baseStats = true;
+	[SerializeField]
+	private TMP_Text statsToggleButton;
 	private CanvasGroup canvasGroup;
 	private PlayerUnit player;
 	[SerializeField]
@@ -58,66 +67,191 @@ public class StatusDisplay : MonoBehaviour, IMenuWindow {
 	private Sprite emptyApparelIcon;
 	[SerializeField]
 	private Sprite emptyAccessoryIcon;
-
-	public bool IsOpen() {
-		return isOpen;
-	}
+	#endregion
 
 	private void Awake() {
 		player = PlayerUnit.INSTANCE;
 		canvasGroup = GetComponent<CanvasGroup>();
 	}
 
-	public void toggleStats() {
+	#region IMenuWindow implementation
+	public bool IsOpen() {
+		return isOpen;
+	}
+
+	public async Task Open() {
+		DrawData();
+		gameObject.SetActive(true);
+		await Utilities.WaitUntil(() => gameObject.activeInHierarchy);
+
+		canvasGroup.alpha = 0;
+
+		while (canvasGroup.alpha < 1) {
+			canvasGroup.alpha += 0.1f;
+			await Task.Delay(10);
+		}
+
+		isOpen = true;
+	}
+
+	public async Task Close() {
+		canvasGroup.alpha = 1;
+
+		while (canvasGroup.alpha > 0) {
+			canvasGroup.alpha -= 0.1f;
+			await Task.Delay(10);
+		}
+
+		isOpen = false;
+		gameObject.SetActive(false);
+	}
+	#endregion
+
+	public void ToggleStats() {
 		// Toggle showing base stats and effective stats
 		baseStats = !baseStats;
 
 		if (baseStats)
-			statsToggleButton.text = "<color=white>Base Stats";
+			statsToggleButton.text = kWhite + "Base Stats";
 		else
-			statsToggleButton.text = "<color=green>Effective Stats";
+			statsToggleButton.text = kGreen + "Effective Stats";
 
-		SetData();
+		DrawData();
 	}
 
-	public void Open() {
-		gameObject.SetActive(true);
-		StartCoroutine(fadeIn());
-		SetData();
+	#region Information Drawing
+	private void DrawData() {
+		DrawBasicInfo();
+
+		if (baseStats)
+			DrawBaseStats();
+		else
+			DrawEffectiveStats();
+
+		// Draw gear info
+		DrawWeaponInfo();
+		DrawApparelInfo();
+		DrawAccessoryInfo();
+
 	}
 
-	private void SetData() {
+	private void DrawBasicInfo() {
 		faceField.sprite = player.characterFace;
 		nameField.text = player.unitName;
 		levelField.text = "Level " + player.level;
 		xpField.text = player.xp + " / 100";
-		
-		if (baseStats) {
-			hpField.text = "<color=white>" + player.cHP + " / " + player.maxHP;
-			spField.text = "<color=white>" + player.cSP + " / " + player.maxSP;
-			strField.text = "<color=white>" + player.str.ToString();
-			magField.text = "<color=white>" + player.mag.ToString();
-			dexField.text = "<color=white>" + player.dex.ToString();
-			defField.text = "<color=white>" + player.def.ToString();
-			resField.text = "<color=white>" + player.res.ToString();
-			armField.text = "<color=white>" + player.arm.ToString();
-			agiField.text = "<color=white>" + player.agi.ToString();
+	}
+
+	private void DrawBaseStats() {
+		hpField.text = kWhite + player.cHP + " / " + player.maxHP;
+		spField.text = kWhite + player.cSP + " / " + player.maxSP;
+		strField.text = kWhite + player.str.ToString();
+		magField.text = kWhite + player.mag.ToString();
+		dexField.text = kWhite + player.dex.ToString();
+		defField.text = kWhite + player.def.ToString();
+		resField.text = kWhite + player.res.ToString();
+		armField.text = kWhite + player.arm.ToString();
+		agiField.text = kWhite + player.agi.ToString();
+	}
+
+	private void DrawEffectiveStats() {
+		string hpText;
+		string spText;
+		string strText;
+		string magText;
+		string dexText;
+		string defText;
+		string resText;
+		string armText;
+		string agiText;
+
+		// Get fancy HP text
+		if (player.effMaxHP == player.maxHP) {
+			hpText = player.cHP + " / " + player.maxHP;
 		} else {
-			hpField.text = player.cHP + " / " + ((player.effMaxHP != player.maxHP) ? "<color=green>" : "<color=white>") + player.effMaxHP;
-			spField.text = player.cSP + " / " + ((player.effMaxSP != player.maxSP) ? "<color=green>" : "<color=white>") + player.effMaxSP;
-			strField.text = ((player.effStr != player.str) ? "<color=green>" : "<color=white>") + player.effStr.ToString();
-			magField.text = ((player.effMag != player.mag) ? "<color=green>" : "<color=white>") + player.effMag.ToString();
-			dexField.text = ((player.effDex != player.dex) ? "<color=green>" : "<color=white>") + player.effDex.ToString();
-			defField.text = ((player.effDef != player.def) ? "<color=green>" : "<color=white>") + player.effDef.ToString();
-			resField.text = ((player.effRes != player.res) ? "<color=green>" : "<color=white>") + player.effRes.ToString();
-			armField.text = ((player.effArm != player.arm) ? "<color=green>" : "<color=white>") + player.effArm.ToString();
-			agiField.text = ((player.effAgi != player.agi) ? "<color=green>" : "<color=white>") + player.effAgi.ToString();
+			int diff = player.effMaxHP - player.maxHP;
+			hpText = player.cHP + " / " + (diff > 0 ? kGreen : kRed) + player.effMaxHP + " (" + diff + ")";
 		}
 
-		// Draw weapon info
+		// Get fancy SP text
+		if (player.effMaxSP == player.maxSP) {
+			spText = player.cSP + " / " + player.maxSP;
+		} else {
+			int diff = player.effMaxSP - player.maxSP;
+			spText = player.cSP + " / " + (diff > 0 ? kGreen : kRed) + player.effMaxSP + " (" + diff + ")";
+		}
+
+		// Get fancy str text
+		if (player.effStr == player.str)
+			strText = player.str.ToString();
+		else {
+			int diff = player.effStr - player.str;
+			strText = player.effStr + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		// Get fancy mag text
+		if (player.effMag == player.mag)
+			magText = player.mag.ToString();
+		else {
+			int diff = player.effMag - player.mag;
+			magText = player.effMag + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		// Get fancy dex text
+		if (player.effDex == player.dex)
+			dexText = player.dex.ToString();
+		else {
+			int diff = player.effDex - player.dex;
+			dexText = player.effDex + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		// Get fancy def text
+		if (player.effDef == player.def)
+			defText = player.def.ToString();
+		else {
+			int diff = player.effDef - player.def;
+			defText = player.effDef + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		// Get fancy res text
+		if (player.effRes == player.res)
+			resText = player.res.ToString();
+		else {
+			int diff = player.effRes - player.res;
+			resText = player.effRes + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		// Get fancy arm text
+		if (player.effArm == player.arm)
+			armText = player.arm.ToString();
+		else {
+			int diff = player.effArm - player.arm;
+			armText = player.effArm + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		// Get fancy agi text
+		if (player.effAgi == player.agi)
+			agiText = player.agi.ToString();
+		else {
+			int diff = player.effAgi - player.agi;
+			agiText = player.effAgi + (diff > 0 ? kGreen : kRed) + " (" + diff + ")";
+		}
+
+		hpField.text = hpText;
+		spField.text = spText;
+		strField.text = strText;
+		magField.text = magText;
+		dexField.text = dexText;
+		defField.text = defText;
+		resField.text = resText;
+		armField.text = armText;
+		agiField.text = agiText;
+	}
+
+	private void DrawWeaponInfo() {
 		weaponIcon.sprite = player.weapon.itemIcon;
 		weaponName.text = player.weapon.itemName;
-		weaponType.text = "<color=red>" + player.weapon.atkType.ToString() + "<color=white>\n";
+		weaponType.text = kRed + player.weapon.atkType.ToString() + kWhite + "\n";
 		switch (player.weapon.atkType) {
 			case AttackType.Melee:
 				weaponType.text += player.weapon.meleeType.ToString();
@@ -129,22 +263,24 @@ public class StatusDisplay : MonoBehaviour, IMenuWindow {
 				weaponType.text += player.weapon.rangedType.ToString();
 				break;
 		}
+	}
 
-		// Draw apparel info
+	private void DrawApparelInfo() {
 		if (player.apparel is null) {
 			apparelIcon.sprite = emptyApparelIcon;
-			apparelName.text = "<color=red>No Apparel";
+			apparelName.text = kRed + "No Apparel";
 			apparelType.text = "None";
 		} else {
 			apparelIcon.sprite = player.apparel.itemIcon;
 			apparelName.text = player.apparel.itemName;
 			apparelType.text = player.apparel.type.ToString();
 		}
+	}
 
-		// Draw accessory info
+	private void DrawAccessoryInfo() {
 		if (player.accessory is null) {
 			accessoryIcon.sprite = emptyAccessoryIcon;
-			accessoryName.text = "<color=red>No Accessory";
+			accessoryName.text = kRed + "No Accessory";
 			accessoryType.text = "None";
 
 		} else {
@@ -153,32 +289,5 @@ public class StatusDisplay : MonoBehaviour, IMenuWindow {
 			accessoryType.text = player.accessory.accessoryType.ToString();
 		}
 	}
-
-	public void Close() {
-		StartCoroutine(fadeOut());
-	}
-
-	private IEnumerator fadeOut() {
-		canvasGroup.alpha = 1;
-
-		while (canvasGroup.alpha > 0) {
-			canvasGroup.alpha -= 0.1f;
-			yield return new WaitForSeconds(0.01f);
-		}
-
-		isOpen = false;
-		gameObject.SetActive(false);
-	}
-
-	private IEnumerator fadeIn() {
-		yield return new WaitUntil(() => gameObject.activeSelf);
-		canvasGroup.alpha = 0;
-
-		while (canvasGroup.alpha < 1) {
-			canvasGroup.alpha += 0.1f;
-			yield return new WaitForSeconds(0.01f);
-		}
-
-		isOpen = true;
-	}
+	#endregion
 }

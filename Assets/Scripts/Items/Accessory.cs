@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+#pragma warning disable IDE0090, IDE1006
+
 public enum AccessoryEffect {
     None,
     ExtraTurn,
@@ -96,9 +98,9 @@ public class Accessory : Item {
 	}
 
     public string GetInfo() {
-        StringBuilder stringBuilder = new StringBuilder();
+		StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.Append(GetRichText("Max HP", maxHPChange))
+		stringBuilder.Append(GetRichText("Max HP", maxHPChange))
             .Append(GetRichText("Max SP", maxSPChange))
             .Append(GetRichText("STR", strChange))
             .Append(GetRichText("MAG", magChange))

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
+#pragma warning disable IDE0051
+
 /// <summary>
 /// Basic script that makes a HDRP light flicker like fire.
 /// Lights with the time set offset will flicker in sync.
@@ -13,7 +15,7 @@ public class LightFireEffect : MonoBehaviour {
 	private float defaultIntensity;
 
 	[SerializeField]
-	private bool useRandomOffset;
+	private readonly bool useRandomOffset;
 
 	[SerializeField]
 	private float setOffset;
@@ -22,10 +24,10 @@ public class LightFireEffect : MonoBehaviour {
 	private float speedMultiplier;
 
 	[SerializeField]
-	private float minimumMultiplier;
+	private readonly float minimumMultiplier;
 
 	[SerializeField]
-	private float maximumMultiplier;
+	private readonly float maximumMultiplier;
 
 	private void Start() {
 		lightData = GetComponent<HDAdditionalLightData>();

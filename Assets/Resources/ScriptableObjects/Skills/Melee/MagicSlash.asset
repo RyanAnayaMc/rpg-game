@@ -17,25 +17,27 @@ MonoBehaviour:
   skillDescription: A sword attack that does magic damage based on STR and MAG.
   requiresWeaponType: 1
   requiredAtkType: 0
-  costSP: 8
+  costSP: 9
   useScriptedSkillEffects: 0
   needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: b60b406109876634992e75dc5c418da4, type: 3}
   skillAnimation: 7
   targetType: 2
+  ignoreDefend: 0
+  offsetRange: 0.1
   unitChpMultiplier: 0
   unitMhpMultiplier: 0
   unitCspMultiplier: 0
   unitMspMultiplier: 0
-  unitStrMultiplier: 0.75
-  unitMagMultiplier: 0.75
+  unitStrMultiplier: 0.7
+  unitMagMultiplier: 0.9
   unitDexMultiplier: 0
   unitDefMultiplier: 0
   unitResMultiplier: 0
   unitArmMultiplier: 0
   unitAgiMultiplier: 0
-  unitMtMultiplier: 0
+  unitMtMultiplier: 0.8
   enemyChpMultiplier: 0
   enemyMhpMultiplier: 0
   enemyCspMultiplier: 0

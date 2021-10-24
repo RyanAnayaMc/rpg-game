@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+#pragma warning disable IDE0044
+
 public enum TargetType {
     NONE,
     SELF,
@@ -151,7 +153,7 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// <param name="user">The user of the skill.</param>
     /// <param name="enemy">The Unit targeted by the skill.</param>
     /// <returns></returns>
-    public int getValue(Unit user, Unit enemy) {
+    public int GetValue(Unit user, Unit enemy) {
         // Get skill damage
         float value =
             user.cHP * unitChpMultiplier +
@@ -190,7 +192,7 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// <param name="user">The user of the skill.</param>
     /// <param name="enemy">The Unit targeted by the skill.</param>
     /// <returns></returns>
-    public int getValue(Unit user) {
+    public int GetValue(Unit user) {
         // Get skill damage
         float value =
             user.cHP * unitChpMultiplier +
@@ -218,7 +220,7 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// <param name="enemy">The target of the skill.</param>
     /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
     /// <returns>The dialogue text to display for the skill.</returns>
-    public async Task<string> doScriptedSkillEffect(BattleUnit user, BattleUnit enemy, BattleSFXHandler sfxHandler) {
+    public async Task<string> DoScriptedSkillEffect(BattleUnit user, BattleUnit enemy, BattleSFXHandler sfxHandler) {
         if (!useScriptedSkillEffects)
             return null;
 

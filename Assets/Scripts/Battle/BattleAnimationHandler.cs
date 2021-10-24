@@ -16,7 +16,10 @@ public enum WeaponAnimation {
     FireSlashAttack,
     GunAttack,
     MendAnimation,
-    RecoveryAnimation
+    RecoveryAnimation,
+    Rapidfire,
+    RifleAttack,
+    SlamAttack
 }
 
 public class BattleAnimationHandler : MonoBehaviour {
@@ -40,23 +43,6 @@ public class BattleAnimationHandler : MonoBehaviour {
             sr.material = oldMaterial;
             await Task.Delay(100);
         }
-    }
-        
-    /// <summary>
-    /// Plays a skill animaiton, including sound effects, for nonscripted skills.
-    /// </summary>
-    /// <param name="attackingUnit">The unit attacking.</param>
-    /// <param name="targetUnit">The unit being attacked.</param>
-    /// <param name="skill">The non-scripted skill.</param>
-    /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
-    public void PlaySkillAnimation(BattleUnit attackingUnit, BattleUnit targetUnit, Skill skill, BattleSFXHandler sfxHandler) {
-        BattleUnit battleUnit = (skill.targetType == TargetType.SELF) ? attackingUnit : targetUnit;
-
-        battleUnit.DoAnimation(skill.skillAnimation);
-        if (skill.targetType == TargetType.ENEMY)
-            FlickerAnimation(battleUnit.gameObject);
-        if (skill.skillSFX != null)
-            sfxHandler.PlaySFX(skill.skillSFX);
     }
 
     /// <summary>

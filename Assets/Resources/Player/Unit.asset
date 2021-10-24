@@ -16,13 +16,13 @@ MonoBehaviour:
   unitName: Bob
   weaponType: 0
   unitIcon: {fileID: 0}
-  weaponId: 3
-  apparelID: -1
+  weaponId: 17
+  apparelID: 1
   accessoryID: -1
   level: 7
   cHP: 200
   maxHP: 200
-  cSP: 32
+  cSP: 40
   maxSP: 40
   str: 55
   mag: 25
@@ -31,7 +31,7 @@ MonoBehaviour:
   res: 30
   arm: 30
   agi: 30
-  isDefending: 1
+  isDefending: 0
   skills:
   - {fileID: 11400000, guid: 841408cb381ca454fa72c09e45c844d8, type: 2}
   - {fileID: 11400000, guid: d883e208e4b08684784515f9a9bef23c, type: 2}

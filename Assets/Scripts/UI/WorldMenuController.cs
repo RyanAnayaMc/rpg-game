@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
+#pragma warning disable IDE0044
 public class WorldMenuController : MonoBehaviour {
-    public GameObject mapHUD;
-    public GameObject popupMenu;
-	public InventoryMenu inventoryMenu;
-	public StatusDisplay statusMenu;
-	public EquipmentMenu equipMenu;
-    public int popupMenuOpenOffset = 362;
+	#region Fields
+	[SerializeField] private GameObject mapHUD;
+	[SerializeField] private GameObject popupMenu;
+	[SerializeField] private InventoryMenu inventoryMenu;
+	[SerializeField] private StatusDisplay statusMenu;
+	[SerializeField] private EquipmentMenu equipMenu;
+	[SerializeField] private int popupMenuOpenOffset = 362;
 	private bool isMenuOpen;
 	private IMenuWindow currentWindow;
 	[SerializeField] private CanvasGroup worldUI;
-
-	private Coroutine _running;
+	private Task _running;
+	#endregion
 
 	public void Start() {
 		inventoryMenu.gameObject.SetActive(false);
@@ -23,82 +26,103 @@ public class WorldMenuController : MonoBehaviour {
 		equipMenu.gameObject.SetActive(false);
 	}
 
-	public void Update() {
+	public async void Update() {
 		if (Input.GetButtonDown("Menu")) {
-			Debug.Log("menu button");
-			Debug.Log(isMenuOpen + " " + CharacterMovementController.isPlayerLocked);
-			if (!isMenuOpen && !CharacterMovementController.isPlayerLocked)
-				StartCoroutineIfNoneRunning(openMenu());
-			else if (isMenuOpen && CharacterMovementController.isPlayerLocked)
-				StartCoroutineIfNoneRunning(closeMenu());
-		}
-	}
-
-	#region Menu Buttons
-	public void onInventoryButton() {
-		onButton(inventoryMenu);
-	}
-
-	public void onStatusButton() {
-		onButton(statusMenu);
-	}
-
-	public void onEquipmentButton() {
-		onButton(equipMenu);
-	}
-
-	private void onButton(IMenuWindow window) {
-		if (_running == null) {
-			if (window.IsOpen()) {
-				window.Close();
-				currentWindow = null;
-			} else {
-				if (currentWindow != null) {
-					currentWindow.Close();
-				}
-
-				window.Open();
-				currentWindow = window;
+			if (!isMenuOpen && !CharacterMovementController.isPlayerLocked) {
+				_running = OpenMenu();
+				await _running;
+			} else if (isMenuOpen && CharacterMovementController.isPlayerLocked) {
+				_running = CloseMenu();
+				await _running;
 			}
 		}
 	}
 
-	public void onMenuButton() {
+	#region Menu Buttons
+	public void OnInventoryButton() {
+		OnButton(inventoryMenu);
+	}
+
+	public void OnStatusButton() {
+		OnButton(statusMenu);
+	}
+
+	public void OnEquipmentButton() {
+		OnButton(equipMenu);
+	}
+
+	private void OnButton(IMenuWindow window) {
+		if (IsTaskRunning()) return;
+
+		if (window.IsOpen()) {
+			window.Close();
+			currentWindow = null;
+		} else {
+			if (currentWindow != null) {
+				currentWindow.Close();
+			}
+			window.Open();
+			currentWindow = window;
+		}
+	}
+
+	public void OnMenuButton() {
 		SceneManager.LoadScene("MainMenu");
 	}
 
-	public void onCloseButton() {
-		StartCoroutineIfNoneRunning(closeMenu());
+	public void OnCloseButton() {
+		CloseMenu().GetAwaiter().GetResult();
+	}
+
+	public async Task CloseMenu() {
+		if (IsTaskRunning()) return;
+		float positionDelta = (float) popupMenuOpenOffset / 10; ;
+
+		_ = FadeOut();
+
+		for (int i = 0; i < 10; i++) {
+
+			Vector3 newMapPosition = mapHUD.transform.localPosition;
+			newMapPosition.x -= positionDelta;
+			Vector3 newMenuPosition = popupMenu.transform.localPosition;
+			newMenuPosition.x -= positionDelta;
+			mapHUD.transform.localPosition = newMapPosition;
+			popupMenu.transform.localPosition = newMenuPosition;
+			await Task.Delay(10);
+		}
+
+		CharacterMovementController.isPlayerLocked = false;
+		isMenuOpen = false;
+
+		if (currentWindow != null)
+			_ = currentWindow.Close();
 	}
 	#endregion
 
 	#region Open and Close
-	private IEnumerator fadeOut() {
+	private async Task FadeOut() {
 		worldUI.alpha = 1;
 
 		while (worldUI.alpha > 0) {
 			worldUI.alpha -= 0.1f;
-			yield return new WaitForSeconds(0.01f);
+			await Task.Delay(10);
 		}
-
-		_running = null;
 	}
 
-	private IEnumerator fadeIn() {
-		yield return new WaitUntil(() => gameObject.activeSelf);
+	private async Task FadeIn() {
+		await Utilities.WaitUntil(() => gameObject.activeSelf);
 		worldUI.alpha = 0;
 
 		while (worldUI.alpha < 1) {
 			worldUI.alpha += 0.1f;
-			yield return new WaitForSeconds(0.01f);
+			await Task.Delay(10);
 		}
-
-		_running = null;
 	}
 
-	private IEnumerator openMenu() {
-		StartCoroutineIfNoneRunning(fadeOut());
-		Debug.Log("menu open");
+	private async Task OpenMenu() {
+		if (IsTaskRunning()) return;
+
+		_ = FadeIn();
 		CharacterMovementController.isPlayerLocked = true;
 		isMenuOpen = true;
 
@@ -112,40 +136,20 @@ public class WorldMenuController : MonoBehaviour {
 			newMenuPosition.x += positionDelta;
 			mapHUD.transform.localPosition = newMapPosition;
 			popupMenu.transform.localPosition = newMenuPosition;
-			yield return new WaitForSeconds(0.01f);
+			await Task.Delay(10);
 		}
-
-		_running = null;
 	}
 
-	private IEnumerator closeMenu() {
-		Debug.Log("menu close");
-		float positionDelta = (float) popupMenuOpenOffset / 10; ;
-
-		for (int i = 0; i < 10; i++) {
-
-			Vector3 newMapPosition = mapHUD.transform.localPosition;
-			newMapPosition.x -= positionDelta;
-			Vector3 newMenuPosition = popupMenu.transform.localPosition;
-			newMenuPosition.x -= positionDelta;
-			mapHUD.transform.localPosition = newMapPosition;
-			popupMenu.transform.localPosition = newMenuPosition;
-			yield return new WaitForSeconds(0.01f);
-		}
-
-		CharacterMovementController.isPlayerLocked = false;
-		isMenuOpen = false;
-
-		if (currentWindow != null) {
-			currentWindow.Close();
-		}
-
-		_running = StartCoroutine(fadeIn());
-	}
-
-	private void StartCoroutineIfNoneRunning(IEnumerator coroutine) {
+	private bool IsTaskRunning() {
 		if (_running == null)
-			_running = StartCoroutine(coroutine);
+			return false;
+		else {
+			if (_running.IsCompleted) {
+				_running = null;
+				return false;
+			} else
+				return true;
+		}
 	}
 	#endregion
 }

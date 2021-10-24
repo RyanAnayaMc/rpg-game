@@ -18,7 +18,6 @@ public class Interactable : MonoBehaviour {
     void Update() {
         if (isInRange && !CharacterMovementController.isPlayerLocked && Input.GetButtonDown("Interact")) {
             interaction.Invoke();
-            Debug.Log("Invoking");
         }
     }
 

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 
+#pragma warning disable IDE0051, IDE0090
 // A class that handles the bulk of combat logic
 
 public class BattleController : MonoBehaviour {
@@ -81,11 +82,6 @@ public class BattleController : MonoBehaviour {
     public BattleAnimationHandler animationHandler;
 
     /// <summary>
-    /// The DamageCalculationHandler for the battle.
-    /// </summary>
-    public DamageCalculationHandler damageHandler;
-
-    /// <summary>
     /// The BatlteUIHandler for the battle.
     /// </summary>
     public BattleUIHandler uiHandler;
@@ -121,7 +117,7 @@ public class BattleController : MonoBehaviour {
     private int selectedItem = -2;
     private int selectedEnemy = -2;
     private int selectedSpecial = -2;
-    private bool isSetup;
+    private bool combatActive = true;
     #endregion
 
     #region Initialization
@@ -146,28 +142,21 @@ public class BattleController : MonoBehaviour {
         BattleController.inScene = scene;
     }
 
-    private void Update() {
-		if (isSetup) {
-            playerUnit.UpdateHUD();
-
-            foreach (BattleUnit enemy in enemyUnits)
-                enemy.UpdateHUD();
-		}
-	}
-
 	void Start() {
         SetupBattle();
     }
 	#endregion
 
 	#region Battle Core
+    /// <summary>
+    /// Method that sets up the battle and starts it.
+    /// </summary>
 	private async void SetupBattle() {
         // Setup helpers
         battleSFXHandler.battleController = this;
         uiHandler.battleController = this;
         musicHandler.battleController = this;
         animationHandler.battleController = this;
-        damageHandler.battleController = this;
 
         // Get parameters from other scene if present
         if (inParameters) {
@@ -187,13 +176,17 @@ public class BattleController : MonoBehaviour {
         // Setup UI
         await uiHandler.setupHUD(playerUnit, enemyUnits);
 
-        isSetup = true;
+        // Begin combat loop
+        combatActive = true;
         CombatLoop();
     }
 
+    /// <summary>
+    /// Main loop that keeps combat running until the player
+    /// wins or loses.
+    /// </summary>
     private async void CombatLoop() {
-        // Main loop that keeps combat running until the end
-        while (!await DidPlayerWin() && !await DidPlayerLose()) {
+        while (combatActive) {
             // Player turn
             await PlayerTurn();
             await Task.Delay(waitTimer);
@@ -209,6 +202,10 @@ public class BattleController : MonoBehaviour {
 	#endregion
 
 	#region Player Turn Handlers
+    /// <summary>
+    /// Starts the player's turn. Displays player's options
+    /// and prompts player to pick one.
+    /// </summary>
 	private async Task PlayerTurn() {
         // Show the player option window
         await uiHandler.ShowPlayerOptionWindow();
@@ -241,11 +238,17 @@ public class BattleController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Called when player clicks attack button. Handles
+    /// selecting an enemy to attack and attacking them.
+    /// </summary>
     private async Task PlayerAttack() {
         // Prompt user to select an enemy to attack
         await uiHandler.ShowEnemyTargetingWindow();
         int attackTarget = await CatchSelectedEnemy();
         await uiHandler.HideEnemyTargetingWindow();
+
+        Debug.Assert(canAct);
 
         if (attackTarget >= 0) {
             // Attack the enemy
@@ -259,11 +262,18 @@ public class BattleController : MonoBehaviour {
 		}
     }
 
+    /// <summary>
+    /// Called when player clicks special button. Handles
+    /// selecting a special and (if necessary) selecting an
+    /// enemy to cast the special.
+    /// </summary>
     private async Task PlayerSpecial() {
         // Prompt user to select a special
         await uiHandler.ShowSkillWindow();
         int specialIndex = await CatchSelectedSpecial();
         await uiHandler.HideSkillWindow();
+
+        Debug.Assert(canAct);
 
         if (specialIndex >= 0) {
             // Player selected a special
@@ -297,11 +307,18 @@ public class BattleController : MonoBehaviour {
 		}
     }
 	
+    /// <summary>
+    /// Called when player clicks item button. Handles selecting
+    /// an item and then using it.
+    /// </summary>
     private async Task PlayerItem() {
         InventoryItem<Consumable>[] consumables = Inventory.INSTANCE.GetConsumables();
         await uiHandler.ShowItemsWindow(consumables);
         int itemIndex = await CatchSelectedItem();
         await uiHandler.HideItemsWindow();
+
+        Debug.Assert(canAct);
+
         if (itemIndex >= 0) {
             // Player chose an item
             Consumable _item = consumables[itemIndex].item;
@@ -315,14 +332,24 @@ public class BattleController : MonoBehaviour {
     #endregion
 
 	#region Enemy Turn Handlers
+    /// <summary>
+    /// Handles enemy turn. Iterates through the list of all enemies
+    /// and has each of them perform an action.
+    /// </summary>
 	private async Task EnemyTurn() {
         // Perform enemy actions in sequence
         foreach (BattleUnit enemy in enemyUnits) {
+            TurnStart(enemy);
             await EnemyAction(enemy);
             await Task.Delay(waitTimer);
         }
 	}
 
+    /// <summary>
+    /// Handles the action of a single enemy. Randomly generates
+    /// an action to perform - attack, defend, or special.
+    /// </summary>
+    /// <param name="enemyUnit">The enemy performing the attack.</param>
     private async Task EnemyAction(BattleUnit enemyUnit) {
         // Determine what enemy should do
         Skill _skill = null;
@@ -366,6 +393,12 @@ public class BattleController : MonoBehaviour {
 	#endregion
 
 	#region Basic Attack Handlers
+    /// <summary>
+    /// Handles basic attacks, including calculation and animation by calling
+    /// a function specific to the damage type of the attacker's weapon.
+    /// </summary>
+    /// <param name="attacker">The unit attacking.</param>
+    /// <param name="target">The unit being attacked.</param>
 	private async Task Attack(BattleUnit attacker, BattleUnit target) {
         // Determine what type of attack to do
         AttackType attackType = attacker.unit.weapon.atkType;
@@ -383,121 +416,223 @@ public class BattleController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Handles basic melee attacks, including calculation and animation.
+    /// </summary>
+    /// <param name="attacker">The unit attacking.</param>
+    /// <param name="target">The unit being attacked.</param>
     private async Task MeleeAttack(BattleUnit attacker, BattleUnit target) {
         // Get convenience references to the units
         Unit a = attacker.unit;
         Unit t = target.unit;
 
-        // Calculate miss chance and determine if attack will miss
-        float accuracy = 1 - ((float) (t.effAgi - t.effDex) / a.effDex);
-        bool miss = UnityEngine.Random.value > accuracy;
+        // Determine if attack will hit
+        bool miss = DetermineMiss(a, t);
 
         if (miss) {
             // Display output for a miss
-            string message = a.unitName + " missed!";
-            uiHandler.DisplayDialogueText(message);
-            NumberPopup.DisplayTextPopup("Miss!", NumberType.NONE, target.transform);
+            ShowMiss(a, target);
         } else {
+            // Determine if crit
+            bool crit = DetermineCrit(a, t);
+
             // Calculate base damage
-            int damage = a.effStr + a.weapon.might - t.effDef;
+            int damage = a.effStr + a.weapon.might;
+            if (crit) damage -= t.effDef / 2;
+            else damage -= t.effDef;
 
             // Do extra processing to the damage
-            damage = OffsetValue(damage, 0.1f);
-            if (t.isDefending) damage /= 2;
-            if (damage < 0) damage = 0;
-
-            // Display animation
-            target.DoAnimation(a.weapon.weaponAnimation);
+            damage = ProcessDamage(damage, a, t);
 
             // Display damage output text and do damage
-            NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, target.transform);
-            battleSFXHandler.PlaySFX(a.weapon.attackSFX);
-            target.TakeDamage(damage);
-            _ = animationHandler.FlickerAnimation(target.gameObject);
-            string message = a.unitName + " did " + damage + " melee damage to " + t.unitName + ".";
-            uiHandler.DisplayDialogueText(message);
+            await DoDamage(damage, target, a, crit);
         }
     }
 
+    /// <summary>
+    /// Handles basic magic attacks, including calculation and animation.
+    /// </summary>
+    /// <param name="attacker">The unit attacking.</param>
+    /// <param name="target">The unit being attacked.</param>
     private async Task MagicAttack(BattleUnit attacker, BattleUnit target) {
         // Get convenience references to the units
         Unit a = attacker.unit;
         Unit t = target.unit;
 
-        // Calculate miss chance and determine if attack will miss
-        float accuracy = 1 - ((float) (t.effAgi - t.effDex) / a.effDex);
-        bool miss = UnityEngine.Random.value > accuracy;
+        // Determine if attack will hit
+        bool miss = DetermineMiss(a, t);
 
         if (miss) {
             // Display output for a miss
-            string message = a.unitName + " missed!";
-            uiHandler.DisplayDialogueText(message);
-            NumberPopup.DisplayTextPopup("Miss!", NumberType.NONE, target.transform);
+            ShowMiss(a, target);
         } else {
+            // Determine if crit
+            bool crit = DetermineCrit(a, t);
+
             // Calculate base damage
-            int damage = a.effMag + a.weapon.might - t.effRes;
+            int damage = a.effMag + a.weapon.might;
+            if (crit) damage -= t.effRes / 2;
+            else damage -= t.effRes;
 
             // Do extra processing to the damage
-            damage = OffsetValue(damage, 0.1f);
-            if (t.isDefending) damage /= 2;
-            if (damage < 0) damage = 0;
-
-            // Display animation
-            target.DoAnimation(a.weapon.weaponAnimation);
+            damage = ProcessDamage(damage, a, t);
 
             // Display damage output text and do damage
-            NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, target.transform);
-            battleSFXHandler.PlaySFX(a.weapon.attackSFX);
-            target.TakeDamage(damage);
-            _ = animationHandler.FlickerAnimation(target.gameObject);
-            string message = a.unitName + " did " + damage + " magic damage to " + t.unitName + ".";
-            uiHandler.DisplayDialogueText(message);
+            await DoDamage(damage, target, a, crit);
         }
     }
 
+    /// <summary>
+    /// Handles basic ranged attacks, including calculation and animation.
+    /// </summary>
+    /// <param name="attacker">The unit attacking.</param>
+    /// <param name="target">The unit being attacked.</param>
     private async Task RangedAttack(BattleUnit attacker, BattleUnit target) {
         // Get convenience references to the units
         Unit a = attacker.unit;
         Unit t = target.unit;
 
-        // Calculate crit chance and determine if attack will crit
+        // Determine if miss
+        bool miss = DetermineMiss(a, t);
+
+        if (miss) {
+            // Display output for a miss
+            ShowMiss(a, target);
+        } else {
+            // Calculate crit chance and determine if attack will crit
+            bool crit = DetermineCrit(a, t);
+
+            // Calculate damage
+            int damage = a.weapon.might;
+            if (!crit) damage -= t.effArm;
+            else damage -= t.effArm / 2;
+
+            // Do extra processing to the damage
+            damage = ProcessDamage(damage, a, t);
+
+            // Display output text, animation, and do damage
+            await DoDamage(damage, target, a, crit);
+        }
+    }
+
+    /// <summary>
+    /// Determines if an attack will miss based on the default
+    /// accuracy calculation.
+    /// </summary>
+    /// <param name="a">The unit performing the attack.</param>
+    /// <param name="t">The unit being attacked.</param>
+    /// <returns>Whether or not the attack will miss.</returns>
+    private bool DetermineMiss(Unit a, Unit t) {
+        float accuracy = 1 - ((float) (t.effAgi - t.effDex) / a.effDex);
+        bool miss = UnityEngine.Random.value > accuracy;
+        return miss;
+    }
+
+    /// <summary>
+    /// Determines if an attack will crit based on the default crit
+    /// calculation.
+    /// </summary>
+    /// <param name="a">The unit performing the attack.</param>
+    /// <param name="t">The unit being attacked.</param>
+    /// <returns>Whether or not the attack will crit.</returns>
+    private bool DetermineCrit(Unit a, Unit t) {
         float critChance = (float) (a.effDex - t.effAgi) / a.effDex;
-        bool crit = UnityEngine.Random.value < critChance;
+        float random = UnityEngine.Random.value;
+        bool crit = random < critChance;
 
-        // Calculate damage
-        int damage = a.weapon.might;
-        if (!crit) damage -= t.effArm;
+        return crit;
+    }
 
-        // Do extra processing to the damage
+    /// <summary>
+    /// Displays the information for a missed attack.
+    /// </summary>
+    /// <param name="a">The attacking Unit.</param>
+    /// <param name="target">The BattleUnit being attacked.</param>
+    private void ShowMiss(Unit a, BattleUnit target) {
+        // Display output for a miss
+        string message = a.unitName + " missed!";
+        uiHandler.DisplayDialogueText(message);
+        NumberPopup.DisplayTextPopup("Miss!", NumberType.NONE, target.transform);
+    }
+
+    /// <summary>
+    /// Performs default extra damage processing. Includes defend check,
+    /// weapon damage multiplier, and random 10% offset.
+    /// </summary>
+    /// <param name="damage">The base damage done by the attack.</param>
+    /// <param name="a">The attacking unit.</param>
+    /// <param name="t">The target unit.</param>
+    /// <returns></returns>
+    private int ProcessDamage(int damage, Unit a, Unit t) {
         damage = OffsetValue(damage, 0.1f);
         if (t.isDefending) damage /= 2;
+        damage = (int) (a.weapon.attackDamageMultiplier * damage);
         if (damage < 0) damage = 0;
 
-        // Display output text, animation, and do damage
-        string message = a.unitName + " did " + damage + (crit ? " critical" : "") + " ranged damage to " + t.unitName + ".";
-        uiHandler.DisplayDialogueText(message);
-        target.DoAnimation(a.weapon.weaponAnimation);
+        return damage;
+    }
+	
+    /// <summary>
+    /// Does damage and displays information on an enemy, including damage dealt in the
+    /// dialogue box and with damage number, the weapon animation, and the flicker animation.
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="target"></param>
+    /// <param name="a"></param>
+    /// <param name="damageType"></param>
+    /// <param name="crit"></param>
+    private async Task DoDamage(int damage, BattleUnit target, Unit a, bool crit = false) {
+        // Get convenience reference to target unit
+        Unit t = target.unit;
+
+        // Dispay initial popup and damage
+        string damageType = a.weapon.atkType.ToString().ToLower();
+        NumberPopup popup = NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, target.transform)
+                .GetComponent<NumberPopup>();
         battleSFXHandler.PlaySFX(a.weapon.attackSFX);
         target.TakeDamage(damage);
+        target.DoAnimation(a.weapon.weaponAnimation);
         _ = animationHandler.FlickerAnimation(target.gameObject);
-        NumberPopup.DisplayTextPopup(damage + "!", NumberType.Damage, target.transform);
+        int totalDamage = damage;
+
+        // Perform follow up attacks and update number each time
+        for (int i = 1; i < a.weapon.hits; i++) {
+            target.TakeDamage(damage);
+            totalDamage += damage;
+            popup.ChangeNumber(totalDamage);
+            await Task.Delay(100);
+        }
+
+        // Display dialogue message
+        string message = a.unitName + " did " + totalDamage + " " + (crit ? "critical " : "")
+            + damageType + " damage to " + t.unitName + ".";
+        uiHandler.DisplayDialogueText(message);
     }
-	#endregion
+    #endregion
 
 	#region Other Action Handlers
+    /// <summary>
+    /// Performs a skill.
+    /// </summary>
+    /// <param name="skill">The skill to perform.</param>
+    /// <param name="user">The unit using the skill.</param>
+    /// <param name="target">
+    /// The target of the skill. May be null for self healing skills,
+    /// AoE skills, and scripted skills that do not need a target.
+    /// </param>
     private async Task Skill(Skill skill, BattleUnit user, BattleUnit target = null) {
-        user.unit.cSP -= skill.costSP;
+        _ = user.ConsumeSP(skill.costSP);
         string message = user.unit.unitName + " uses " + skill.skillName + "!";
 
         if (skill.useScriptedSkillEffects) {
-            message += "\n" + await skill.doScriptedSkillEffect(user, target, battleSFXHandler);
+            message += "\n" + await skill.DoScriptedSkillEffect(user, target, battleSFXHandler);
             uiHandler.DisplayDialogueText(message);
         } else {
             message = user.unit.unitName + " uses " + skill.skillName + "!";
             switch (skill.targetType) {
                 case TargetType.SELF:
                     // Determine amount to heal and heal
-                    int heal = skill.getValue(user.unit);
+                    int heal = skill.GetValue(user.unit);
                     int value = user.Heal(heal);
 
                     // Display popup and recovery number
@@ -511,10 +646,10 @@ public class BattleController : MonoBehaviour {
                     break;
                 case TargetType.ENEMY:
                     // Determine damage to deal
-                    int damage = skill.getValue(user.unit, target.unit);
+                    int damage = skill.GetValue(user.unit, target.unit);
 
                     // Perform extra processing to the damage
-                    if (!skill.ignoreDefend) damage /= 2;
+                    if (!skill.ignoreDefend && target.unit.isDefending) damage /= 2;
                     damage = OffsetValue(damage, skill.offsetRange);
                     if (damage < 0) damage = 0;
 
@@ -535,7 +670,7 @@ public class BattleController : MonoBehaviour {
                     if (user == playerUnit) {
                         foreach (BattleUnit enemy in enemyUnits) {
                             // Get damage to this enemy
-                            damage = skill.getValue(user.unit, enemy.unit);
+                            damage = skill.GetValue(user.unit, enemy.unit);
 
                             // Do extra damage processing
                             if (!skill.ignoreDefend) damage /= 2;
@@ -564,12 +699,21 @@ public class BattleController : MonoBehaviour {
 		}
 	}
 	
+    /// <summary>
+    /// Performs a defend action.
+    /// </summary>
+    /// <param name="user">The unit performing the defend animation.</param>
     private void Defend(BattleUnit user) {
         user.unit.isDefending = true;
         string message = user.unit.unitName + " defends!";
         uiHandler.DisplayDialogueText(message);
 	}
 
+    /// <summary>
+    /// Uses an item.
+    /// </summary>
+    /// <param name="item">The item being used.</param>
+    /// <param name="user">The unit using the item.</param>
     private async Task Item(Consumable item, BattleUnit user) {
         string message = user.unit.unitName + " uses a " + item.itemName + ".\n";
         switch (item.type) {
@@ -626,6 +770,11 @@ public class BattleController : MonoBehaviour {
     #endregion
 
 	#region Win Condition Checkers
+    /// <summary>
+    /// Checks to see if the player won. Despawns any
+    /// defeated enemies as well.
+    /// </summary>
+    /// <returns>Whether or not the player won.</returns>
 	private async Task<bool> DidPlayerWin() {
         // Remove all dead enemies from the list
         for (int i = 0; i < enemyUnits.Count; i++) {
@@ -642,6 +791,11 @@ public class BattleController : MonoBehaviour {
         return enemyUnits.Count == 0;
 	}
 
+    /// <summary>
+    /// Checks to see if the player lost. Despawns player if they
+    /// have been defeated.
+    /// </summary>
+    /// <returns>Whether or not the player lost.</returns>
     private async Task<bool> DidPlayerLose() {
         // Check to see if player died
         if (playerUnit.unit.cHP <= 0) {
@@ -656,7 +810,12 @@ public class BattleController : MonoBehaviour {
 	#endregion
 
 	#region Battle Finish Handlers
+    /// <summary>
+    /// Actions that occur at the end of the battle if player won. Handles victory
+    /// fanfare, dialogue text, and returning to map.
+    /// </summary>
     private async void PlayerWon() {
+        combatActive = false;
         uiHandler.DisplayDialogueText("You win!");
         musicHandler.PlayVictoryFanfare();
 
@@ -665,26 +824,53 @@ public class BattleController : MonoBehaviour {
         SceneManager.LoadScene(currentScene);
 	}
 
+    /// <summary>
+    /// Actions that occur at the end of battle if player lost. Displays
+    /// game over text.
+    /// </summary>
     private async void PlayerLost() {
+        combatActive = false;
         uiHandler.DisplayDialogueText("You lose...");
 	}
 
 	#endregion
 
 	#region Button Events
+    /// <summary>
+    /// Triggered on enemy target button press.
+    /// Stores data about an enemy targeting button pressed.
+    /// </summary>
+    /// <param name="i">The button pressed. -1 means the back button was pressed.</param>
 	public void OnEnemyButton(int i) { selectedEnemy = i; }
+
+    /// <summary>
+    /// Triggered on skill button press.
+    /// Stores data about a skill button pressed.
+    /// </summary>
+    /// <param name="i">The button pressed. -1 means the back button was pressed.</param>
     public void OnSkillButton(int i) { selectedSpecial = i; }
+
+    /// <summary>
+    /// Triggered on item button press.
+    /// Stores data about an item button pressed.
+    /// </summary>
+    /// <param name="i">The button pressed. -1 means the back button was pressed.</param>
     public void OnItemButton(int i) { selectedItem = i; }
 
-    public async void ItemBackButton() {
-        await uiHandler.HideItemsWindow();
-        await uiHandler.ShowPlayerOptionWindow();
-	}
-
+    /// <summary>
+    /// Triggered on the player action menu button press.
+    /// Stores data about the button the player pressed.
+    /// </summary>
+    /// <param name="buttonPressed">The button pressed.</param>
 	public void OnBasicButton(int buttonPressed) { caughtButton = (WindowButton) buttonPressed; }
 	#endregion
 
 	#region Catchers
+    /// <summary>
+    /// Waits for the player to pick a WindowButton. Returns the
+    /// WindowButton selected when the player presses one.
+    /// </summary>
+    /// <returns>The pressed WindowButton.</returns>
 	private async Task<WindowButton> CatchPressedButton() {
         while (caughtButton < 0) await Task.Delay(50);
         WindowButton button = caughtButton;
@@ -692,6 +878,11 @@ public class BattleController : MonoBehaviour {
         return button;
     }
 
+    /// <summary>
+    /// Waits for the player to pick an enemy or go back. Returns the
+    /// index when the player makes a selection.
+    /// </summary>
+    /// <returns>-1 if the player clicked the back button. Otherwise the enemy index.</returns>
     private async Task<int> CatchSelectedEnemy() {
         while (selectedEnemy < -1) await Task.Delay(50);
         int enemy = selectedEnemy;
@@ -699,6 +890,11 @@ public class BattleController : MonoBehaviour {
         return enemy;
     }
 
+    /// <summary>
+    /// Waits for the player to pick an item or go back. Returns the
+    /// index when the player makes a selection.
+    /// </summary>
+    /// <returns>-1 if the player clicked the back button. Otherwise the item index.</returns>
     private async Task<int> CatchSelectedItem() {
         while (selectedItem < -1) await Task.Delay(50);
         int item = selectedItem;
@@ -706,6 +902,11 @@ public class BattleController : MonoBehaviour {
         return item;
     }
 
+    /// <summary>
+    /// Waits for the player to pick a special or go back. Returns the
+    /// index when the player makes a selection.
+    /// </summary>
+    /// <returns>-1 if the player clicked the back button. Otherwise the special index.</returns>
     private async Task<int> CatchSelectedSpecial() {
         while (selectedSpecial < -1) await Task.Delay(50);
         int special = selectedSpecial;
@@ -715,20 +916,40 @@ public class BattleController : MonoBehaviour {
     #endregion
 
     #region Helper Methods
+    /// <summary>
+    /// Actions to perform at the start of a unit's turn.
+    /// </summary>
+    /// <param name="unit">The BattleUnit starting their turn.</param>
     public void TurnStart(BattleUnit unit) {
         unit.unit.isDefending = false;
 	}
 
+    /// <summary>
+    /// Displays a unit's floating HP bar for the enemyBarDuration.
+    /// Hides the bar afterwards.
+    /// </summary>
+    /// <param name="unit">The BattleUnit to show the HP bar for.</param>
     private async void ShowHPBarAsync(BattleUnit unit) {
         unit.unitHUD.ShowHPBar();
         await Utilities.DoAfter(enemyBarDuration, () => unit.unitHUD.HideHPBar());
     }
 
+    /// <summary>
+    /// Displays a unit's floating SP bar for the enemyBarDuration.
+    /// Hides the bar afterwards.
+    /// </summary>
+    /// <param name="unit">The BattleUnit to show the SP bar for.</param>
     private async void ShowSPBarAsync(BattleUnit unit) {
         unit.unitHUD.ShowSPBar();
         await Utilities.DoAfter(enemyBarDuration, () => unit.unitHUD.HideSPBar());
     }
 
+    /// <summary>
+    /// Spawns in the player's BattleUnit.
+    /// </summary>
+    /// <param name="unit">The PlayerUnit corresponding to the player.</param>
+    /// <param name="location">The location to spawn the player.</param>
+    /// <returns>The instantiated BattleUnit for the player.</returns>
     private BattleUnit SpawnPlayerUnit(PlayerUnit unit, Transform location) {
         BattleUnit battleUnit = Instantiate(unit.unitPrefab, location).GetComponent<BattleUnit>();
         battleUnit.unit = unit;
@@ -736,6 +957,12 @@ public class BattleController : MonoBehaviour {
         return battleUnit;
     }
 
+    /// <summary>
+    /// Spawns in an enemy's BattleUnit.
+    /// </summary>
+    /// <param name="unit">The Unit corresponding to the enemy.</param>
+    /// <param name="location">The location to spawn the enemy.</param>
+    /// <returns>The instantiated BattleUnit for the enemy.</returns>
     private BattleUnit SpawnEnemyUnit(Unit unit, Transform location) {
         BattleUnit battleUnit = Instantiate(unit.unitPrefab, location).GetComponent<BattleUnit>();
         battleUnit.unit = Instantiate(unit);
@@ -743,6 +970,13 @@ public class BattleController : MonoBehaviour {
         return battleUnit;
     }
 
+    /// <summary>
+    /// Spawns in all the enemies. Amount of enemies spawned will never exceed the enemies
+    /// provided by the list nor will they exceed the amount of enemy spawn locations provided.
+    /// </summary>
+    /// <param name="units">The Units corresponding to the enemies.</param>
+    /// <param name="locations">The locations the enemies can spawn on the map.</param>
+    /// <returns>A list of the instantiated enemy BattleUnits.</returns>
     private List<BattleUnit> SpawnEnemies(List<Unit> units, List<Transform> locations) {
         List<BattleUnit> battleUnits = new List<BattleUnit>();
 
@@ -752,6 +986,13 @@ public class BattleController : MonoBehaviour {
         return battleUnits;
     }
 
+    /// <summary>
+    /// Randomly applies an offset to a value. The offset is given as a relative
+    /// float, meaning that a value of 0.1 means a 10% offset.
+    /// </summary>
+    /// <param name="value">The value to offset.</param>
+    /// <param name="offset">The actual offset itself.</param>
+    /// <returns>The offset value.</returns>
     private int OffsetValue(int value, float offset) {
         // Randomly offsets an integer in the range of the offset
         float multiplier = 1 + UnityEngine.Random.Range(-offset, offset);

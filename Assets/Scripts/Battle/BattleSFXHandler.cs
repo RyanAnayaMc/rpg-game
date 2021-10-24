@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#pragma warning disable IDE0044, IDE0051
 public class BattleSFXHandler : MonoBehaviour {
     /// <summary>
     /// Reference to the battle's BattleController for convenience.
@@ -13,14 +14,15 @@ public class BattleSFXHandler : MonoBehaviour {
     private AudioSource[] audioSources;
     private int index;
     [SerializeField]
-    private int audioSourceCount;
+    private int audioSourceCount = 5;
     [SerializeField]
     private AudioClip confirmSFX;
     [SerializeField]
     private AudioClip backSFX;
 
+
 	private void Start() {
-        audioSources = new AudioSource[audioSourceCount];
+		audioSources = new AudioSource[audioSourceCount];
         for (int i = 0; i < audioSourceCount; i++)
             audioSources[i] = Instantiate(sfxSource.gameObject).GetComponent<AudioSource>();
         index = 0;

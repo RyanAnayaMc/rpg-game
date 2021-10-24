@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
+#pragma warning disable IDE0051
+
 [RequireComponent(typeof(Animator))]
 public class EffectRenderer : MonoBehaviour {
     private Animator animator;
@@ -20,9 +22,10 @@ public class EffectRenderer : MonoBehaviour {
         StartCoroutine(animation.ToString());
 	}
 
-    IEnumerator NONE() { yield return null; }
 
-    IEnumerator SlashAttack() {
+	IEnumerator NONE() { yield return null; }
+
+	IEnumerator SlashAttack() {
         lightData.color = RGB(255, 210, 0);
 
         lightData.intensity = 78;
@@ -140,6 +143,18 @@ public class EffectRenderer : MonoBehaviour {
 
         lightData.intensity = 0;
     }
+
+    IEnumerator Rapidfire() {
+        yield return null;
+	}
+
+    IEnumerator RifleAttack() {
+        yield return null;
+	}
+
+    IEnumerator SlamAttack() {
+        yield return null;
+	}
 
     private Color RGB(int r, int g, int b, int a = 255) {
         return new Color(

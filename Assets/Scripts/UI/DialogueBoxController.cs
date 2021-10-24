@@ -49,10 +49,8 @@ public class DialogueBoxController : MonoBehaviour {
             face.sprite = characterFace;
 		}
 
-        if (animator.GetBool("isOpen")) {
-            Debug.Log("is Open");
-            return;
-        }
+        if (animator.GetBool("isOpen")) return;
+
         Text.text = "";
         animator.SetBool("isOpen", true);
         currentText = text;
@@ -197,8 +195,6 @@ public class DialogueBoxController : MonoBehaviour {
     /// <param name="options">The</param>
     public IEnumerator ShowOptions(params string[] options) {
         int optionCount = Mathf.Min(4, options.Length);
-
-        Debug.Log(optionCount);
 
         GameObject[] optionButtons = new GameObject[optionCount];
         Animator animator = dialogueSelectionWindow.GetComponent<Animator>();

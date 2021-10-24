@@ -66,6 +66,10 @@ public class NumberPopup : MonoBehaviour {
         functionTime = 0;
     }
 
+    public void ChangeNumber(int newNumber) {
+        numberText.text = newNumber.ToString();
+	}
+
     void Update() {
         if (functionTime < 1.5) {
             if (numType == NumberType.Damage || numType == NumberType.AbsorbDamage)
