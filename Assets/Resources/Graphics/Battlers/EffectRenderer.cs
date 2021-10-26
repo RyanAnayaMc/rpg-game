@@ -18,7 +18,6 @@ public class EffectRenderer : MonoBehaviour {
 
     public void DoAnimation(WeaponAnimation animation) {
         // Do animation sprite
-        animator.SetTrigger(animation.ToString());
         StartCoroutine(animation.ToString());
 	}
 
@@ -26,7 +25,8 @@ public class EffectRenderer : MonoBehaviour {
 	IEnumerator NONE() { yield return null; }
 
 	IEnumerator SlashAttack() {
-        lightData.color = RGB(255, 210, 0);
+        animator.SetTrigger("SlashAttack");
+        lightData.color = Utilities.RGB(255, 210, 0);
 
         lightData.intensity = 78;
 
@@ -39,7 +39,8 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator FireAttack() {
-        lightData.color = RGB(248, 80, 0);
+        animator.SetTrigger("FireAttack");
+        lightData.color = Utilities.RGB(248, 80, 0);
         int[] intensities = {300, 250, 275};
         lightData.intensity = 300;
 
@@ -57,11 +58,13 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator CastAnimation() {
+        animator.SetTrigger("CastAnimation");
         yield return null;
     }
 
     IEnumerator ThunderBowAttack() {
-        lightData.color = RGB(199, 255, 0);
+        animator.SetTrigger("ThunderBowAttack");
+        lightData.color = Utilities.RGB(199, 255, 0);
         lightData.intensity = 70;
 
         for (int i = 0; i < 35; i++) {
@@ -73,6 +76,7 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator HealAnimation() {
+        animator.SetTrigger("HealAnimation");
         lightData.color = Color.green;
         lightData.intensity = 65;
 
@@ -85,7 +89,8 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator FireSlashAttack() {
-        lightData.color = RGB(255, 223, 0);
+        animator.SetTrigger("FireSlashAttack");
+        lightData.color = Utilities.RGB(255, 223, 0);
         lightData.intensity = 25;
 
         for (int i = 0; i < 25; i++) {
@@ -103,7 +108,8 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator GunAttack() {
-        lightData.color = RGB(255, 221, 0);
+        animator.SetTrigger("GunAttack");
+        lightData.color = Utilities.RGB(255, 221, 0);
         lightData.intensity = 30;
 
         for (int i = 0; i < 30; i++) {
@@ -115,7 +121,8 @@ public class EffectRenderer : MonoBehaviour {
 	}
 
     IEnumerator MendAnimation() {
-        lightData.color =  RGB(0, 255, 234);
+        animator.SetTrigger("MendAnimation");
+        lightData.color =  Utilities.RGB(0, 255, 234);
         lightData.intensity = 50;
 
         for (int i = 0; i < 50; i++) {
@@ -127,7 +134,8 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator RecoveryAnimation() {
-        lightData.color = RGB(0, 180, 255);
+        animator.SetTrigger("RecoveryAnimation");
+        lightData.color = Utilities.RGB(0, 180, 255);
         lightData.intensity = 55;
 
         for (int i = 0; i < 30; i++) {
@@ -145,23 +153,17 @@ public class EffectRenderer : MonoBehaviour {
     }
 
     IEnumerator Rapidfire() {
+        animator.SetTrigger("Rapidfire");
         yield return null;
 	}
 
     IEnumerator RifleAttack() {
+        animator.SetTrigger("RifleAttack");
         yield return null;
 	}
 
     IEnumerator SlamAttack() {
+        animator.SetTrigger("SlamAttack");
         yield return null;
-	}
-
-    private Color RGB(int r, int g, int b, int a = 255) {
-        return new Color(
-            (float) r / 255,
-            (float) g / 255,
-            (float) b / 255,
-            (float) a / 255
-        );
 	}
 }
