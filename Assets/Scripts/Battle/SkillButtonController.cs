@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 
+#pragma warning disable IDE0044
+
 public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
     public TMP_Text elementName;
     [SerializeField]
@@ -21,7 +23,7 @@ public class SkillButtonController : MonoBehaviour, IPointerEnterHandler, IPoint
     /// Puts the skill icon, name, and SP cost on the button text.
     /// </summary>
     /// <param name="skill">The skill to use for the data.</param>
-    public void setData(ButtonTextable textable) {
+    public void SetData(ButtonTextable textable) {
         element = textable;
         elementName.text = textable.GetName();
         elementNumberText.text = textable.GetNumber().ToString();

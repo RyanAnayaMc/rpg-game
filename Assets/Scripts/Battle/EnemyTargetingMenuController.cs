@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#pragma warning disable IDE0044
+
 public class EnemyTargetingMenuController : MonoBehaviour {
     /// <summary>
     /// Reference to the battle's BattleController for convenience.
@@ -42,7 +44,7 @@ public class EnemyTargetingMenuController : MonoBehaviour {
             SkillButtonController buttonController = enemyButton.GetComponent<SkillButtonController>();
             enemyButtons.Add(buttonController);
             buttonController.dialogueBox = dialogueBox;
-            buttonController.setData(enemy);
+            buttonController.SetData(enemy);
             buttonController.elementName.text = enemy.unit.unitName;
 
             // Register the listener for the button

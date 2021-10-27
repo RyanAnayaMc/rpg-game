@@ -66,7 +66,7 @@ public class CharacterMovementController : MonoBehaviour {
         float moveX = isPlayerLocked ? 0 : (Input.GetAxis("Horizontal") * speed) * (1 + sprint * sprintModifier);
         float moveZ = isPlayerLocked ? 0 : (Input.GetAxis("Vertical") * speed) * (1 + sprint * sprintModifier);
 
-        float moveY = 0;
+        float moveY;
 
         if (isPlayerLocked) {
             moveY = 0;

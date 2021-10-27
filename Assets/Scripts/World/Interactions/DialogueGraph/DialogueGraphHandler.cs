@@ -5,6 +5,8 @@ using UnityEngine;
 using TMPro;
 using XNode;
 
+#pragma warning disable IDE0051, IDE0060
+
 public class DialogueGraphHandler : MonoBehaviour {
     public DialogueGraph graph;
 	public DialogueBoxController dialogueBox;

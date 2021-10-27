@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+
+#pragma warning disable IDE0044
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class BattleUnit : MonoBehaviour, ButtonTextable {
@@ -40,6 +43,8 @@ public class BattleUnit : MonoBehaviour, ButtonTextable {
         if (isDead)
             unit.cHP = 0;
 
+        UpdateHP();
+
         return isDead;
     }
 
@@ -48,7 +53,8 @@ public class BattleUnit : MonoBehaviour, ButtonTextable {
     /// </summary>
     /// <param name="animation"></param>
     public void DoAnimation(WeaponAnimation animation) {
-        effectRenderer.GetComponent<EffectRenderer>().DoAnimation(animation);
+        // effectRenderer.GetComponent<EffectRenderer>().DoAnimation(animation);
+        BattleAnimations.INSTANCE.DoAnimationOn(animation, effectRenderer.transform);
 	}
 
     /// <summary>
@@ -60,6 +66,8 @@ public class BattleUnit : MonoBehaviour, ButtonTextable {
         if (unit.cHP + heal > unit.effMaxHP)
             heal = unit.effMaxHP - unit.cHP;
         unit.cHP += heal;
+
+        UpdateHP();
 
         return heal;
     }
@@ -74,8 +82,26 @@ public class BattleUnit : MonoBehaviour, ButtonTextable {
             recover = unit.effMaxSP - unit.cSP;
         unit.cSP += recover;
 
+        UpdateSP();
+
         return recover;
     }
+
+    /// <summary>
+    /// Consumes unit's SP by a given amount if possible.
+    /// cSP will never be below zero.
+    /// </summary>
+    /// <param name="consumption">The amount of SP to try to consume.</param>
+    /// <returns>Whether or not the SP was consumed.</returns>
+    public bool ConsumeSP(int consumption) {
+        if (unit.cSP < consumption)
+            return false;
+        else {
+            unit.cSP -= consumption;
+            UpdateSP();
+            return true;
+		}
+	}
 
     /// <summary>
     /// Updates the unit's HP and SP on their HUD.
@@ -100,7 +126,7 @@ public class BattleUnit : MonoBehaviour, ButtonTextable {
 	}
 
 	public string GetDescriptionText() {
-        return "Left click to attack " + unit.unitName + " Lv. " + unit.level + ".";
+        return "Lv. " + unit.level + " " + unit.unitName;
 	}
 
 	public string GetName() {

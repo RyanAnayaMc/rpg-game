@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+
+#pragma warning disable IDE0044
 
 public enum TargetType {
     NONE,
@@ -81,6 +84,16 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// </summary>
     public TargetType targetType;
 
+    /// <summary>
+    /// Whether or not the skill ignores defense damage reduction
+    /// </summary>
+    public bool ignoreDefend;
+
+    /// <summary>
+    /// The range that the damage can be offset
+    /// </summary>
+    public float offsetRange;
+
     [SerializeField]
     private float unitChpMultiplier;
     [SerializeField]
@@ -140,7 +153,7 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// <param name="user">The user of the skill.</param>
     /// <param name="enemy">The Unit targeted by the skill.</param>
     /// <returns></returns>
-    public int getValue(Unit user, Unit enemy) {
+    public int GetValue(Unit user, Unit enemy) {
         // Get skill damage
         float value =
             user.cHP * unitChpMultiplier +
@@ -179,7 +192,7 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// <param name="user">The user of the skill.</param>
     /// <param name="enemy">The Unit targeted by the skill.</param>
     /// <returns></returns>
-    public int getValue(Unit user) {
+    public int GetValue(Unit user) {
         // Get skill damage
         float value =
             user.cHP * unitChpMultiplier +
@@ -207,11 +220,11 @@ public class Skill : ScriptableObject, ButtonTextable {
     /// <param name="enemy">The target of the skill.</param>
     /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
     /// <returns>The dialogue text to display for the skill.</returns>
-    public string doScriptedSkillEffect(BattleUnit user, BattleUnit enemy, BattleSFXHandler sfxHandler) {
+    public async Task<string> DoScriptedSkillEffect(BattleUnit user, BattleUnit enemy, BattleSFXHandler sfxHandler) {
         if (!useScriptedSkillEffects)
             return null;
 
-        return scriptedSkillEffect.DoSkill(user, enemy, sfxHandler);
+        return await scriptedSkillEffect.DoSkill(user, enemy, sfxHandler);
     }
 
 	public string GetDescriptionText() {
@@ -229,75 +242,4 @@ public class Skill : ScriptableObject, ButtonTextable {
 	public Sprite GetIcon() {
         return icon;
 	}
-
-    /// <summary>
-    /// Performs the skill.
-    /// </summary>
-    /// <param name="attacker">The unit using the skill</param>
-    /// <param name="defender">
-    /// The target of the skill. Meaningless for skills that
-    /// target all enemies or heal skills.
-    /// </param>
-    /// <param name="sfxHandler">The battle's BattleSFXHandler</param>
-    /// <returns> The dialogue message</returns>
-    public string DoSkill(BattleUnit attacker, BattleUnit defender, BattleSFXHandler sfxHandler) {
-        string diagMsg = attacker.unit.unitName + " used " + skillName + "!\n";
-        int value = 0;
-        BattleAnimationHandler animationHandler = sfxHandler.battleController.animationHandler;
-
-        if (!useScriptedSkillEffects) {
-            switch (targetType) {
-                case TargetType.ENEMY:
-                    int damage = getValue(attacker.unit, defender.unit);
-
-                    if (defender.unit.isDefending)
-                        damage /= 2;
-
-                    if (damage < 0)
-                        damage = 0;
-
-                    diagMsg += attacker.unit.unitName + " did " + damage + " special damage to " + defender.unit.unitName + ".";
-                    defender.TakeDamage(damage);
-                    
-                    NumberPopup.DisplayNumberPopup(damage, NumberType.Damage, defender.transform);
-                    defender.DoAnimation(skillAnimation);
-                    sfxHandler.PlaySFX(skillSFX);
-                    animationHandler.FlickerAnimation(defender.gameObject);
-
-                    value = damage;
-                    break;
-                case TargetType.SELF:
-                    int heal = getValue(attacker.unit);
-                    diagMsg += attacker.unit.unitName + " healed " + heal + " HP.";
-                    value = attacker.Heal(heal);
-
-                    NumberPopup.DisplayNumberPopup(value, NumberType.Heal, attacker.transform);
-                    break;
-                case TargetType.ALLENEMY:
-                    int totalDamage = 0;
-
-                    foreach (BattleUnit enemy in sfxHandler.battleController.enemyUnits) {
-                        int temp = getValue(attacker.unit, enemy.unit);
-                        if (enemy.unit.isDefending)
-                            temp /= 2;
-                        if (temp < 0)
-                            temp = 0;
-
-                        totalDamage += temp;
-
-                        NumberPopup.DisplayNumberPopup(temp, NumberType.Damage, enemy.transform);
-                        enemy.TakeDamage(temp);
-                        enemy.DoAnimation(skillAnimation);
-                        animationHandler.FlickerAnimation(enemy.gameObject);
-                        sfxHandler.PlaySFX(skillSFX);
-                    }
-
-                    diagMsg += attacker.unit.unitName + " did a total of " + totalDamage + " special damage!";
-                    break;
-            }
-        } else
-            diagMsg += doScriptedSkillEffect(attacker, defender, sfxHandler);
-
-        return diagMsg;
-    }
 }

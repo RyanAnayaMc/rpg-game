@@ -63,6 +63,16 @@ public class Weapon : Item {
     /// </summary>
     public AudioClip castSFX;
 
+    /// <summary>
+    /// The multiplier to apply to this weapon's attacks
+    /// </summary>
+    public float attackDamageMultiplier = 1;
+
+    /// <summary>
+    /// The number of hits this weapon does when attacking
+    /// </summary>
+    public int hits = 1;
+
     public override string GetDescriptionText() {
         return base.itemDescription + " <color=green>" + might + "<color=white>MT";
 	}

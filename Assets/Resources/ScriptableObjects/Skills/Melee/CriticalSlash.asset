@@ -14,28 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: b11f9c52da2945740b5078d84177a9ab, type: 3}
   skillName: Critical Slash
-  skillDescription: A strong attack that scales on STR and DEX.
+  skillDescription: A strong attack that scales on STR and DEX. Damage dealt has
+    no randomness.
   requiresWeaponType: 1
   requiredAtkType: 0
-  costSP: 4
+  costSP: 6
   useScriptedSkillEffects: 0
   needsTarget: 0
   scriptedSkillEffect: {fileID: 0}
   skillSFX: {fileID: 8300000, guid: bc0ec6c698c39ad49afc75af080bb418, type: 3}
   skillAnimation: 1
   targetType: 2
+  ignoreDefend: 0
+  offsetRange: 0
   unitChpMultiplier: 0
   unitMhpMultiplier: 0
   unitCspMultiplier: 0
   unitMspMultiplier: 0
-  unitStrMultiplier: 0.7
+  unitStrMultiplier: 0.8
   unitMagMultiplier: 0
-  unitDexMultiplier: 0.8
+  unitDexMultiplier: 0.9
   unitDefMultiplier: 0
   unitResMultiplier: 0
   unitArmMultiplier: 0
   unitAgiMultiplier: 0
-  unitMtMultiplier: 0
+  unitMtMultiplier: 0.85
   enemyChpMultiplier: 0
   enemyMhpMultiplier: 0
   enemyCspMultiplier: 0

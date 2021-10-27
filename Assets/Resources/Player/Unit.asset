@@ -16,8 +16,8 @@ MonoBehaviour:
   unitName: Bob
   weaponType: 0
   unitIcon: {fileID: 0}
-  weaponId: 3
-  apparelID: -1
+  weaponId: 17
+  apparelID: 1
   accessoryID: -1
   level: 7
   cHP: 200
