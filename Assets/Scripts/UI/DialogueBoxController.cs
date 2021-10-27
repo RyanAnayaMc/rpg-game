@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+#pragma warning disable IDE0051
+
 public class DialogueBoxController : MonoBehaviour {
     public TMP_Text Text;
     private Animator animator;
@@ -75,7 +77,7 @@ public class DialogueBoxController : MonoBehaviour {
         if (isTyping)
             Text.text = currentText;
 
-        StartCoroutine(displayText());
+        StartCoroutine(DisplayText());
 	}
 
     /// <summary>
@@ -87,20 +89,20 @@ public class DialogueBoxController : MonoBehaviour {
 
     public void OnDialogueOpen() {
         StopAllCoroutines();
-        StartCoroutine(displayText());
+        StartCoroutine(DisplayText());
     }
 
     public void OnDialogueClose() {
         StopAllCoroutines();
     }
 
-    private IEnumerator displayText() {
+    private IEnumerator DisplayText() {
         Text.text = "";
 
         isTyping = true;
 
-        originalText = stripHTML(currentText);
-        string displayedText = "";
+        originalText = StripHTML(currentText);
+        string displayedText;
         int alphaIndex = 0;
 
         foreach (char c in originalText.ToCharArray()) {
@@ -133,7 +135,7 @@ public class DialogueBoxController : MonoBehaviour {
     /// from a string.
     /// </summary>
     /// <returns>String with HTML stripped out.</returns>
-    private string stripHTML(string str) {
+    private string StripHTML(string str) {
         int index1 = -1;
         int index2 = -1;
 
@@ -160,7 +162,7 @@ public class DialogueBoxController : MonoBehaviour {
 
         string newStr = str.Substring(0, index1) + str.Substring(index2 + 1);
 
-        return stripHTML(newStr);
+        return StripHTML(newStr);
     }
 
     /// <summary>

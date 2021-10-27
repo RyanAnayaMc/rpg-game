@@ -76,7 +76,7 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 		foreach (InventoryItem<Consumable> item in consumables) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
-			controller.setData(item);
+			controller.SetData(item);
 			controller.useTextField = true;
 			controller.textField = infoText;
 
@@ -93,7 +93,7 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 		foreach (InventoryItem<Weapon> item in weapons) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
-			controller.setData(item);
+			controller.SetData(item);
 			controller.useTextField = true;
 			controller.textField = infoText;
 
@@ -110,7 +110,7 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 		foreach (InventoryItem<Apparel> item in apparel) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
-			controller.setData(item);
+			controller.SetData(item);
 			controller.useTextField = true;
 			controller.textField = infoText;
 
@@ -127,7 +127,7 @@ public class InventoryMenu : MonoBehaviour, IMenuWindow {
 		foreach (InventoryItem<Accessory> item in accessories) {
 			GameObject obj = Instantiate(buttonPrefab, content);
 			SkillButtonController controller = obj.GetComponent<SkillButtonController>();
-			controller.setData(item);
+			controller.SetData(item);
 			controller.useTextField = true;
 			controller.textField = infoText;
 

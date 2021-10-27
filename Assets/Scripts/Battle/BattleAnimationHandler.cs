@@ -19,7 +19,9 @@ public enum WeaponAnimation {
     RecoveryAnimation,
     Rapidfire,
     RifleAttack,
-    SlamAttack
+    SlamAttack,
+    ExplosionAttack,
+    BigExplosionAttack
 }
 
 public class BattleAnimationHandler : MonoBehaviour {

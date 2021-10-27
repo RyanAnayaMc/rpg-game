@@ -170,7 +170,7 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 			SkillButtonController controller = button.GetComponent<SkillButtonController>();
 			buttons.Add(button);
 
-			controller.setData(weapon);
+			controller.SetData(weapon);
 			controller.useTextField = true;
 			controller.textField = infoText;
 			int itemId = Atlas.GetID(weapon.item);
@@ -196,7 +196,7 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 			SkillButtonController controller = button.GetComponent<SkillButtonController>();
 			buttons.Add(button);
 
-			controller.setData(apparelItem);
+			controller.SetData(apparelItem);
 			controller.useTextField = true;
 			controller.textField = infoText;
 			int itemId = Atlas.GetID(apparelItem.item);
@@ -222,7 +222,7 @@ public class EquipmentMenu : MonoBehaviour, IMenuWindow {
 			SkillButtonController controller = button.GetComponent<SkillButtonController>();
 			buttons.Add(button);
 
-			controller.setData(accessory);
+			controller.SetData(accessory);
 			controller.useTextField = true;
 			controller.textField = infoText;
 			int itemId = Atlas.GetID(accessory.item);

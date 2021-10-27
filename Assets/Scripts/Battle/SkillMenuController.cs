@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+#pragma warning disable IDE0044
+
 public class SkillMenuController : MonoBehaviour {
     /// <summary>
     /// Reference to the battle's BattleController for convenience.
@@ -58,7 +60,7 @@ public class SkillMenuController : MonoBehaviour {
             SkillButtonController buttonController = skillButton.GetComponent<SkillButtonController>();
             skillButtons.Add(buttonController);
             buttonController.dialogueBox = dialogueBox;
-            buttonController.setData(skill);
+            buttonController.SetData(skill);
             if (battleController.playerUnit.unit.cSP < skill.costSP)
                 buttonController.RedNumber();
 

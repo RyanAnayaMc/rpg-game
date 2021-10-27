@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+#pragma warning disable IDE0044
+
 public class ItemMenuController : MonoBehaviour {
     /// <summary>
     /// Reference to the battle's BattleController for convenience.
@@ -43,7 +45,7 @@ public class ItemMenuController : MonoBehaviour {
             SkillButtonController buttonController = itemButton.GetComponent<SkillButtonController>();
             itemButtons.Add(buttonController);
             buttonController.dialogueBox = dialogueBox;
-            buttonController.setData(item);
+            buttonController.SetData(item);
 
             // Register the listener for the button
             Button button = itemButton.GetComponent<Button>();
