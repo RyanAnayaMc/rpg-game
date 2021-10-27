@@ -81,6 +81,7 @@ public class BattleAnimations {
     /// <param name="animation">The animation to perform.</param>
     /// <param name="target">The target to perform the animation on.</param>
     public void DoAnimationOn(WeaponAnimation animation, Transform target) {
+        Debug.Log("Instantiating effect " + animation.ToString());
         GameObject.Instantiate(animations[animation], target);
 	}
 }

@@ -20,6 +20,6 @@ public static class Paths {
 	public const string RAPIDFIRE_ANIMATION_PATH = "Graphics/Effects/RapidfireEffect";
 	public const string RECOVER_ANIMATION_PATH = "Graphics/Effects/RecoverAnimation";
 	public const string SLAM_ATTACK_PATH = "Graphics/Effects/SlamAttack";
-	public const string SLASH_ATTACK_PATH = "Graphics/Effect/SlashEffectHDRP";
-	public const string THUNDER_BOW_ATTACK_PATH = "Graphics/Effect/ThunderBowAttack";
+	public const string SLASH_ATTACK_PATH = "Graphics/Effects/SlashEffectHDRP";
+	public const string THUNDER_BOW_ATTACK_PATH = "Graphics/Effects/ThunderBowAttack";
 }

@@ -1848,6 +1848,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleModule
       objectReference: {fileID: 0}
+    - target: {fileID: 7543248115721842943, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: playerLocation
+      value: 
+      objectReference: {fileID: 1908869457}
+    - target: {fileID: 7543248115721842943, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: enemyBarDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7543248115721842943, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: enemyLocations.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7543248115721842943, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: enemyLocations.Array.data[0]
+      value: 
+      objectReference: {fileID: 1825083914}
+    - target: {fileID: 7543248115721842943, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: enemyLocations.Array.data[1]
+      value: 
+      objectReference: {fileID: 300270941}
+    - target: {fileID: 7543248115721842943, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: enemyLocations.Array.data[2]
+      value: 
+      objectReference: {fileID: 1041538839}
     - target: {fileID: 7705182046448146411, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

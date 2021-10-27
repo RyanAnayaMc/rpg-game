@@ -15,7 +15,7 @@ public class LightFireEffect : MonoBehaviour {
 	private float defaultIntensity;
 
 	[SerializeField]
-	private readonly bool useRandomOffset;
+	private bool useRandomOffset;
 
 	[SerializeField]
 	private float setOffset;
@@ -24,10 +24,10 @@ public class LightFireEffect : MonoBehaviour {
 	private float speedMultiplier;
 
 	[SerializeField]
-	private readonly float minimumMultiplier;
+	private float minimumMultiplier;
 
 	[SerializeField]
-	private readonly float maximumMultiplier;
+	private float maximumMultiplier;
 
 	private void Start() {
 		lightData = GetComponent<HDAdditionalLightData>();
