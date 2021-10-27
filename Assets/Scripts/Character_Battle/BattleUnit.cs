@@ -54,7 +54,7 @@ public class BattleUnit : MonoBehaviour, ButtonTextable {
     /// <param name="animation"></param>
     public void DoAnimation(WeaponAnimation animation) {
         // effectRenderer.GetComponent<EffectRenderer>().DoAnimation(animation);
-        BattleAnimations.INSTANCE.DoAnimationOn(animation, transform);
+        BattleAnimations.INSTANCE.DoAnimationOn(animation, effectRenderer.transform);
 	}
 
     /// <summary>
