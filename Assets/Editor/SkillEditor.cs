@@ -59,6 +59,8 @@ public class SkillEditor : Editor {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("enemyMtMultiplier"));
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("flatValue"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("ignoreDefend"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("offsetRange"));
         }
 
         serializedObject.ApplyModifiedProperties();

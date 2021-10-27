@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+#pragma warning disable IDE0090, IDE1006
+
 public enum AccessoryEffect {
     None,
     ExtraTurn,
@@ -48,7 +50,7 @@ public class Accessory : Item {
 	}
 
     public (bool isCompatible, string errorMessage) CheckCompatibility(Weapon weapon) {
-        string msg = "";
+        string msg;
 
         switch (weapon.atkType) {
             case AttackType.Melee:
@@ -96,9 +98,9 @@ public class Accessory : Item {
 	}
 
     public string GetInfo() {
-        StringBuilder stringBuilder = new StringBuilder();
+		StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.Append(GetRichText("Max HP", maxHPChange))
+		stringBuilder.Append(GetRichText("Max HP", maxHPChange))
             .Append(GetRichText("Max SP", maxSPChange))
             .Append(GetRichText("STR", strChange))
             .Append(GetRichText("MAG", magChange))
@@ -122,26 +124,17 @@ public class Accessory : Item {
     }
 
     private string GetRichText(AccessoryEffect effect) {
-        switch (effect) {
-            case AccessoryEffect.ExtraTurn:
-                return "Extra Turn";
-            case AccessoryEffect.DamageReductionPercent:
-                return effectParameter + "% Damage Reduction";
-            case AccessoryEffect.DamageReductionFlat:
-                return "-" + effectParameter + " Damage Taken";
-            case AccessoryEffect.HPRecoverPerTurn:
-                return effectParameter + " HP/turn";
-            case AccessoryEffect.SPRecoverPerTurn:
-                return effectParameter + " SP/turn";
-            case AccessoryEffect.Fury:
-                return "Fury";
-            case AccessoryEffect.Thermal:
-                return "Thermal";
-            case AccessoryEffect.ExtraHit:
-                return effectParameter + "% Extra Hit";
-            default:
-                return "";
-		}
+		return effect switch {
+			AccessoryEffect.ExtraTurn => "Extra Turn",
+			AccessoryEffect.DamageReductionPercent => effectParameter + "% Damage Reduction",
+			AccessoryEffect.DamageReductionFlat => "-" + effectParameter + " Damage Taken",
+			AccessoryEffect.HPRecoverPerTurn => effectParameter + " HP/turn",
+			AccessoryEffect.SPRecoverPerTurn => effectParameter + " SP/turn",
+			AccessoryEffect.Fury => "Fury",
+			AccessoryEffect.Thermal => "Thermal",
+			AccessoryEffect.ExtraHit => effectParameter + "% Extra Hit",
+			_ => "",
+		};
 	}
 
     public override int GetNumber() {

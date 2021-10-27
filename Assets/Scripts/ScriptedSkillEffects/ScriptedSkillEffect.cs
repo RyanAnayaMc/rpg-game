@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -14,5 +15,5 @@ public abstract class ScriptedSkillEffect : MonoBehaviour {
     /// <param name="enemy">The enemy of the skill user.</param>
     /// <param name="sfxHandler">The battle's BattleSFXHandler.</param>
     /// <returns>The dialogue text to display.</returns>
-    public abstract string DoSkill(BattleUnit user, BattleUnit enemy, BattleSFXHandler sfxHandler);
+    public abstract Task<string> DoSkill(BattleUnit user, BattleUnit enemy, BattleSFXHandler sfxHandler);
 }

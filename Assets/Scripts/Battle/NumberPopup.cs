@@ -66,11 +66,15 @@ public class NumberPopup : MonoBehaviour {
         functionTime = 0;
     }
 
+    public void ChangeNumber(int newNumber) {
+        numberText.text = newNumber.ToString();
+	}
+
     void Update() {
         if (functionTime < 1.5) {
             if (numType == NumberType.Damage || numType == NumberType.AbsorbDamage)
                 transform.localPosition = getPositionDamage();
-            else if (numType == NumberType.Heal || numType == NumberType.SpHeal)
+            else if (numType == NumberType.Heal || numType == NumberType.SpHeal || numType == NumberType.NONE)
                 transform.localPosition = getPositionRecover();
         } else {
             if (numberText.alpha > 0)

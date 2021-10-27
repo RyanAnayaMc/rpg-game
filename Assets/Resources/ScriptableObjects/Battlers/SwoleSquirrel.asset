@@ -24,7 +24,7 @@ MonoBehaviour:
   maxHP: 1000
   cSP: 45
   maxSP: 45
-  str: 65
+  str: 55
   mag: 25
   dex: 30
   def: 40
@@ -36,5 +36,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 841408cb381ca454fa72c09e45c844d8, type: 2}
   - {fileID: 11400000, guid: d883e208e4b08684784515f9a9bef23c, type: 2}
   - {fileID: 11400000, guid: e71d470cf039efd409a32f56d436b90a, type: 2}
-  - {fileID: 11400000, guid: ce1136145612b4f4ab6b4ad775e93936, type: 2}
+  - {fileID: 11400000, guid: 22fd397702bc09445acf4492a88ec5b0, type: 2}
   showStats: 1

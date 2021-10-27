@@ -38,6 +38,8 @@ public class WeaponEditor : Editor
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("might"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDamageMultiplier"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("hits"));
 
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("castSFX"));

@@ -23,7 +23,9 @@ MonoBehaviour:
   magicType: 0
   rangedType: 3
   castAnimation: 0
-  weaponAnimation: 8
-  might: 90
-  attackSFX: {fileID: 8300000, guid: f0e844e37acf7374f92e5869493e1892, type: 3}
+  weaponAnimation: 11
+  might: 120
+  attackSFX: {fileID: 8300000, guid: 1f198e9a789b433479a286dd6919f8fd, type: 3}
   castSFX: {fileID: 0}
+  attackDamageMultiplier: 0.3
+  hits: 4

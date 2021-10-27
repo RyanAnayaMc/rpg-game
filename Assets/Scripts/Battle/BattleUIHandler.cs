@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
 
 public class BattleUIHandler : MonoBehaviour {
     [SerializeField]
@@ -42,7 +43,7 @@ public class BattleUIHandler : MonoBehaviour {
     /// </summary>
     /// <param name="playerUnit">The Unit representing the player.</param>
     /// <param name="enemyUnit">The Unit representing the enemy.</param>
-    public void setupHUD(BattleUnit playerUnit, List<BattleUnit> enemyUnits) {
+    public async Task setupHUD(BattleUnit playerUnit, List<BattleUnit> enemyUnits) {
         skillMenuController.battleController = battleController;
         itemMenuController.battleController = battleController;
         enemyTargetingMenuController.battleController = battleController;
@@ -88,7 +89,7 @@ public class BattleUIHandler : MonoBehaviour {
 
         // Hide the skill menu but make sure it is enabled
         skillMenuController.gameObject.SetActive(true);
-        animationHandler.stretchOut(skillMenuController.gameObject, 1f);
+        await animationHandler.StretchOut(skillMenuController.gameObject, 1f);
     }
 
     /// <summary>
@@ -99,9 +100,9 @@ public class BattleUIHandler : MonoBehaviour {
     }
 
     private IEnumerator showPlayerPhaseCoroutine() {
-        animationHandler.fadeIn(playerPhaseUI, 0.03f);
+        animationHandler.FadeIn(playerPhaseUI, 0.03f);
         yield return new WaitForSeconds(1);
-        animationHandler.fadeOut(playerPhaseUI, 0.03f);
+        animationHandler.FadeOut(playerPhaseUI, 0.03f);
     }
 
     /// <summary>
@@ -112,77 +113,77 @@ public class BattleUIHandler : MonoBehaviour {
     }
 
     private IEnumerator showEnemyPhaseCoroutine() {
-        animationHandler.fadeIn(enemyPhaseUI, 0.03f);
+        animationHandler.FadeIn(enemyPhaseUI, 0.03f);
         yield return new WaitForSeconds(1);
-        animationHandler.fadeOut(enemyPhaseUI, 0.03f);
+        animationHandler.FadeOut(enemyPhaseUI, 0.03f);
     }
 
     /// <summary>
     /// Shows the player's option window
     /// </summary>
-    public void ShowPlayerOptionWindow() {
-        animationHandler.stretchIn(playerOptionWindow, 0.1f);
+    public async Task ShowPlayerOptionWindow() {
+        await animationHandler.StretchIn(playerOptionWindow, 0.1f);
     }
 
     /// <summary>
     /// Hides the player's option window
     /// </summary>
-    public void HidePlayerOptionWindow() {
-        animationHandler.stretchOut(playerOptionWindow, 0.2f);
+    public async Task HidePlayerOptionWindow() {
+        await animationHandler.StretchOut(playerOptionWindow, 0.2f);
     }
 
     /// <summary>
     /// Shows the skill menu
     /// </summary>
-    public void ShowSkillWindow() {
+    public async Task ShowSkillWindow() {
         GameObject skillWindow = skillMenuController.gameObject;
         skillMenuController.SetSkillMenu();
-        animationHandler.stretchIn(skillWindow, 0.1f);
+        await animationHandler.StretchIn(skillWindow, 0.1f);
     }
 
     /// <summary>
     /// Hides the skill menu
     /// </summary>
-    public void HideSkillWindow() {
+    public async Task HideSkillWindow() {
         GameObject skillWindow = skillMenuController.gameObject;
-        animationHandler.stretchOut(skillWindow, 0.1f);
+        await animationHandler.StretchOut(skillWindow, 0.1f);
     }
 
     /// <summary>
     /// Shows the enemy targeting menu
     /// </summary>
-    public void ShowEnemyTargetingWindow() {
+    public async Task ShowEnemyTargetingWindow() {
         GameObject enemyWindow = enemyTargetingMenuController.gameObject;
         enemyTargetingMenuController.SetEnemyMenu(battleController.enemyUnits);
-        animationHandler.stretchIn(enemyWindow, 0.1f);
+        await animationHandler.StretchIn(enemyWindow, 0.1f);
     }
 
     /// <summary>
     /// Hides the enemy targeting menu
     /// </summary>
-    public void HideEnemyTargetingWindow() {
+    public async Task HideEnemyTargetingWindow() {
         GameObject enemyWindow = enemyTargetingMenuController.gameObject;
         enemyTargetingMenuController.ResetEnemyMenu();
-        animationHandler.stretchOut(enemyWindow, 0.1f);
+        await animationHandler.StretchOut(enemyWindow, 0.1f);
     }
 
     /// <summary>
     /// Shows the Item menu
     /// </summary>
     /// <param name="items">The items the player has</param>
-    public void ShowItemsWindow(InventoryItem<Consumable>[] items) {
+    public async Task ShowItemsWindow(InventoryItem<Consumable>[] items) {
         GameObject itemWindow = itemMenuController.gameObject;
         itemMenuController.SetItemMenu(items);
-        animationHandler.stretchIn(itemWindow, 0.1f);
+        await animationHandler.StretchIn(itemWindow, 0.1f);
 	}
 
     /// <summary>
     /// Hides the item menu
     /// </summary>
-    public void HideItemsWindow() {
+    public async Task HideItemsWindow() {
         GameObject itemWindow = itemMenuController.gameObject;
         itemMenuController.ResetItemMenu();
-        animationHandler.stretchOut(itemWindow, 0.1f);
+        await animationHandler.StretchOut(itemWindow, 0.1f);
 	}
 
     /// <summary>
