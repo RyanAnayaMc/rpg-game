@@ -2800,6 +2800,10 @@ PrefabInstance:
       propertyPath: enemyLocations.Array.data[1]
       value: 
       objectReference: {fileID: 1871468168}
+    - target: {fileID: 8530276559026860918, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0000001
+      objectReference: {fileID: 0}
     - target: {fileID: 9076478148105183902, guid: 62cf0e0b35070e242a00b456a2c0d136, type: 3}
       propertyPath: m_RootOrder
       value: 3
