@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using XNode;
+using System.Threading.Tasks;
 
 #pragma warning disable IDE0051, IDE0060
 
@@ -39,7 +41,7 @@ public class DialogueGraphHandler : MonoBehaviour {
 	private IEnumerator StartNode(string[] data) {
 		// Start node, lock character movement and setup variables
 		previousName = "!@#$%^&#^";
-		CharacterMovementController.isPlayerLocked = true;
+		InputMovement.LockPlayer();
 
 		NextNode("exit");
 		yield return null;
@@ -49,7 +51,7 @@ public class DialogueGraphHandler : MonoBehaviour {
 	private IEnumerator EndNode(string[] data) {
 		// Exit node, go back to beginning node and unlock character
 		dialogueBox.CloseDialogue();
-		CharacterMovementController.isPlayerLocked = false;
+		InputMovement.UnlockPlayer();
 		graph.currentNode = graph.startNode;
 		yield return null;
 	}
@@ -300,7 +302,45 @@ public class DialogueGraphHandler : MonoBehaviour {
 	}
 
 	#endregion
-	
+
+	#region Battle
+	// Battle Node
+	private IEnumerator BattleNode(string[] data) {
+		// Close the dialogue box
+		dialogueBox.CloseDialogue();
+		previousName = "!@#$%^&#^";
+
+		// Get the current node
+		BattleNode node = graph.currentNode as BattleNode;
+
+		// Get the battle scene and current scene
+		string battleScene = data[1];
+		string currentScene = SceneManager.GetActiveScene().name;
+
+		// Get battle parameters
+		List<Unit> enemies = node.enemies;
+		bool allowDeath = node.allowDeath;
+		AudioClip clip = node.battleMusic;
+
+		// Start the battle and wait for it to end
+		BattleController.StartBattle(enemies, clip, currentScene, node.allowDeath, battleScene);
+		yield return new WaitUntil(() => BattleController.playerWon != null);
+
+		// Determine if player won
+		bool victory = (bool) BattleController.playerWon;
+
+		yield return new WaitForSeconds(0.5f);
+
+		Debug.Log("victory " + victory);
+
+		// Go to the next node
+		if (victory)
+			NextNode("victory");
+		else
+			NextNode("defeat");
+	}
+	#endregion
+
 	#endregion
 
 	private void NextNode(string name) {

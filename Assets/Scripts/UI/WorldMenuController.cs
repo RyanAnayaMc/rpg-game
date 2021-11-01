@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
-#pragma warning disable IDE0044
 public class WorldMenuController : MonoBehaviour {
 	#region Fields
 	[SerializeField] private GameObject mapHUD;
@@ -28,10 +27,10 @@ public class WorldMenuController : MonoBehaviour {
 
 	public async void Update() {
 		if (Input.GetButtonDown("Menu")) {
-			if (!isMenuOpen && !CharacterMovementController.isPlayerLocked) {
+			if (!isMenuOpen && !InputMovement.IsPlayerLocked()) {
 				_running = OpenMenu();
 				await _running;
-			} else if (isMenuOpen && CharacterMovementController.isPlayerLocked) {
+			} else if (isMenuOpen && InputMovement.IsPlayerLocked()) {
 				_running = CloseMenu();
 				await _running;
 			}
@@ -91,7 +90,7 @@ public class WorldMenuController : MonoBehaviour {
 			await Task.Delay(10);
 		}
 
-		CharacterMovementController.isPlayerLocked = false;
+		InputMovement.UnlockPlayer();
 		isMenuOpen = false;
 
 		if (currentWindow != null)
@@ -123,7 +122,7 @@ public class WorldMenuController : MonoBehaviour {
 		if (IsTaskRunning()) return;
 
 		_ = FadeIn();
-		CharacterMovementController.isPlayerLocked = true;
+		InputMovement.LockPlayer();
 		isMenuOpen = true;
 
 		float positionDelta = (float) popupMenuOpenOffset / 10; ;
