@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 public class DialogueGraphHandler : MonoBehaviour {
     public DialogueGraph graph;
 	public DialogueBoxController dialogueBox;
+	[SerializeField] private GameObject[] objects;
 	private string previousName;
+	private ControlState oldState;
 
 	private Coroutine _parser;
 
@@ -40,6 +42,8 @@ public class DialogueGraphHandler : MonoBehaviour {
 	// Start node
 	private IEnumerator StartNode(string[] data) {
 		// Start node, lock character movement and setup variables
+		oldState = OnScreenControlsUI.state;
+		OnScreenControlsUI.UpdateState(ControlState.Dialogue);
 		previousName = "!@#$%^&#^";
 		InputMovement.LockPlayer();
 
@@ -52,6 +56,7 @@ public class DialogueGraphHandler : MonoBehaviour {
 		// Exit node, go back to beginning node and unlock character
 		dialogueBox.CloseDialogue();
 		InputMovement.UnlockPlayer();
+		OnScreenControlsUI.UpdateState(oldState);
 		graph.currentNode = graph.startNode;
 		yield return null;
 	}
@@ -301,6 +306,28 @@ public class DialogueGraphHandler : MonoBehaviour {
 		NextNode("exit");
 	}
 
+	// Dialogue Bubble Node
+	private IEnumerator BubbleNode(string[] data) {
+		BubbleNode node = graph.currentNode as BubbleNode;
+
+		BalloonAnimation animation = node.animation;
+		Transform target = objects[node.targetObjectIndex].transform;
+		int durationMs = node.durationMs;
+		bool waitForFinish = node.waitForAnimationToFinish;
+		float oX = node.offsetX;
+		float oY = node.offsetY;
+		float oZ = node.offsetZ;
+
+		BalloonAnimations.INSTANCE.DoAnimationOn(animation, target, durationMs, oX, oY, oZ);
+
+		if (waitForFinish)
+			yield return new WaitForSeconds((float) durationMs / 1000);
+		else
+			yield return null;
+
+		NextNode("exit");
+	}
+
 	#endregion
 
 	#region Battle
@@ -308,6 +335,7 @@ public class DialogueGraphHandler : MonoBehaviour {
 	private IEnumerator BattleNode(string[] data) {
 		// Close the dialogue box
 		dialogueBox.CloseDialogue();
+		OnScreenControlsUI.UpdateState(ControlState.None);
 		previousName = "!@#$%^&#^";
 
 		// Get the current node
@@ -331,7 +359,7 @@ public class DialogueGraphHandler : MonoBehaviour {
 
 		yield return new WaitForSeconds(0.5f);
 
-		Debug.Log("victory " + victory);
+		OnScreenControlsUI.UpdateState(ControlState.Dialogue);
 
 		// Go to the next node
 		if (victory)

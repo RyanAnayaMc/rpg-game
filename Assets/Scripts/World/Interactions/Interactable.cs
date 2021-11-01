@@ -15,12 +15,16 @@ public class Interactable : MonoBehaviour {
     }
 
 	public void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player")) {
             isInRange = true;
+            OnScreenControlsUI.UpdateState(ControlState.MapInteract);
+        }
 	}
 
 	public void OnTriggerExit(Collider other) {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player")) {
             isInRange = false;
-	}
+            OnScreenControlsUI.UpdateState(ControlState.Map);
+        }
+    }
 }

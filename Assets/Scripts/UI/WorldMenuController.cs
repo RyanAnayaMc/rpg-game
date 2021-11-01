@@ -17,6 +17,7 @@ public class WorldMenuController : MonoBehaviour {
 	private IMenuWindow currentWindow;
 	[SerializeField] private CanvasGroup worldUI;
 	private Task _running;
+	private ControlState oldState;
 	#endregion
 
 	public void Start() {
@@ -90,6 +91,8 @@ public class WorldMenuController : MonoBehaviour {
 			await Task.Delay(10);
 		}
 
+		OnScreenControlsUI.UpdateState(oldState);
+
 		InputMovement.UnlockPlayer();
 		isMenuOpen = false;
 
@@ -124,6 +127,9 @@ public class WorldMenuController : MonoBehaviour {
 		_ = FadeIn();
 		InputMovement.LockPlayer();
 		isMenuOpen = true;
+
+		oldState = OnScreenControlsUI.state;
+		OnScreenControlsUI.UpdateState(ControlState.Menu);
 
 		float positionDelta = (float) popupMenuOpenOffset / 10; ;
 
