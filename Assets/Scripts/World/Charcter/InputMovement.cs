@@ -46,7 +46,7 @@ public class InputMovement : MonoBehaviour, IMovement {
 
     private bool isJumping;
 
-    public Vector3 GetMovement(Vector3 currentVelocity, bool isGrounded, bool usingFarCamera) {
+    public Vector3 GetMovement(Vector3 currentVelocity, bool isGrounded, bool usingFarCamera, bool raw) {
         if (loadSavedLocation) {
             transform.position = savedLocation;
             loadSavedLocation = false;
@@ -68,7 +68,7 @@ public class InputMovement : MonoBehaviour, IMovement {
         float moveZ = Input.GetAxis("Vertical");
 
         // If player is jumping then apply the movement as a delta to current velocity
-        if (isJumping) {
+        if (isJumping && !raw) {
             moveX = currentVelocity.x - moveX * Time.deltaTime * 0.5f;
             moveZ = currentVelocity.z - moveZ * Time.deltaTime * 0.5f;
         }
