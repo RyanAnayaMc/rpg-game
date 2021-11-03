@@ -1,0 +1,40 @@
+Changes from GDD:
+
+CONTENT
+- Story and character sprites are mostly placeholder assets from RPGMaker (except main character)
+ - Actual main side quest not yet implemented, just basic things to test mechanics
+ - Hub area and quests not yet implemented
+- Instead of having 2 main sidequests for the final game it will just be one but it will have a mini-story
+ - It is the second one mentioned in the GDD - distribution of magical substances and using an RV for it
+- Tutorial for combat not yet implemented
+
+GEAR
+- Character can only equip one weapon (instead of two)
+- Apparel categories are different
+
+WORLD
+- Jumping is now it's own action (instead of being an interaction)
+- Overworld HUD redesigned from GDD
+  - No current quest objective (yet)
+  - Character HP not shown (moved to status menu)
+  - HUD now shows controls
+- Encounters are not random
+ - Encounters start based on world interactions
+
+COMBAT
+- Introduced new stat: SP (Special Points)
+  - Shows up on combat HUD
+  - SP cannot exceed MaxSP, just like how HP cannot exceed MaxHP
+  - Functions like "Mana" in other RPGs - consumed to perform specials in combat
+- Added new action for player: Special
+  - Performs a special ability that costs mana
+  - Can do single target or AoE damage, heal self, and more
+  - Player cannot use the Special if SP is insufficient
+- Firearm mechanics from GDD very poor in practice
+  - Changed to be inline with other weapons
+    - Firearms can now miss using the same accuracy chance as melee and magic
+    - Melee and magic can now crit with the same chance as ranged attacks
+- Crit now ignores half of the enemy DEF/RES/ARM instead of all
+- Combat HUD does not show HP and SP for enemy at all times and instead uses a floating HP bar
+- Damage numbers pop up when enemies are damaged
+- EXP system not yet implemented

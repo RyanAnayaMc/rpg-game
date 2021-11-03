@@ -11,6 +11,8 @@ public enum ControlState {
     Menu
 }
 
+#pragma warning disable IDE0051
+
 public class OnScreenControlsUI : MonoBehaviour {
     public static ControlState state { get { return _state; } }
     private static ControlState _state = ControlState.Map;
@@ -22,9 +24,9 @@ public class OnScreenControlsUI : MonoBehaviour {
 		if (controlsText is null) {
             controlsText = new Dictionary<ControlState, string>() {
                 { ControlState.None, "" },
-                { ControlState.Map, "[Tab] Menu    [Q] Flashlight    [WASD] Move    [Space] Jump" },
-                { ControlState.MapInteract, "[Tab] Menu    [Q] Flashlight    [WASD] Move    [Space] Jump     [F / E] Interact"},
-                { ControlState.Dialogue, "[F / E] Next" },
+                { ControlState.Map, "[Tab] Menu    [Q] Flashlight     [E] Camera    [WASD] Move    [Space] Jump" },
+                { ControlState.MapInteract, "[Tab] Menu    [Q] Flashlight     [E] Camera    [WASD] Move    [Space] Jump     [F] Interact"},
+                { ControlState.Dialogue, "[F] Next" },
                 { ControlState.Menu, "[Tab] Close Menu    [Mouse] Navigate    [Left Click] Select" }
             };
 		}

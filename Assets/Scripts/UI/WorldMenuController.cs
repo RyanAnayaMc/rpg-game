@@ -67,6 +67,7 @@ public class WorldMenuController : MonoBehaviour {
 	}
 
 	public void OnMenuButton() {
+		InputMovement.UnlockPlayer();
 		SceneManager.LoadScene("MainMenu");
 	}
 
@@ -78,7 +79,7 @@ public class WorldMenuController : MonoBehaviour {
 		if (IsTaskRunning()) return;
 		float positionDelta = (float) popupMenuOpenOffset / 10; ;
 
-		_ = FadeOut();
+		_ = FadeIn();
 
 		for (int i = 0; i < 10; i++) {
 
@@ -124,7 +125,7 @@ public class WorldMenuController : MonoBehaviour {
 	private async Task OpenMenu() {
 		if (IsTaskRunning()) return;
 
-		_ = FadeIn();
+		_ = FadeOut();
 		InputMovement.LockPlayer();
 		isMenuOpen = true;
 

@@ -8,5 +8,5 @@ public interface ICharExtra {
     /// </summary>
     /// <param name="movement">The character's movement this frame.</param>
     /// <param name="dir">The direction the character is moving.</param>
-    public void ReceiveData(Vector3 movement, Direction dir);
+    public void ReceiveData(Vector3 movement, Direction dir, bool usingFarCamera);
 }

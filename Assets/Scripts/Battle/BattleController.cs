@@ -111,7 +111,7 @@ public class BattleController : MonoBehaviour {
     // Variables regarding the world screen
     private static string currentScene;
     private static string battleScene;
-    private static GameObject[] mapSceneObjects;
+    private static List<GameObject> mapSceneObjects;
 
     // Variables used by the battle system
     private bool canAct;
@@ -139,7 +139,10 @@ public class BattleController : MonoBehaviour {
         playerWon = null;
         // InputMovement.SaveLocation();
 
-        mapSceneObjects = GameObject.FindGameObjectsWithTag("MapObject");
+        mapSceneObjects = new List<GameObject>();
+        mapSceneObjects.Add(GameObject.FindGameObjectWithTag("Player"));
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("MapObject"))
+            mapSceneObjects.Add(obj);
 
         foreach (GameObject obj in mapSceneObjects)
             obj.SetActive(false);

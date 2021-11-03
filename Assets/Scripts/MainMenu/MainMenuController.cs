@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour {
     public string playButtonScene;
+    public string playButton2Scene;
     public AudioSource sfxSource;
     public AudioClip buttonClickSFX;
     public AudioClip backSFX;
@@ -25,6 +26,11 @@ public class MainMenuController : MonoBehaviour {
         playSFX();
         SceneManager.LoadScene(playButtonScene);
         // TODO: loading screen?
+    }
+
+    public void onPlayButton2() {
+        playSFX();
+        SceneManager.LoadScene(playButton2Scene);
     }
 
     public void onExitButton() {

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
+#pragma warning disable IDE0051
+
 public class Flashlight : MonoBehaviour, ICharExtra {
     // Effect related fields
     [SerializeField]
     private HDAdditionalLightData lightData;
     private GameObject flashlight;
-    private bool flashlightOn = true;
+    private bool flashlightOn = false;
     [SerializeField]
     private Light[] lights;
     private Direction direction;
+    bool usingFarCamera;
 
     // Start is called before the first frame update
     void Start() {
@@ -34,24 +37,28 @@ public class Flashlight : MonoBehaviour, ICharExtra {
     /// Rotates the player's flashlight based on the current direction
     /// </summary>
     void RotateLight() {
-        switch (direction) {
-            case Direction.UP:
-                flashlight.transform.localPosition = new Vector3(0, 2f, 1.5f);
-                flashlight.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                return;
-            case Direction.DOWN:
-                flashlight.transform.localPosition = new Vector3(0, 2, 0.75f);
-                flashlight.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                return;
-            case Direction.LEFT:
-                flashlight.transform.localPosition = new Vector3(-0.7f, 2f, 0.6f);
-                flashlight.transform.localRotation = Quaternion.Euler(0, -90, 0);
-                return;
-            case Direction.RIGHT:
-                flashlight.transform.localPosition = new Vector3(0.7f, 2f, 0.6f);
-                flashlight.transform.localRotation = Quaternion.Euler(0, 90, 0);
-                return;
-
+        if (usingFarCamera) {
+            switch (direction) {
+                case Direction.UP:
+                    flashlight.transform.localPosition = new Vector3(0, 0.2f, 1.5f);
+                    flashlight.transform.localRotation = Quaternion.Euler(-40, 0, 0);
+                    return;
+                case Direction.DOWN:
+                    flashlight.transform.localPosition = new Vector3(0, 0.15f, -0.3f);
+                    flashlight.transform.localRotation = Quaternion.Euler(40, 180, 0);
+                    return;
+                case Direction.LEFT:
+                    flashlight.transform.localPosition = new Vector3(-0.03f, 0.15f, 0f);
+                    flashlight.transform.localRotation = Quaternion.Euler(0, -90, -40);
+                    return;
+                case Direction.RIGHT:
+                    flashlight.transform.localPosition = new Vector3(0.03f, 0.15f, 0f);
+                    flashlight.transform.localRotation = Quaternion.Euler(0, 90, -40);
+                    return;
+            }
+        } else {
+            flashlight.transform.localPosition = new Vector3(0, 0.2f, 1.5f);
+            flashlight.transform.localRotation = Quaternion.Euler(-20, 0, 0);
         }
     }
 
@@ -76,7 +83,8 @@ public class Flashlight : MonoBehaviour, ICharExtra {
         return flashlightOn;
     }
 
-    public void ReceiveData(Vector3 movement, Direction dir) {
+    public void ReceiveData(Vector3 movement, Direction dir, bool usingFarCam) {
         direction = dir;
+        usingFarCamera = usingFarCam;
 	}
 }

@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#pragma warning disable IDE0051
-
 public class InputMovement : MonoBehaviour, IMovement {
     /// <summary>
     /// Whether or not the player is able to move.
@@ -48,7 +46,7 @@ public class InputMovement : MonoBehaviour, IMovement {
 
     private bool isJumping;
 
-    public Vector3 GetMovement(Vector3 currentVelocity, bool isGrounded) {
+    public Vector3 GetMovement(Vector3 currentVelocity, bool isGrounded, bool usingFarCamera) {
         if (loadSavedLocation) {
             transform.position = savedLocation;
             loadSavedLocation = false;
@@ -108,6 +106,12 @@ public class InputMovement : MonoBehaviour, IMovement {
             moveY += jumpForce;
             isJumping = true;
         }
+
+        // Ensure that values are numbers
+        if (float.IsNaN(moveX))
+            moveX = 0;
+        if (float.IsNaN(moveZ))
+            moveZ = 0;
 
         return new Vector3(moveX, moveY, moveZ);
     }

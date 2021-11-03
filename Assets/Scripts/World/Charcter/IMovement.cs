@@ -12,5 +12,5 @@ public interface IMovement {
 	/// <param name="currentVelocity">The character's current velocity.</param>
 	/// <param name="isGrounded">Whether or not the character is currently on the ground.</param>
 	/// <returns>The direction to move this frame.</returns>
-	public Vector3 GetMovement(Vector3 currentVelocity, bool isGrounded);
+	public Vector3 GetMovement(Vector3 currentVelocity, bool isGrounded, bool usingFarCamera);
 }
