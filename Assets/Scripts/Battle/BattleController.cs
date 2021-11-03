@@ -109,7 +109,9 @@ public class BattleController : MonoBehaviour {
     public AudioClip enemyDefeatSFX;
 
     // Variables regarding the world screen
-    private string currentScene;
+    private static string currentScene;
+    private static string battleScene;
+    private static List<GameObject> mapSceneObjects;
 
     // Variables used by the battle system
     private bool canAct;
@@ -118,11 +120,13 @@ public class BattleController : MonoBehaviour {
     private int selectedEnemy = -2;
     private int selectedSpecial = -2;
     private bool combatActive = true;
+    public static bool? playerWon;
+    public static bool allowLose;
     #endregion
 
     #region Initialization
     /// <summary>
-    /// Starts a battle
+    /// Starts a battle. Waits until the battle is done.
     /// </summary>
     /// <param name="playerUnit">The player unit.</param>
     /// <param name="enemy">The enemy unit.</param>
@@ -130,16 +134,27 @@ public class BattleController : MonoBehaviour {
     /// <param name="currentSceneName">The name of the scene you are currently in (to return to after the battle).</param>
     /// <param name="currentLocation">The location to return to after the battle.</param>
     /// <param name="battleSceneName">The name of the Battle scene to load</param>
-    public static void StartBattle(List<Unit> enemies, AudioClip battleMusic, string scene, string battleSceneName = "CastleBattle") {
-        CharacterMovementController.loadSavedLocation = true;
-        CharacterMovementController.savedLocation = GameObject.FindGameObjectWithTag("Player").transform.position;
+    /// <returns>Whether or not the player won the battle.</returns>
+    public static void StartBattle(List<Unit> enemies, AudioClip battleMusic, string scene, bool allowLose = false, string battleSceneName = "CastleBattle") {
+        playerWon = null;
+        // InputMovement.SaveLocation();
 
-        SceneManager.LoadScene(battleSceneName);
+        mapSceneObjects = new List<GameObject>();
+        mapSceneObjects.Add(GameObject.FindGameObjectWithTag("Player"));
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("MapObject"))
+            mapSceneObjects.Add(obj);
+
+        foreach (GameObject obj in mapSceneObjects)
+            obj.SetActive(false);
+
+        battleScene = battleSceneName;
+        SceneManager.LoadScene(battleScene, LoadSceneMode.Additive);
 
         BattleController.inParameters = true;
         BattleController.inEnemyUnits = enemies;
         BattleController.inMusic = battleMusic;
         BattleController.inScene = scene;
+        BattleController.allowLose = allowLose;
     }
 
 	void Start() {
@@ -191,12 +206,12 @@ public class BattleController : MonoBehaviour {
             await PlayerTurn();
             await Task.Delay(waitTimer);
             if (await DidPlayerWin())
-                PlayerWon();
+                await PlayerWon();
 
             // Enemy turn
             await EnemyTurn();
             if (await DidPlayerLose())
-                PlayerLost();
+                await PlayerLost();
         }
     }
 	#endregion
@@ -814,24 +829,45 @@ public class BattleController : MonoBehaviour {
     /// Actions that occur at the end of the battle if player won. Handles victory
     /// fanfare, dialogue text, and returning to map.
     /// </summary>
-    private async void PlayerWon() {
+    private async Task PlayerWon() {
         combatActive = false;
         uiHandler.DisplayDialogueText("You win!");
         musicHandler.PlayVictoryFanfare();
 
-        await Utilities.WaitUntil(() => Input.GetButtonDown("Interact"));
-        
-        SceneManager.LoadScene(currentScene);
-	}
+        await Utilities.WaitUntil(() => Input.GetButton("Interact"));
+
+        AsyncOperation op = SceneManager.UnloadSceneAsync(battleScene);
+        await Utilities.WaitUntil(() => op.isDone);
+
+        foreach (GameObject obj in mapSceneObjects)
+            obj.SetActive(true);
+
+        playerWon = true;
+    }
 
     /// <summary>
     /// Actions that occur at the end of battle if player lost. Displays
     /// game over text.
     /// </summary>
-    private async void PlayerLost() {
+    private async Task PlayerLost() {
         combatActive = false;
         uiHandler.DisplayDialogueText("You lose...");
-	}
+
+        await Utilities.WaitUntil(() => Input.GetButton("Interact"));
+
+        if (allowLose) {
+            AsyncOperation op = SceneManager.UnloadSceneAsync(battleScene);
+            await Utilities.WaitUntil(() => op.isDone);
+            
+            foreach (GameObject obj in mapSceneObjects)
+                obj.SetActive(true);
+
+            playerWon = false;
+        } else {
+            SceneManager.UnloadSceneAsync(currentScene);
+            SceneManager.LoadScene("GameOver");
+		}
+    }
 
 	#endregion
 

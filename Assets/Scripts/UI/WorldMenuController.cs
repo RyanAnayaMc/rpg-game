@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
-#pragma warning disable IDE0044
 public class WorldMenuController : MonoBehaviour {
 	#region Fields
 	[SerializeField] private GameObject mapHUD;
@@ -18,6 +17,7 @@ public class WorldMenuController : MonoBehaviour {
 	private IMenuWindow currentWindow;
 	[SerializeField] private CanvasGroup worldUI;
 	private Task _running;
+	private ControlState oldState;
 	#endregion
 
 	public void Start() {
@@ -28,10 +28,10 @@ public class WorldMenuController : MonoBehaviour {
 
 	public async void Update() {
 		if (Input.GetButtonDown("Menu")) {
-			if (!isMenuOpen && !CharacterMovementController.isPlayerLocked) {
+			if (!isMenuOpen && !InputMovement.IsPlayerLocked()) {
 				_running = OpenMenu();
 				await _running;
-			} else if (isMenuOpen && CharacterMovementController.isPlayerLocked) {
+			} else if (isMenuOpen && InputMovement.IsPlayerLocked()) {
 				_running = CloseMenu();
 				await _running;
 			}
@@ -67,6 +67,7 @@ public class WorldMenuController : MonoBehaviour {
 	}
 
 	public void OnMenuButton() {
+		InputMovement.UnlockPlayer();
 		SceneManager.LoadScene("MainMenu");
 	}
 
@@ -78,7 +79,7 @@ public class WorldMenuController : MonoBehaviour {
 		if (IsTaskRunning()) return;
 		float positionDelta = (float) popupMenuOpenOffset / 10; ;
 
-		_ = FadeOut();
+		_ = FadeIn();
 
 		for (int i = 0; i < 10; i++) {
 
@@ -91,7 +92,9 @@ public class WorldMenuController : MonoBehaviour {
 			await Task.Delay(10);
 		}
 
-		CharacterMovementController.isPlayerLocked = false;
+		OnScreenControlsUI.UpdateState(oldState);
+
+		InputMovement.UnlockPlayer();
 		isMenuOpen = false;
 
 		if (currentWindow != null)
@@ -122,9 +125,12 @@ public class WorldMenuController : MonoBehaviour {
 	private async Task OpenMenu() {
 		if (IsTaskRunning()) return;
 
-		_ = FadeIn();
-		CharacterMovementController.isPlayerLocked = true;
+		_ = FadeOut();
+		InputMovement.LockPlayer();
 		isMenuOpen = true;
+
+		oldState = OnScreenControlsUI.state;
+		OnScreenControlsUI.UpdateState(ControlState.Menu);
 
 		float positionDelta = (float) popupMenuOpenOffset / 10; ;
 

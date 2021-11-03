@@ -7,8 +7,9 @@ public class CombatStart : MonoBehaviour {
     public List<Unit> enemies;
     public string combatScene;
     public AudioClip battleMusic;
+    public bool allowLose;
 
     public void StartBattle() {
-        BattleController.StartBattle(enemies, battleMusic, gameObject.scene.name, combatScene);
+        BattleController.StartBattle(enemies, battleMusic, gameObject.scene.name, allowLose, combatScene);
     }
 }

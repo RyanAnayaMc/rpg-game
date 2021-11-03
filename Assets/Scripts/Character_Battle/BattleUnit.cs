@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-#pragma warning disable IDE0044
-
 [RequireComponent(typeof(SpriteRenderer))]
 public class BattleUnit : MonoBehaviour, ButtonTextable {
     /// <summary>
