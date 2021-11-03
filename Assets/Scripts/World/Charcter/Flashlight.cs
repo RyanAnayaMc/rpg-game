@@ -36,19 +36,19 @@ public class Flashlight : MonoBehaviour, ICharExtra {
     void RotateLight() {
         switch (direction) {
             case Direction.UP:
-                flashlight.transform.localPosition = new Vector3(0, 1, 0.6f);
+                flashlight.transform.localPosition = new Vector3(0, 2f, 1.5f);
                 flashlight.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 return;
             case Direction.DOWN:
-                flashlight.transform.localPosition = new Vector3(0, 1, 0);
+                flashlight.transform.localPosition = new Vector3(0, 2, 0.75f);
                 flashlight.transform.localRotation = Quaternion.Euler(0, 180, 0);
                 return;
             case Direction.LEFT:
-                flashlight.transform.localPosition = new Vector3(-0.37f, 0.5f, 0.6f);
+                flashlight.transform.localPosition = new Vector3(-0.7f, 2f, 0.6f);
                 flashlight.transform.localRotation = Quaternion.Euler(0, -90, 0);
                 return;
             case Direction.RIGHT:
-                flashlight.transform.localPosition = new Vector3(0.37f, 0.5f, 0.6f);
+                flashlight.transform.localPosition = new Vector3(0.7f, 2f, 0.6f);
                 flashlight.transform.localRotation = Quaternion.Euler(0, 90, 0);
                 return;
 
