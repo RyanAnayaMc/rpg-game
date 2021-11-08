@@ -52,7 +52,7 @@ public class CharacterMovementController : MonoBehaviour {
         farCamera.gameObject.SetActive(usingFarCamera);
 
         // Get movement direction
-        Vector3 moveDirection = moveHandler.GetMovement(characterController.velocity, characterController.isGrounded, usingFarCamera);
+        Vector3 moveDirection = moveHandler.GetMovement(characterController.velocity, characterController.isGrounded, usingFarCamera, !usingFarCamera);
 
         // Set animator parameter
         animator.SetFloat("speed", moveDirection.magnitude);
@@ -117,11 +117,19 @@ public class CharacterMovementController : MonoBehaviour {
         camRotation = Quaternion.Euler(rX, rY, rZ);
         closeCamera.transform.parent.rotation = camRotation;
 
-        // Horizontal part of move vector no longer needed
-        moveDirection = new Vector3(0, moveDirection.y, moveDirection.z);
+        // Save vertical movement variable
+        float moveY = moveDirection.y;
+
+        // Take forward and back direction of movement
+        moveDirection = new Vector3(0, 0, Mathf.Sqrt(moveDirection.x * moveDirection.x + moveDirection.z * moveDirection.z));
+        Debug.Log(moveDirection.ToString());
 
         // Rotate move vector to match camera rotation
-        moveDirection = camRotation * moveDirection;
+        moveDirection = Quaternion.Euler(0, rY, 0) * moveDirection;
+        Debug.Log(moveDirection);
+
+        // Add vertical movement back
+        moveDirection.y = moveY;
 
         // Move the player
         characterController.Move(moveDirection * Time.deltaTime);
