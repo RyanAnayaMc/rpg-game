@@ -23,13 +23,12 @@ public class Inventory : ScriptableObject {
 	/// Get all the consumables in the inventory
 	/// </summary>
 	public InventoryItem<Consumable>[] GetConsumables() {
-        Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
         InventoryItem<Consumable>[] inventoryItems = new InventoryItem<Consumable>[consumables.Count];
 
         for (int i = 0; i < consumables.Count; i++) {
             InventoryItem<Consumable> invItem = new InventoryItem<Consumable>();
             invItem.quantity = quantities[i];
-            invItem.item = atlas.consumables[consumables[i]];
+            invItem.item = Atlas.GetConsumable(consumables[i]);
             inventoryItems[i] = invItem;
 		}
 
@@ -40,12 +39,11 @@ public class Inventory : ScriptableObject {
     /// Get all the weapons in the inventory
     /// </summary>
     public InventoryItem<Weapon>[] GetWeapons() {
-        Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
         InventoryItem<Weapon>[] inventoryItems = new InventoryItem<Weapon>[weapons.Count];
 
         for (int i = 0; i < weapons.Count; i++) {
             InventoryItem<Weapon> invItem = new InventoryItem<Weapon>();
-            invItem.item = atlas.weapons[weapons[i]];
+            invItem.item = Atlas.GetWeapon(weapons[i]);
             invItem.quantity = weaponQuantities[i];
             inventoryItems[i] = invItem;
 		}
@@ -57,12 +55,11 @@ public class Inventory : ScriptableObject {
     /// Get all the apparel in the inventory
     /// </summary>
     public InventoryItem<Apparel>[] GetApparel() {
-        Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
         InventoryItem<Apparel>[] inventoryItems = new InventoryItem<Apparel>[apparel.Count];
 
         for (int i = 0; i < apparel.Count; i++) {
             InventoryItem<Apparel> invItem = new InventoryItem<Apparel>();
-            invItem.item = atlas.apparel[apparel[i]];
+            invItem.item = Atlas.GetApparel(apparel[i]);
             invItem.quantity = apparelQuantities[i];
             inventoryItems[i] = invItem;
         }
@@ -74,12 +71,11 @@ public class Inventory : ScriptableObject {
     /// Get all the accessories in the inventory
     /// </summary>
     public InventoryItem<Accessory>[] GetAccessories() {
-        Atlas atlas = Resources.Load<Atlas>(Paths.ATLAS_PATH);
         InventoryItem<Accessory>[] inventoryItems = new InventoryItem<Accessory>[accessories.Count];
 
         for (int i = 0; i < accessories.Count; i++) {
             InventoryItem<Accessory> invItem = new InventoryItem<Accessory>();
-            invItem.item = atlas.accessories[weapons[i]];
+            invItem.item = Atlas.GetAccessory(accessories[i]);
             invItem.quantity = accessoryQuantities[i];
             inventoryItems[i] = invItem;
         }

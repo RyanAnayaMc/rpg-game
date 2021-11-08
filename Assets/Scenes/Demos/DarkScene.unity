@@ -1527,6 +1527,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7994340052016791012, guid: 7aa60559b83c0dd49b9edc4d6cf43c75, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7994340052093529596, guid: 7aa60559b83c0dd49b9edc4d6cf43c75, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2049,7 +2053,7 @@ GameObject:
   - component: {fileID: 1571048452}
   m_Layer: 0
   m_Name: Sky and Fog Volume
-  m_TagString: Untagged
+  m_TagString: MapObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
