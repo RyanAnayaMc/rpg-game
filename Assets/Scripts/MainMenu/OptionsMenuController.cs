@@ -15,6 +15,7 @@ public class OptionsMenuController : MonoBehaviour {
 	public Toggle dankShitToggle;
 	public Toggle raytracingToggle;
 	public Toggle fpsToggle;
+	public Toggle textAnimationToggle;
 	public GameObject fpsCounter;
 
 	// Read settings from file
@@ -30,6 +31,7 @@ public class OptionsMenuController : MonoBehaviour {
 		dankShitToggle.isOn = Settings.INSTANCE.doDankShit;
 		raytracingToggle.isOn = Settings.INSTANCE.useRaytracing;
 		fpsToggle.isOn = Settings.INSTANCE.showFPS;
+		textAnimationToggle.isOn = Settings.INSTANCE.useTextAnimation;
 	}
 	public void SetMusicVolume(float newVolume) {
 		Settings.INSTANCE.musicVolume = newVolume;
@@ -45,6 +47,10 @@ public class OptionsMenuController : MonoBehaviour {
 
 	public void DoDankShit(bool value) {
 		Settings.INSTANCE.doDankShit = value;
+	}
+
+	public void SetTextAnimation(bool value) {
+		Settings.INSTANCE.useTextAnimation = value;
 	}
 
 	public void UseRaytracing(bool value) {

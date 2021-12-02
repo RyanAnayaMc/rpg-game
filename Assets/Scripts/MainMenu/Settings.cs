@@ -54,10 +54,17 @@ public class Settings {
 	/// </summary>
 	public bool showFPS;
 
+	/// <summary>
+	/// Whether or not the text will use animations.
+	/// </summary>
+	[SerializeField]
+	public bool useTextAnimation;
+
 	private Settings() {
 		musicVolume = 1;
 		sfxVolume = 1;
 		showDamageNumbers = true;
 		doDankShit = false;
+		useTextAnimation = true;
 	}
 }

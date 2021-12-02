@@ -18,7 +18,7 @@ public static class SaveDataHandler {
 	}
 
 	public static void LoadSettings() {
-
+		_ = LoadSettingsAndReturn();
 	}
 
 	internal static Settings LoadSettingsAndReturn() {
